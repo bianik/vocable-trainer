@@ -17,6 +17,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <junit.version>4.12</junit.version>
     <assertj.swing.version>3.9.2</assertj.swing.version>
+    <mockito.version>2.23.0</mockito.version>
   </properties>
 
   <dependencies>
@@ -32,5 +33,12 @@
       <version>${assertj.swing.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+
 </project>
