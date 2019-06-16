@@ -29,7 +29,7 @@ public class TrainerControllerTest {
 
 	@Test
 	public void testNewVocableWhenVocableDoesNotAlreadyExist() {
-		trainerController.newVocable();
+		trainerController.newVocable(null);
 	}
 
 }
