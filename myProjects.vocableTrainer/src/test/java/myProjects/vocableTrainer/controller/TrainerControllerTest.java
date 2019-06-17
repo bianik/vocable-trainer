@@ -38,6 +38,7 @@ public class TrainerControllerTest {
 		trainerController.newVocable(vocable);
 		// verify
 		verify(vocableRepository).findByPhrase("phrase 1");
+		verify(vocableRepository).saveVocable(vocable);
 	}
 
 }
