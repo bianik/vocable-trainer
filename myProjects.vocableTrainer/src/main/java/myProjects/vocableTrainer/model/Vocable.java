@@ -57,7 +57,13 @@ public class Vocable {
 	public void incFalseTries() {
 		falseTries++;
 	}
+	
+	// self implemented function
+	public boolean compareTo(Vocable other) {
+		return phrase.equals(other.getPhrase()) && translation.contentEquals(other.getTranslation());
+	}
 
+	// auto generated functions
 	@Override
 	public int hashCode() {
 		final int prime = 31;
