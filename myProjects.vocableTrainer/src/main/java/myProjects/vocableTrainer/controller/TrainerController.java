@@ -31,6 +31,7 @@ public class TrainerController {
 			trainerView.showCheckResult("incorrect - correct phrase: 'phrase 1'", false);
 		}
 		correctVocable.incCorrTries();
+		correctVocable.incFalseTries();
 	}
 
 }
