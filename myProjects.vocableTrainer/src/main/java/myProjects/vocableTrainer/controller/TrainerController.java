@@ -29,12 +29,12 @@ public class TrainerController {
 			correctVocable.incCorrTries();
 			int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
 			trainerView.showCheckResult("correct(" + c + "/" + (c + f) + "="
-					+ Integer.toString((int) (100.0 * (c / (c + f)))) + "% corr. tries)", true);
+					+ Integer.toString(Math.round(100 * ((float) c / (c + f)))) + "% corr. tries)", true);
 		} else {
 			correctVocable.incFalseTries();
 			int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
 			trainerView.showCheckResult(
-					"incorrect(" + c + "/" + (c + f) + "=" + Integer.toString(Math.round(100 * ((float)c / (c + f))))
+					"incorrect(" + c + "/" + (c + f) + "=" + Integer.toString(Math.round(100 * ((float) c / (c + f))))
 							+ "% corr. tries) - correct phrase: '" + correctVocable.getPhrase() + "'",
 					false);
 		}
