@@ -140,5 +140,8 @@ public class TrainerControllerTest {
 		when(vocableRepository.nextVocable(vocable1)).thenReturn(vocable2);
 		// exercise
 		trainerController.nextVocable(vocable1);
+		// verify
+		verify(vocableRepository).nextVocable(vocable1);
+		
 	}
 }
