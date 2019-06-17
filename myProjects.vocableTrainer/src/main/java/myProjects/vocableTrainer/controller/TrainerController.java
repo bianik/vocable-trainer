@@ -41,4 +41,9 @@ public class TrainerController {
 		vocableRepository.updateVocable(correctVocable);
 	}
 
+	public void nextVocable(Vocable vocable1) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
