@@ -29,8 +29,11 @@ public class TrainerController {
 			trainerView.showCheckResult("correct", true);
 			correctVocable.incCorrTries();
 		} else {
-			trainerView.showCheckResult("incorrect(0/1=0% corr. tries) - correct phrase: 'phrase 1'", false);
 			correctVocable.incFalseTries();
+			trainerView.showCheckResult("incorrect(" + correctVocable.getCorrTries() + "/"
+					+ (correctVocable.getCorrTries() + correctVocable.getFalseTries()) + "="
+					+ Integer.toString((int) (100.0 * (correctVocable.getCorrTries() / correctVocable.getFalseTries())))
+					+ "% corr. tries) - correct phrase: '" + correctVocable.getPhrase() + "'", false);
 		}
 	}
 
