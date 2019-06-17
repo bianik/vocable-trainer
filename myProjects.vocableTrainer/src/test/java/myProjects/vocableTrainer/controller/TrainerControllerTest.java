@@ -131,4 +131,14 @@ public class TrainerControllerTest {
 		verify(correctVocable, never()).incCorrTries();
 		verify(vocableRepository).updateVocable(correctVocable);
 	}
+
+	@Test
+	public void testNextVocable() {
+		// setup
+		Vocable vocable1 = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		Vocable vocable2 = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		when(vocableRepository.nextVocable(vocable1)).thenReturn(vocable2);
+		// exercise
+		trainerController.nextVocable(vocable1);
+	}
 }

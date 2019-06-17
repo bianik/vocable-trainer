@@ -10,4 +10,6 @@ public interface VocableRepository {
 	public void saveVocable(Vocable vocable);
 	
 	public void updateVocable(Vocable vocable);
+
+	public Vocable nextVocable(Vocable currentVocable);
 }
