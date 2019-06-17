@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -37,9 +38,10 @@ public class TrainerControllerTest {
 		// exercise
 		trainerController.newVocable(vocable);
 		// verify
-		verify(vocableRepository).findByPhrase("phrase 1");
-		verify(vocableRepository).saveVocable(vocable);
-		verify(trainerView).showMessageVocableAdded("Vocable added", vocable);
+		InOrder inOrder = inOrder(vocableRepository, trainerView);
+		inOrder.verify(vocableRepository).findByPhrase("phrase 1");
+		inOrder.verify(vocableRepository).saveVocable(vocable);
+		inOrder.verify(trainerView).showMessageVocableAdded("Vocable added", vocable);
 	}
 
 }
