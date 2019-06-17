@@ -75,6 +75,7 @@ public class TrainerControllerTest {
 		verify(trainerView).showCheckResult("correct(1/1=100% corr. tries)", true);
 		verify(correctVocable).incCorrTries();
 		verify(correctVocable, never()).incFalseTries();
+		verify(vocableRepository).updateVocable(correctVocable);
 	}
 
 	@Test
