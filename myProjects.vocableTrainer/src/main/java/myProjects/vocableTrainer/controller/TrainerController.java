@@ -38,6 +38,7 @@ public class TrainerController {
 							+ "% corr. tries) - correct phrase: '" + correctVocable.getPhrase() + "'",
 					false);
 		}
+		vocableRepository.updateVocable(correctVocable);
 	}
 
 }
