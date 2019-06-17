@@ -18,13 +18,12 @@ public class TrainerController {
 		if (vocableRepository.findByPhrase(voc.getPhrase()) == null) {
 			vocableRepository.saveVocable(voc);
 			trainerView.showMessageVocableAdded("Vocable added", voc);
-		}else {
+		} else {
 			trainerView.showMessageVocableAdded("Vocable already exists", voc);
 		}
 	}
 
 	public void checkVocableOnGivenPhrase(Vocable vocableToCheck) {
-		// TODO Auto-generated method stub
 		
 	}
 
