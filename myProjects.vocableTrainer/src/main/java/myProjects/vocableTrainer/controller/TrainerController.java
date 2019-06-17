@@ -29,7 +29,7 @@ public class TrainerController {
 			trainerView.showCheckResult("correct", true);
 			correctVocable.incCorrTries();
 		} else {
-			trainerView.showCheckResult("incorrect - correct phrase: 'phrase 1'", false);
+			trainerView.showCheckResult("incorrect(0/1=0% corr. tries) - correct phrase: 'phrase 1'", false);
 			correctVocable.incFalseTries();
 		}
 	}
