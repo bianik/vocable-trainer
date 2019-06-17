@@ -23,4 +23,9 @@ public class TrainerController {
 		}
 	}
 
+	public void checkVocableOnGivenPhrase(Vocable vocableToCheck) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
