@@ -69,6 +69,7 @@ public class TrainerControllerTest {
 		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
 		// verify
 		verify(vocableRepository).findByTranslation("translation 1");
+		verify(trainerView).showCheckResult("correct", true);
 	}
 
 }
