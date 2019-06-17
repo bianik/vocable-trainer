@@ -90,5 +90,6 @@ public class TrainerControllerTest {
 		verify(vocableRepository).findByTranslation(TRANSLATION);
 		verify(trainerView).showCheckResult("incorrect - correct phrase: '" + CORRECT_PHRASE + "'", false);
 		verify(correctVocable).incFalseTries();
+		verify(correctVocable, never()).incCorrTries();
 	}
 }
