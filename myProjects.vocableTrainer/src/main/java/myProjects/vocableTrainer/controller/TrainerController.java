@@ -15,8 +15,8 @@ public class TrainerController {
 	}
 	
 	public void newVocable(Vocable voc) {
-		vocableRepository.findByPhrase(voc.getPhrase());
-		vocableRepository.saveVocable(voc);
+		if(vocableRepository.findByPhrase(voc.getPhrase()) == null)
+			vocableRepository.saveVocable(voc);
 		trainerView.showMessageVocableAdded("Vocable added", voc);
 	}
 
