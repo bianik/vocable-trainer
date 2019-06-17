@@ -73,6 +73,7 @@ public class TrainerControllerTest {
 		verify(vocableRepository).findByTranslation(TRANSLATION);
 		verify(trainerView).showCheckResult("correct", true);
 		verify(correctVocable).incCorrTries();
+		verify(correctVocable, never()).incFalseTries();
 	}
 
 	@Test
