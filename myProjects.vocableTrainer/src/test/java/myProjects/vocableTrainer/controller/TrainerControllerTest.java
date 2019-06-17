@@ -77,6 +77,25 @@ public class TrainerControllerTest {
 	}
 
 	@Test
+	public void testCheckVocableOnGivenPhraseWhenCorrectPhraseWithDifferentTryValues() {
+		// setup
+		final String PHRASE = "phrase 1";
+		final String TRANSLATION = "translation 1";
+		Vocable vocableToCheck = new Vocable(PHRASE, TRANSLATION);
+		Vocable correctVocable = spy(new Vocable(PHRASE, TRANSLATION));
+		correctVocable.setFalseTries(3);
+		correctVocable.setCorrTries(5);
+		when(vocableRepository.findByTranslation(TRANSLATION)).thenReturn(correctVocable);
+		// exercise
+		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
+		// verify
+		verify(vocableRepository).findByTranslation(TRANSLATION);
+		verify(trainerView).showCheckResult("correct(6/9=67% corr. tries)", true);	// 6/9=0.66667
+		verify(correctVocable).incCorrTries();
+		verify(correctVocable, never()).incFalseTries();
+	}
+
+	@Test
 	public void testCheckVocableOnGivenPhraseWhenIncorrectPhrase() {
 		// setup
 		final String CORRECT_PHRASE = "phrase 1";
@@ -89,11 +108,12 @@ public class TrainerControllerTest {
 		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
 		// verify
 		verify(vocableRepository).findByTranslation(TRANSLATION);
-		verify(trainerView).showCheckResult("incorrect(0/1=0% corr. tries) - correct phrase: '" + CORRECT_PHRASE + "'", false);
+		verify(trainerView).showCheckResult("incorrect(0/1=0% corr. tries) - correct phrase: '" + CORRECT_PHRASE + "'",
+				false);
 		verify(correctVocable).incFalseTries();
 		verify(correctVocable, never()).incCorrTries();
 	}
-	
+
 	@Test
 	public void testCheckVocableOnGivenPhraseWhenIncorrectPhraseWithDifferentTryValues() {
 		// setup
@@ -109,7 +129,8 @@ public class TrainerControllerTest {
 		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
 		// verify
 		verify(vocableRepository).findByTranslation(TRANSLATION);
-		verify(trainerView).showCheckResult("incorrect(5/8=63% corr. tries) - correct phrase: '" + CORRECT_PHRASE + "'", false);
+		verify(trainerView).showCheckResult("incorrect(5/8=63% corr. tries) - correct phrase: '" + CORRECT_PHRASE + "'",
+				false);
 		verify(correctVocable).incFalseTries();
 		verify(correctVocable, never()).incCorrTries();
 	}
