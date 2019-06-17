@@ -59,4 +59,16 @@ public class TrainerControllerTest {
 		inOrder.verify(trainerView).showMessageVocableAdded("Vocable already exists", vocableToAdd);
 	}
 
+	@Test
+	public void testCheckVocableOnGivenPhraseWhenCorrectPhrase() {
+		// setup
+		Vocable vocableToCheck = new Vocable("phrase 1", "translation 1");
+		Vocable correctVocable = new Vocable("phrase 1", "translation 1");
+		when(vocableRepository.findByTranslation("phrase 1")).thenReturn(correctVocable);
+		// exercise
+		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
+		// verify
+		
+	}
+
 }
