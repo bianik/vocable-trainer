@@ -42,7 +42,7 @@ public class TrainerController {
 	}
 
 	public void nextVocable(Vocable currentVocable) {
-		vocableRepository.nextVocable(currentVocable);
+		trainerView.showNextVocable(vocableRepository.nextVocable(currentVocable));
 	}
 
 }
