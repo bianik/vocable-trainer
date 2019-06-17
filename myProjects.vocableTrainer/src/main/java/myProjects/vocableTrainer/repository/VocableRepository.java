@@ -9,5 +9,5 @@ public interface VocableRepository {
 	
 	public void saveVocable(Vocable vocable);
 	
-	public void updateVocable(Vocable vocable, boolean result);
+	public void updateVocable(Vocable vocable);
 }

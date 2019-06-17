@@ -1,6 +1,5 @@
 package myProjects.vocableTrainer.controller;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
@@ -15,6 +14,11 @@ import myProjects.vocableTrainer.repository.VocableRepository;
 import myProjects.vocableTrainer.view.TrainerView;
 
 public class TrainerControllerTest {
+	private static final String CORRECT_PHRASE = "phrase 1";
+	private static final String TRANSLATION = "translation 1";
+	private static final String GIVEN_INCORRECT_PHRASE = "wrong phrase";
+	private static final int INITIAL_CORR_TRIES = 5;
+	private static final int INITIAL_FALSE_TRIES = 3;
 
 	@Mock
 	private TrainerView trainerView;
@@ -33,8 +37,8 @@ public class TrainerControllerTest {
 	@Test
 	public void testNewVocableWhenVocableDoesNotAlreadyExist() {
 		// setup
-		Vocable vocable = new Vocable("phrase 1", "translation 1");
-		when(vocableRepository.findByPhrase("phrase 1")).thenReturn(null);
+		Vocable vocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		when(vocableRepository.findByPhrase(CORRECT_PHRASE)).thenReturn(null);
 		// exercise
 		trainerController.newVocable(vocable);
 		// verify
@@ -47,25 +51,22 @@ public class TrainerControllerTest {
 	@Test
 	public void testNewVocableWhenVocableDoesAlreadyExist() {
 		// setup
-		Vocable vocableToAdd = new Vocable("phrase 1", "translation 1");
-		Vocable existingVocable = new Vocable("phrase 1", "translation 1");
+		Vocable vocableToAdd = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		Vocable existingVocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		when(vocableRepository.findByPhrase("phrase 1")).thenReturn(existingVocable);
 		// exercise
 		trainerController.newVocable(vocableToAdd);
 		// verify
 		InOrder inOrder = inOrder(vocableRepository, trainerView);
-		inOrder.verify(vocableRepository).findByPhrase("phrase 1");
+		inOrder.verify(vocableRepository).findByPhrase(CORRECT_PHRASE);
 		inOrder.verify(vocableRepository, never()).saveVocable(vocableToAdd);
 		inOrder.verify(trainerView).showMessageVocableAdded("Vocable already exists", vocableToAdd);
 	}
 
 	@Test
 	public void testCheckVocableOnGivenPhraseWhenCorrectPhrase() {
-		// setup
-		final String PHRASE = "phrase 1";
-		final String TRANSLATION = "translation 1";
-		Vocable vocableToCheck = new Vocable(PHRASE, TRANSLATION);
-		Vocable correctVocable = spy(new Vocable(PHRASE, TRANSLATION));
+		Vocable vocableToCheck = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		Vocable correctVocable = spy(new Vocable(CORRECT_PHRASE, TRANSLATION));
 		when(vocableRepository.findByTranslation(TRANSLATION)).thenReturn(correctVocable);
 		// exercise
 		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
@@ -79,18 +80,16 @@ public class TrainerControllerTest {
 	@Test
 	public void testCheckVocableOnGivenPhraseWhenCorrectPhraseWithDifferentTryValues() {
 		// setup
-		final String PHRASE = "phrase 1";
-		final String TRANSLATION = "translation 1";
-		Vocable vocableToCheck = new Vocable(PHRASE, TRANSLATION);
-		Vocable correctVocable = spy(new Vocable(PHRASE, TRANSLATION));
-		correctVocable.setFalseTries(3);
-		correctVocable.setCorrTries(5);
+		Vocable vocableToCheck = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		Vocable correctVocable = spy(new Vocable(CORRECT_PHRASE, TRANSLATION));
+		correctVocable.setFalseTries(INITIAL_FALSE_TRIES);
+		correctVocable.setCorrTries(INITIAL_CORR_TRIES);
 		when(vocableRepository.findByTranslation(TRANSLATION)).thenReturn(correctVocable);
 		// exercise
 		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
 		// verify
 		verify(vocableRepository).findByTranslation(TRANSLATION);
-		verify(trainerView).showCheckResult("correct(6/9=67% corr. tries)", true);	// 6/9=0.66667
+		verify(trainerView).showCheckResult("correct(6/9=67% corr. tries)", true); // 6/9=0.66667
 		verify(correctVocable).incCorrTries();
 		verify(correctVocable, never()).incFalseTries();
 	}
@@ -98,9 +97,6 @@ public class TrainerControllerTest {
 	@Test
 	public void testCheckVocableOnGivenPhraseWhenIncorrectPhrase() {
 		// setup
-		final String CORRECT_PHRASE = "phrase 1";
-		final String GIVEN_INCORRECT_PHRASE = "wrong phrase";
-		final String TRANSLATION = "translation 1";
 		Vocable vocableToCheck = new Vocable(GIVEN_INCORRECT_PHRASE, TRANSLATION);
 		Vocable correctVocable = spy(new Vocable(CORRECT_PHRASE, TRANSLATION));
 		when(vocableRepository.findByTranslation(TRANSLATION)).thenReturn(correctVocable);
@@ -108,8 +104,8 @@ public class TrainerControllerTest {
 		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
 		// verify
 		verify(vocableRepository).findByTranslation(TRANSLATION);
-		verify(trainerView).showCheckResult("incorrect(0/1=0% corr. tries) - correct phrase: '" + CORRECT_PHRASE + "'",
-				false);
+		String checkResultMessage = "incorrect(0/1=0% corr. tries) - correct phrase: '" + CORRECT_PHRASE + "'";
+		verify(trainerView).showCheckResult(checkResultMessage, false);
 		verify(correctVocable).incFalseTries();
 		verify(correctVocable, never()).incCorrTries();
 	}
@@ -117,20 +113,17 @@ public class TrainerControllerTest {
 	@Test
 	public void testCheckVocableOnGivenPhraseWhenIncorrectPhraseWithDifferentTryValues() {
 		// setup
-		final String CORRECT_PHRASE = "phrase 1";
-		final String GIVEN_INCORRECT_PHRASE = "wrong phrase";
-		final String TRANSLATION = "translation 1";
 		Vocable vocableToCheck = new Vocable(GIVEN_INCORRECT_PHRASE, TRANSLATION);
 		Vocable correctVocable = spy(new Vocable(CORRECT_PHRASE, TRANSLATION));
-		correctVocable.setFalseTries(2);
-		correctVocable.setCorrTries(5);
+		correctVocable.setFalseTries(INITIAL_FALSE_TRIES);
+		correctVocable.setCorrTries(INITIAL_CORR_TRIES);
 		when(vocableRepository.findByTranslation(TRANSLATION)).thenReturn(correctVocable);
 		// exercise
 		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
 		// verify
 		verify(vocableRepository).findByTranslation(TRANSLATION);
-		verify(trainerView).showCheckResult("incorrect(5/8=63% corr. tries) - correct phrase: '" + CORRECT_PHRASE + "'",
-				false);
+		String checkResultMessage = "incorrect(5/9=56% corr. tries) - correct phrase: '" + CORRECT_PHRASE + "'"; // 5/9=0.55556
+		verify(trainerView).showCheckResult(checkResultMessage, false);
 		verify(correctVocable).incFalseTries();
 		verify(correctVocable, never()).incCorrTries();
 	}
