@@ -7,17 +7,20 @@ import myProjects.vocableTrainer.view.TrainerView;
 public class TrainerController {
 	private VocableRepository vocableRepository;
 	private TrainerView trainerView;
-	
+
 	public TrainerController(VocableRepository vocableRepository, TrainerView trainerView) {
 		super();
 		this.vocableRepository = vocableRepository;
 		this.trainerView = trainerView;
 	}
-	
+
 	public void newVocable(Vocable voc) {
-		if(vocableRepository.findByPhrase(voc.getPhrase()) == null)
+		if (vocableRepository.findByPhrase(voc.getPhrase()) == null) {
 			vocableRepository.saveVocable(voc);
-		trainerView.showMessageVocableAdded("Vocable added", voc);
+			trainerView.showMessageVocableAdded("Vocable added", voc);
+		}else {
+			trainerView.showMessageVocableAdded("Vocable already exists", voc);
+		}
 	}
 
 }
