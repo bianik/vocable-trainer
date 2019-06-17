@@ -71,7 +71,7 @@ public class TrainerControllerTest {
 		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
 		// verify
 		verify(vocableRepository).findByTranslation(TRANSLATION);
-		verify(trainerView).showCheckResult("correct", true);
+		verify(trainerView).showCheckResult("correct(1/1=100% corr. tries)", true);
 		verify(correctVocable).incCorrTries();
 		verify(correctVocable, never()).incFalseTries();
 	}
