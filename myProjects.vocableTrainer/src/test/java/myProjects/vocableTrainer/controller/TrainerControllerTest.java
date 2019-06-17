@@ -55,6 +55,7 @@ public class TrainerControllerTest {
 		// verify
 		verify(vocableRepository).findByPhrase("phrase 1");
 		verify(vocableRepository, never()).saveVocable(vocableToAdd);
+		verify(trainerView).showMessageVocableAdded("Vocable already exists", vocableToAdd);
 	}
 
 }
