@@ -93,6 +93,7 @@ public class TrainerControllerTest {
 		verify(trainerView).showCheckResult("correct(6/9=67% corr. tries)", true); // 6/9=0.66667
 		verify(correctVocable).incCorrTries();
 		verify(correctVocable, never()).incFalseTries();
+		verify(vocableRepository).updateVocable(correctVocable);
 	}
 
 	@Test
@@ -109,6 +110,7 @@ public class TrainerControllerTest {
 		verify(trainerView).showCheckResult(checkResultMessage, false);
 		verify(correctVocable).incFalseTries();
 		verify(correctVocable, never()).incCorrTries();
+		verify(vocableRepository).updateVocable(correctVocable);
 	}
 
 	@Test
@@ -127,5 +129,6 @@ public class TrainerControllerTest {
 		verify(trainerView).showCheckResult(checkResultMessage, false);
 		verify(correctVocable).incFalseTries();
 		verify(correctVocable, never()).incCorrTries();
+		verify(vocableRepository).updateVocable(correctVocable);
 	}
 }
