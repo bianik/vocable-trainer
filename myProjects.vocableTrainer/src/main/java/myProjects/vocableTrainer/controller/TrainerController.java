@@ -26,8 +26,11 @@ public class TrainerController {
 	public void checkVocableOnGivenPhrase(Vocable vocableToCheck) {
 		Vocable correctVocable = vocableRepository.findByTranslation(vocableToCheck.getTranslation());
 		if (vocableToCheck.compareTo(correctVocable)) {
-			trainerView.showCheckResult("correct", true);
 			correctVocable.incCorrTries();
+			int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
+			trainerView.showCheckResult(
+					"correct(" + c + "/" + (c+f) + "=" + Integer.toString((int) (100.0 * (c / (c + f)))) + "% corr. tries)",
+					true);
 		} else {
 			correctVocable.incFalseTries();
 			trainerView.showCheckResult("incorrect(" + correctVocable.getCorrTries() + "/"
