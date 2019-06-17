@@ -133,7 +133,7 @@ public class TrainerControllerTest {
 	}
 
 	@Test
-	public void testNextVocable() {
+	public void testNextVocableWhenCurrentVocable() {
 		// setup
 		Vocable vocable1 = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		Vocable vocable2 = new Vocable(CORRECT_PHRASE, TRANSLATION);
@@ -142,6 +142,6 @@ public class TrainerControllerTest {
 		trainerController.nextVocable(vocable1);
 		// verify
 		verify(vocableRepository).nextVocable(vocable1);
-		
+		verify(trainerView).showNextVocable(vocable2);
 	}
 }
