@@ -93,4 +93,24 @@ public class TrainerControllerTest {
 		verify(correctVocable).incFalseTries();
 		verify(correctVocable, never()).incCorrTries();
 	}
+	
+	@Test
+	public void testCheckVocableOnGivenPhraseWhenIncorrectPhraseWithDifferentTryValues() {
+		// setup
+		final String CORRECT_PHRASE = "phrase 1";
+		final String GIVEN_INCORRECT_PHRASE = "wrong phrase";
+		final String TRANSLATION = "translation 1";
+		Vocable vocableToCheck = new Vocable(GIVEN_INCORRECT_PHRASE, TRANSLATION);
+		Vocable correctVocable = spy(new Vocable(CORRECT_PHRASE, TRANSLATION));
+		correctVocable.setFalseTries(2);
+		correctVocable.setCorrTries(5);
+		when(vocableRepository.findByTranslation(TRANSLATION)).thenReturn(correctVocable);
+		// exercise
+		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
+		// verify
+		verify(vocableRepository).findByTranslation(TRANSLATION);
+		verify(trainerView).showCheckResult("incorrect(5/8=63% corr. tries) - correct phrase: '" + CORRECT_PHRASE + "'", false);
+		verify(correctVocable).incFalseTries();
+		verify(correctVocable, never()).incCorrTries();
+	}
 }
