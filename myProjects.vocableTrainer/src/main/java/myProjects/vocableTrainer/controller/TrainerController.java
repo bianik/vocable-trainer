@@ -30,8 +30,8 @@ public class TrainerController {
 			correctVocable.incCorrTries();
 		} else {
 			trainerView.showCheckResult("incorrect - correct phrase: 'phrase 1'", false);
+			correctVocable.incFalseTries();
 		}
-		correctVocable.incFalseTries();
 	}
 
 }
