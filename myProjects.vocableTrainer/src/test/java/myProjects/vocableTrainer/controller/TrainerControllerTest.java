@@ -53,9 +53,10 @@ public class TrainerControllerTest {
 		// exercise
 		trainerController.newVocable(vocableToAdd);
 		// verify
-		verify(vocableRepository).findByPhrase("phrase 1");
-		verify(vocableRepository, never()).saveVocable(vocableToAdd);
-		verify(trainerView).showMessageVocableAdded("Vocable already exists", vocableToAdd);
+		InOrder inOrder = inOrder(vocableRepository, trainerView);
+		inOrder.verify(vocableRepository).findByPhrase("phrase 1");
+		inOrder.verify(vocableRepository, never()).saveVocable(vocableToAdd);
+		inOrder.verify(trainerView).showMessageVocableAdded("Vocable already exists", vocableToAdd);
 	}
 
 }
