@@ -28,15 +28,15 @@ public class TrainerController {
 		if (vocableToCheck.compareTo(correctVocable)) {
 			correctVocable.incCorrTries();
 			int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
-			trainerView.showCheckResult(
-					"correct(" + c + "/" + (c+f) + "=" + Integer.toString((int) (100.0 * (c / (c + f)))) + "% corr. tries)",
-					true);
+			trainerView.showCheckResult("correct(" + c + "/" + (c + f) + "="
+					+ Integer.toString((int) (100.0 * (c / (c + f)))) + "% corr. tries)", true);
 		} else {
 			correctVocable.incFalseTries();
-			trainerView.showCheckResult("incorrect(" + correctVocable.getCorrTries() + "/"
-					+ (correctVocable.getCorrTries() + correctVocable.getFalseTries()) + "="
-					+ Integer.toString((int) (100.0 * (correctVocable.getCorrTries() / correctVocable.getFalseTries())))
-					+ "% corr. tries) - correct phrase: '" + correctVocable.getPhrase() + "'", false);
+			int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
+			trainerView.showCheckResult(
+					"incorrect(" + c + "/" + (c + f) + "=" + Integer.toString(Math.round(100 * ((float)c / (c + f))))
+							+ "% corr. tries) - correct phrase: '" + correctVocable.getPhrase() + "'",
+					false);
 		}
 	}
 
