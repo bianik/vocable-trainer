@@ -5,8 +5,11 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -27,7 +30,7 @@ public class H2VocableRepositoryTest {
 	private static final String TABLE_NAME = "vocables";
 
 	private static Connection conn;
-	private static H2VocableRepository VocableRepo;
+	private static H2VocableRepository vocableRepo;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -46,7 +49,7 @@ public class H2VocableRepositoryTest {
 		executeDbCommand("DROP TABLE IF EXISTS " + TABLE_NAME);
 		executeDbCommand("CREATE TABLE " + TABLE_NAME
 				+ "(phrase VARCHAR(30), translation VARCHAR(30), corrTries INTEGER, falseTries INTEGER)");
-		VocableRepo = new H2VocableRepository(conn, TABLE_NAME);
+		vocableRepo = new H2VocableRepository(conn, TABLE_NAME);
 	}
 
 	@After
@@ -55,7 +58,7 @@ public class H2VocableRepositoryTest {
 
 	@Test
 	public void testFindByPhraseNotFound() {
-		assertThat(VocableRepo.findByPhrase("phrase")).isNull();
+		assertThat(vocableRepo.findByPhrase("phrase")).isNull();
 	}
 
 	@Test
@@ -64,14 +67,14 @@ public class H2VocableRepositoryTest {
 		addTestVocable("an other phrase", "translation", 0, 0);
 		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		// execution
-		Vocable retreivedVocable = VocableRepo.findByPhrase("phrase 1");
+		Vocable retreivedVocable = vocableRepo.findByPhrase("phrase 1");
 		// verify
 		assertThat(retreivedVocable).isEqualTo(dbVocable);
 	}
 
 	@Test
 	public void testFindByTranslationNotFound() {
-		assertThat(VocableRepo.findByTranslation("translation")).isNull();
+		assertThat(vocableRepo.findByTranslation("translation")).isNull();
 	}
 	
 	@Test
@@ -80,9 +83,48 @@ public class H2VocableRepositoryTest {
 		addTestVocable("an other phrase", "an other translation", 0, 0);
 		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		// execution
-		Vocable retreivedVocable = VocableRepo.findByTranslation("translation 1");
+		Vocable retreivedVocable = vocableRepo.findByTranslation("translation 1");
 		// verify
 		assertThat(retreivedVocable).isEqualTo(dbVocable);
+	}
+
+	@Test
+	public void testSaveVocableWhenVocableNotAlreadyExist() {
+		Vocable vocable = new Vocable("phrase 1", "translation 1");
+		// execution
+		vocableRepo.saveVocable(vocable);
+		// verify
+		assertThat(readAllVocablesFromRepository()).containsExactly(vocable);
+	}
+	
+	////////////////// helping functions ////////////////////////////////
+	
+	private List<Vocable> readAllVocablesFromRepository() {
+		String command = "SELECT * FROM " + TABLE_NAME + "'";
+		Statement stmt = null;
+		ResultSet rs =  null;
+		List<Vocable> allVocables = new ArrayList<Vocable>();
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(command);
+	         // extract data from result set 
+	         while(rs.next()) {
+	        	Vocable v = new Vocable();
+	        	v = new Vocable();
+	            // Retrieve by column name 
+	            v.setPhrase(rs.getString("phrase"));
+	            v.setTranslation(rs.getString("translation"));
+	            v.setCorrTries(rs.getInt("corrTries"));
+	            v.setFalseTries(rs.getInt("falseTries"));
+	            allVocables.add(v);
+	         }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {if(rs != null) rs.close();} catch (SQLException e) {}
+			try {if(stmt != null) stmt.close();} catch (SQLException e) {}
+		}
+		return allVocables;
 	}
 
 	public Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries) {

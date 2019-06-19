@@ -54,7 +54,7 @@ public class H2VocableRepository implements VocableRepository {
 
 	public void saveVocable(Vocable vocable) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	public void updateVocable(Vocable vocable) {
