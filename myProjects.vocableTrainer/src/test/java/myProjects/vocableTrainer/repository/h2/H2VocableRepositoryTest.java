@@ -73,6 +73,17 @@ public class H2VocableRepositoryTest {
 	public void testFindByTranslationNotFound() {
 		assertThat(VocableRepo.findByTranslation("translation")).isNull();
 	}
+	
+	@Test
+	public void testFindByTranslationFound() {
+		// setup
+		addTestVocable("an other phrase", "an other translation", 0, 0);
+		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		// execution
+		Vocable retreivedVocable = VocableRepo.findByTranslation("translation 1");
+		// verify
+		assertThat(retreivedVocable).isEqualTo(dbVocable);
+	}
 
 	public Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries) {
 		executeDbCommand("INSERT INTO " + TABLE_NAME + " VALUES ('" + phrase + "', '" + translation + "', " + corrTries
