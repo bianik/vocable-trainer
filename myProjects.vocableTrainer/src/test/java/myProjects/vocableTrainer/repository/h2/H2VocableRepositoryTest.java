@@ -57,16 +57,21 @@ public class H2VocableRepositoryTest {
 	public void testFindByPhraseNotFound() {
 		assertThat(VocableRepo.findByPhrase("phrase")).isNull();
 	}
-	
+
 	@Test
 	public void testFindByPhraseFound() {
 		// setup
-		addTestVocable("an other phrase", "translation", 0,0);
-		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0,0);
+		addTestVocable("an other phrase", "translation", 0, 0);
+		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		// execution
 		Vocable retreivedVocable = VocableRepo.findByPhrase("phrase 1");
 		// verify
 		assertThat(retreivedVocable).isEqualTo(dbVocable);
+	}
+
+	@Test
+	public void testFindByTranslationNotFound() {
+		assertThat(VocableRepo.findByTranslation("translation")).isNull();
 	}
 
 	public Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries) {
