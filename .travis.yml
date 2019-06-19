@@ -10,4 +10,4 @@ cache:
       - $HOME/.m2
 
 script:
-   - mvn -f myProjects.vocableTrainer/pom.xml clean verify
+   - mvn -f myProjects.vocableTrainer/pom.xml clean verify -Pcode-coverage,mutation-testing
