@@ -21,6 +21,7 @@
     <jacoco.version>0.8.3</jacoco.version>
     <coveralls.version>4.3.0</coveralls.version>
     <pitest.version>1.4.3</pitest.version>
+    <h2db.version>1.4.199</h2db.version>
   </properties>
 
   <dependencies>
@@ -41,6 +42,11 @@
       <artifactId>mockito-core</artifactId>
       <version>${mockito.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2db.version}</version>
     </dependency>
   </dependencies>
 
