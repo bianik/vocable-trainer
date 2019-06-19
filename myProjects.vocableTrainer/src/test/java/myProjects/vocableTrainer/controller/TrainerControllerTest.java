@@ -144,4 +144,16 @@ public class TrainerControllerTest {
 		verify(vocableRepository).nextVocable(vocable1);
 		verify(trainerView).showNextVocable(vocable2);
 	}
+	
+	@Test
+	public void testNextVocableWhenNoCurrentVocable() {
+		// setup
+		Vocable vocable1 = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		when(vocableRepository.nextVocable(null)).thenReturn(vocable1);
+		// exercise
+		trainerController.nextVocable(null);
+		// verify
+		verify(vocableRepository).nextVocable(null);
+		verify(trainerView).showNextVocable(vocable1);
+	}
 }
