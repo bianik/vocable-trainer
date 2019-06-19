@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import myProjects.vocableTrainer.model.Vocable;
+
 public class H2VocableRepositoryTest {
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "org.h2.Driver";
@@ -55,10 +57,24 @@ public class H2VocableRepositoryTest {
 	public void testFindByPhraseNotFound() {
 		assertThat(VocableRepo.findByPhrase("phrase")).isNull();
 	}
+	
+	@Test
+	public void testFindByPhraseFound() {
+		// setup
+		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0,0);
+		// execution
+		Vocable retreivedVocable = VocableRepo.findByPhrase("phrase 1");
+		// verify
+		assertThat(retreivedVocable).isEqualTo(dbVocable);
+	}
 
-	public void addTestVocable(String phrase, String translation, int falseTries, int corrTries) {
+	public Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries) {
 		executeDbCommand("INSERT INTO " + TABLE_NAME + " VALUES ('" + phrase + "', '" + translation + "', " + corrTries
 				+ ", " + falseTries + ")");
+		Vocable v = new Vocable(phrase, translation);
+		v.setCorrTries(corrTries);
+		v.setFalseTries(falseTries);
+		return v;
 	}
 
 	public void executeDbCommand(String command) {
