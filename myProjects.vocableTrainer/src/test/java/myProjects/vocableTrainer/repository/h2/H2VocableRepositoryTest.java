@@ -61,6 +61,7 @@ public class H2VocableRepositoryTest {
 	@Test
 	public void testFindByPhraseFound() {
 		// setup
+		addTestVocable("an other phrase", "translation", 0,0);
 		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0,0);
 		// execution
 		Vocable retreivedVocable = VocableRepo.findByPhrase("phrase 1");
