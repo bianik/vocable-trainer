@@ -89,7 +89,7 @@ public class H2VocableRepositoryTest {
 	}
 
 	@Test
-	public void testSaveVocableWhenVocableNotAlreadyExist() {
+	public void testSaveVocable() {
 		Vocable vocable = new Vocable("phrase 1", "translation 1");
 		// execution
 		vocableRepo.saveVocable(vocable);
@@ -100,7 +100,7 @@ public class H2VocableRepositoryTest {
 	////////////////// helping functions ////////////////////////////////
 	
 	private List<Vocable> readAllVocablesFromRepository() {
-		String command = "SELECT * FROM " + TABLE_NAME + "'";
+		String command = "SELECT * FROM " + TABLE_NAME;
 		Statement stmt = null;
 		ResultSet rs =  null;
 		List<Vocable> allVocables = new ArrayList<Vocable>();

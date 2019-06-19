@@ -53,8 +53,19 @@ public class H2VocableRepository implements VocableRepository {
 	}
 
 	public void saveVocable(Vocable vocable) {
-		// TODO Auto-generated method stub
-		
+		String command = "INSERT INTO " + tableName + " VALUES ('" + vocable.getPhrase() + "', '"
+				+ vocable.getTranslation() + "', " + vocable.getCorrTries() + ", " + vocable.getFalseTries() + ")";
+		Statement stmt = null;
+		ResultSet rs =  null;
+		try {
+			stmt = conn.createStatement();
+			stmt.executeUpdate(command);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {if(rs != null) rs.close();} catch (SQLException e) {}
+			try {if(stmt != null) stmt.close();} catch (SQLException e) {}
+		}
 	}
 
 	public void updateVocable(Vocable vocable) {
