@@ -63,11 +63,12 @@ public class Vocable {
 		return phrase.equals(other.getPhrase()) && translation.contentEquals(other.getTranslation());
 	}
 
-	// auto generated functions
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + corrTries;
+		result = prime * result + falseTries;
 		result = prime * result + ((phrase == null) ? 0 : phrase.hashCode());
 		result = prime * result + ((translation == null) ? 0 : translation.hashCode());
 		return result;
@@ -82,6 +83,10 @@ public class Vocable {
 		if (getClass() != obj.getClass())
 			return false;
 		Vocable other = (Vocable) obj;
+		if (corrTries != other.corrTries)
+			return false;
+		if (falseTries != other.falseTries)
+			return false;
 		if (phrase == null) {
 			if (other.phrase != null)
 				return false;
@@ -97,6 +102,7 @@ public class Vocable {
 
 	@Override
 	public String toString() {
-		return "Vocable [phrase=" + phrase + ", translation=" + translation + "]";
+		return "Vocable [phrase=" + phrase + ", translation=" + translation + ", corrTries=" + corrTries
+				+ ", falseTries=" + falseTries + "]";
 	}
 }
