@@ -1,6 +1,5 @@
 package myProjects.vocableTrainer.repository.h2;
 
-import static org.junit.Assert.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.sql.Connection;
@@ -70,6 +69,11 @@ public class H2VocableRepositoryTest {
 		Vocable retreivedVocable = vocableRepo.findByPhrase("phrase 1");
 		// verify
 		assertThat(retreivedVocable).isEqualTo(dbVocable);
+	}
+	
+	@Test
+	public void testFindByPhraseDbErrorShouldThrow() {
+		assertThatThrownBy(() -> vocableRepo.findByPhrase("phrase")).isInstanceOf(SQLException.class);
 	}
 
 	@Test
