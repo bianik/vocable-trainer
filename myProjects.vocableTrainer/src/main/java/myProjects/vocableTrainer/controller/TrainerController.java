@@ -55,8 +55,7 @@ public class TrainerController {
 		try {
 			trainerView.showNextVocable("", vocableRepository.nextVocable(currentVocable));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			trainerView.showNextVocable("Database error!",null);
 		}
 	}
 }
