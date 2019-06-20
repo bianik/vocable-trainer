@@ -64,6 +64,17 @@ public class TrainerControllerTest {
 		inOrder.verify(vocableRepository, never()).saveVocable(vocableToAdd);
 		inOrder.verify(trainerView).showMessageVocableAdded("Vocable already exists", vocableToAdd);	
 	}
+	
+	@Test
+	public void testNewVocableDbErrorShowError() throws Exception{
+		// setup
+		Vocable vocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		doThrow(new SQLException()).when(vocableRepository).saveVocable(vocable);
+		// exercise
+		trainerController.newVocable(vocable);
+		// verify
+		verify(trainerView).showMessageVocableAdded("Database error!", vocable);
+	}
 
 	@Test
 	public void testCheckVocableOnGivenPhraseWhenCorrectPhrase()  throws Exception{
