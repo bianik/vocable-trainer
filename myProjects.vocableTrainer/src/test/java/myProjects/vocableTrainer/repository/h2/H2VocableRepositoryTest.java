@@ -156,7 +156,9 @@ public class H2VocableRepositoryTest {
 		dbVocable.setCorrTries(6);
 		dbVocable.setFalseTries(3);
 		// execution
-		vocableRepo.updateVocable(dbVocable);
+		try {
+			vocableRepo.updateVocable(dbVocable);
+		} catch (SQLException e) {}
 		// verify
 		assertThat(readAllVocablesFromRepository()).contains(dbVocable);
 	}
