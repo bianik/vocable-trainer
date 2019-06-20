@@ -22,14 +22,8 @@ public class H2VocableRepository implements VocableRepository {
 		return findBy("PHRASE", phrase);
 	}
 
-	public Vocable findByTranslation(String translation) {
-		try {
-			return findBy("TRANSLATION", translation);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+	public Vocable findByTranslation(String translation) throws SQLException {
+		return findBy("TRANSLATION", translation);
 	}
 
 	private Vocable findBy(String column, String argument) throws SQLException {
@@ -48,8 +42,16 @@ public class H2VocableRepository implements VocableRepository {
 			v.setCorrTries(rs.getInt("corrTries"));
 			v.setFalseTries(rs.getInt("falseTries"));
 		}
-		try {if (rs != null) rs.close(); } catch (SQLException e) {}
-		try {if (stmt != null) stmt.close(); } catch (SQLException e) {}
+		try {
+			if (rs != null)
+				rs.close();
+		} catch (SQLException e) {
+		}
+		try {
+			if (stmt != null)
+				stmt.close();
+		} catch (SQLException e) {
+		}
 		return v;
 	}
 

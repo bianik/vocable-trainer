@@ -93,7 +93,9 @@ public class H2VocableRepositoryTest {
 
 	@Test
 	public void testFindByTranslationNotFound() {
-		assertThat(vocableRepo.findByTranslation("translation")).isNull();
+		try {
+			assertThat(vocableRepo.findByTranslation("translation")).isNull();
+		} catch (SQLException e) {}
 	}
 
 	@Test
@@ -103,7 +105,9 @@ public class H2VocableRepositoryTest {
 		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		// execution
 		Vocable retreivedVocable = null;
-		retreivedVocable = vocableRepo.findByTranslation("translation 1");
+		try {
+			retreivedVocable = vocableRepo.findByTranslation("translation 1");
+		} catch (SQLException e) {}
 		// verify
 		assertThat(retreivedVocable).isEqualTo(dbVocable);
 	}
@@ -113,8 +117,7 @@ public class H2VocableRepositoryTest {
 		// setup
 		try {
 			conn.close();
-		} catch (SQLException e) {
-		}
+		} catch (SQLException e) {}
 		// execute & verify
 		assertThatThrownBy(() -> vocableRepo.findByTranslation("translation")).isInstanceOf(SQLException.class);
 	}
