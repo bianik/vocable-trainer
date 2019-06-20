@@ -160,6 +160,21 @@ public class H2VocableRepositoryTest {
 		// verify
 		assertThat(readAllVocablesFromRepository()).contains(dbVocable);
 	}
+	
+	@Test
+	public void testUpdateVocableDbErrorShouldThrow() {
+		// setup
+		addTestVocable("an other phrase", "an other translation", 0, 0);
+		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		dbVocable.setCorrTries(6);
+		dbVocable.setFalseTries(3);
+		try {
+			conn.close();
+		} catch (SQLException e) {
+		}
+		// execute & verify
+		assertThatThrownBy(() -> vocableRepo.updateVocable(dbVocable)).isInstanceOf(SQLException.class);
+	}
 
 	@Test
 	public void testNextVocableWhenNoCurrentVocable() {
