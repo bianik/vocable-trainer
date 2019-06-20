@@ -28,13 +28,56 @@ public class H2VocableRepository implements VocableRepository {
 
 	private Vocable findBy(String column, String argument) throws SQLException {
 		String command = "SELECT * FROM " + tableName + " WHERE " + column + " = '" + argument + "'";
-		Statement stmt = null;
-		ResultSet rs = null;
 		Vocable v = null;
-		stmt = conn.createStatement();
-		rs = stmt.executeQuery(command);
-		// extract data from result set
-		if (rs.first()) {
+		try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(command);) {
+			// extract data from result set
+			if (rs.first()) {
+				v = new Vocable();
+				// Retrieve by column name
+				v.setPhrase(rs.getString("phrase"));
+				v.setTranslation(rs.getString("translation"));
+				v.setCorrTries(rs.getInt("corrTries"));
+				v.setFalseTries(rs.getInt("falseTries"));
+			}
+		}
+		return v;
+	}
+
+	public void saveVocable(Vocable vocable) throws SQLException {
+		String command = "INSERT INTO " + tableName + " VALUES ('" + vocable.getPhrase() + "', '"
+				+ vocable.getTranslation() + "', " + vocable.getCorrTries() + ", " + vocable.getFalseTries() + ")";
+		try (Statement stmt = conn.createStatement();) {
+			stmt.executeUpdate(command);
+		}
+	}
+
+	public void updateVocable(Vocable vocable) throws SQLException {
+		String command = "UPDATE " + tableName + " SET CORRTRIES = " + vocable.getCorrTries() + ", FALSETRIES = "
+				+ vocable.getFalseTries() + " WHERE PHRASE = '" + vocable.getPhrase() + "'";
+		try (Statement stmt = conn.createStatement();) {
+			stmt.executeUpdate(command);
+		}
+	}
+
+	public Vocable nextVocable(Vocable currentVocable) throws SQLException {
+		String command = "SELECT * FROM " + tableName;
+		Vocable v = null;
+		try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = stmt.executeQuery(command);) {
+			// extract data from result set
+			if (currentVocable != null) {
+				while (rs.next()) {
+					if (rs.getString("phrase").equals(currentVocable.getPhrase())) {
+						if (rs.isLast())
+							rs.first();
+						else
+							rs.next();
+						break;
+					}
+				}
+			} else {
+				rs.first();
+			}
 			v = new Vocable();
 			// Retrieve by column name
 			v.setPhrase(rs.getString("phrase"));
@@ -42,58 +85,6 @@ public class H2VocableRepository implements VocableRepository {
 			v.setCorrTries(rs.getInt("corrTries"));
 			v.setFalseTries(rs.getInt("falseTries"));
 		}
-		rs.close();
-		stmt.close();
-		return v;
-	}
-
-	public void saveVocable(Vocable vocable) throws SQLException {
-		String command = "INSERT INTO " + tableName + " VALUES ('" + vocable.getPhrase() + "', '"
-				+ vocable.getTranslation() + "', " + vocable.getCorrTries() + ", " + vocable.getFalseTries() + ")";
-		Statement stmt = null;
-		stmt = conn.createStatement();
-		stmt.executeUpdate(command);
-		stmt.close();
-	}
-
-	public void updateVocable(Vocable vocable) throws SQLException {
-		String command = "UPDATE " + tableName + " SET CORRTRIES = " + vocable.getCorrTries() + ", FALSETRIES = "
-				+ vocable.getFalseTries() + " WHERE PHRASE = '" + vocable.getPhrase() + "'";
-		Statement stmt = null;
-		stmt = conn.createStatement();
-		stmt.executeUpdate(command);
-		stmt.close();
-	}
-
-	public Vocable nextVocable(Vocable currentVocable) throws SQLException {
-		String command = "SELECT * FROM " + tableName;
-		Statement stmt = null;
-		ResultSet rs = null;
-		Vocable v = null;
-		stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-		rs = stmt.executeQuery(command);
-		// extract data from result set
-		if (currentVocable != null) {
-			while (rs.next()) {
-				if (rs.getString("phrase").equals(currentVocable.getPhrase())) {
-					if (rs.isLast())
-						rs.first();
-					else
-						rs.next();
-					break;
-				}
-			}
-		} else {
-			rs.first();
-		}
-		v = new Vocable();
-		// Retrieve by column name
-		v.setPhrase(rs.getString("phrase"));
-		v.setTranslation(rs.getString("translation"));
-		v.setCorrTries(rs.getInt("corrTries"));
-		v.setFalseTries(rs.getInt("falseTries"));
-		rs.close();
-		stmt.close();
 		return v;
 	}
 }
