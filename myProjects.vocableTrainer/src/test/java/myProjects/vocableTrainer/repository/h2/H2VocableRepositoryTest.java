@@ -136,7 +136,7 @@ public class H2VocableRepositoryTest {
 	public void testNextVocableWhenCurrentVocableLastOne() {
 		// setup
 		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
-		Vocable secondVocable = addTestVocable("phrase 2", "translation 2", 0, 0);
+		addTestVocable("phrase 2", "translation 2", 0, 0);
 		Vocable lastVocable = addTestVocable("phrase 3", "translation 3", 0, 0);
 		// execution
 		Vocable nextVocable = vocableRepo.nextVocable(lastVocable);
