@@ -47,8 +47,7 @@ public class TrainerController {
 			}
 			vocableRepository.updateVocable(correctVocable);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			trainerView.showCheckResult("Database error!", false);
 		}
 	}
 
