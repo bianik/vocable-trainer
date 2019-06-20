@@ -87,25 +87,42 @@ public class H2VocableRepository implements VocableRepository {
 	public Vocable nextVocable(Vocable currentVocable) {
 		String command = "SELECT * FROM " + tableName;
 		Statement stmt = null;
-		ResultSet rs =  null;
+		ResultSet rs = null;
 		Vocable v = null;
 		try {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(command);
-	         // extract data from result set 
-	         if(rs.first()) { 
-	        	v = new Vocable();
-	            // Retrieve by column name 
-	            v.setPhrase(rs.getString("phrase"));
-	            v.setTranslation(rs.getString("translation"));
-	            v.setCorrTries(rs.getInt("corrTries"));
-	            v.setFalseTries(rs.getInt("falseTries"));
-	         }
+			// extract data from result set
+			if (currentVocable != null) {
+				while (rs.next()) {
+					if (rs.getString("phrase").equals(currentVocable.getPhrase())) {
+						rs.next();
+						break;
+					}
+				}
+			}else {
+				rs.first();
+			}
+			v = new Vocable();
+			// Retrieve by column name
+			v.setPhrase(rs.getString("phrase"));
+			v.setTranslation(rs.getString("translation"));
+			v.setCorrTries(rs.getInt("corrTries"));
+			v.setFalseTries(rs.getInt("falseTries"));
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {if(rs != null) rs.close();} catch (SQLException e) {}
-			try {if(stmt != null) stmt.close();} catch (SQLException e) {}
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+			}
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+			}
 		}
 		return v;
 	}
