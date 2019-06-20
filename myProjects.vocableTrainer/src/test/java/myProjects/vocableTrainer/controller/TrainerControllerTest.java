@@ -180,4 +180,15 @@ public class TrainerControllerTest {
 		verify(vocableRepository).nextVocable(null);
 		verify(trainerView).showNextVocable("", vocable1);
 	}
+	
+	@Test
+	public void testNextVocableDbErrorShowError() throws Exception{
+		// setup
+		Vocable vocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		doThrow(new SQLException()).when(vocableRepository).nextVocable(vocable);
+		// exercise
+		trainerController.nextVocable(vocable);
+		// verify
+		verify(trainerView).showNextVocable("Database error!", null);
+	}
 }
