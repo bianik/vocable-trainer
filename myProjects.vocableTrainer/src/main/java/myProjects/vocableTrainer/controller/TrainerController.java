@@ -1,5 +1,7 @@
 package myProjects.vocableTrainer.controller;
 
+import java.sql.SQLException;
+
 import myProjects.vocableTrainer.model.Vocable;
 import myProjects.vocableTrainer.repository.VocableRepository;
 import myProjects.vocableTrainer.view.TrainerView;
@@ -15,16 +17,23 @@ public class TrainerController {
 	}
 
 	public void newVocable(Vocable voc) {
-		if (vocableRepository.findByPhrase(voc.getPhrase()) == null) {
-			vocableRepository.saveVocable(voc);
-			trainerView.showMessageVocableAdded("Vocable added", voc);
-		} else {
-			trainerView.showMessageVocableAdded("Vocable already exists", voc);
+		try {
+			if (vocableRepository.findByPhrase(voc.getPhrase()) == null) {
+				vocableRepository.saveVocable(voc);
+				trainerView.showMessageVocableAdded("Vocable added", voc);
+			} else {
+				trainerView.showMessageVocableAdded("Vocable already exists", voc);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 	public void checkVocableOnGivenPhrase(Vocable vocableToCheck) {
-		Vocable correctVocable = vocableRepository.findByTranslation(vocableToCheck.getTranslation());
+		Vocable correctVocable;
+		try {
+			correctVocable = vocableRepository.findByTranslation(vocableToCheck.getTranslation());
 		if (vocableToCheck.compareTo(correctVocable)) {
 			correctVocable.incCorrTries();
 			int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
@@ -39,10 +48,18 @@ public class TrainerController {
 					false);
 		}
 		vocableRepository.updateVocable(correctVocable);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void nextVocable(Vocable currentVocable) {
-		trainerView.showNextVocable(vocableRepository.nextVocable(currentVocable));
+		try {
+			trainerView.showNextVocable(vocableRepository.nextVocable(currentVocable));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
 }

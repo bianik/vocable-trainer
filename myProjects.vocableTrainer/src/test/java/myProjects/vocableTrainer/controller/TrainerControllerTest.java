@@ -35,7 +35,7 @@ public class TrainerControllerTest {
 	}
 
 	@Test
-	public void testNewVocableWhenVocableDoesNotAlreadyExist() {
+	public void testNewVocableWhenVocableDoesNotAlreadyExist() throws Exception{
 		// setup
 		Vocable vocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		when(vocableRepository.findByPhrase(CORRECT_PHRASE)).thenReturn(null);
@@ -49,7 +49,7 @@ public class TrainerControllerTest {
 	}
 
 	@Test
-	public void testNewVocableWhenVocableDoesAlreadyExist() {
+	public void testNewVocableWhenVocableDoesAlreadyExist()  throws Exception{
 		// setup
 		Vocable vocableToAdd = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		Vocable existingVocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
@@ -64,7 +64,7 @@ public class TrainerControllerTest {
 	}
 
 	@Test
-	public void testCheckVocableOnGivenPhraseWhenCorrectPhrase() {
+	public void testCheckVocableOnGivenPhraseWhenCorrectPhrase()  throws Exception{
 		Vocable vocableToCheck = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		Vocable correctVocable = spy(new Vocable(CORRECT_PHRASE, TRANSLATION));
 		when(vocableRepository.findByTranslation(TRANSLATION)).thenReturn(correctVocable);
@@ -79,7 +79,7 @@ public class TrainerControllerTest {
 	}
 
 	@Test
-	public void testCheckVocableOnGivenPhraseWhenCorrectPhraseWithDifferentTryValues() {
+	public void testCheckVocableOnGivenPhraseWhenCorrectPhraseWithDifferentTryValues()  throws Exception{
 		// setup
 		Vocable vocableToCheck = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		Vocable correctVocable = spy(new Vocable(CORRECT_PHRASE, TRANSLATION));
@@ -97,7 +97,7 @@ public class TrainerControllerTest {
 	}
 
 	@Test
-	public void testCheckVocableOnGivenPhraseWhenIncorrectPhrase() {
+	public void testCheckVocableOnGivenPhraseWhenIncorrectPhrase() throws Exception{
 		// setup
 		Vocable vocableToCheck = new Vocable(GIVEN_INCORRECT_PHRASE, TRANSLATION);
 		Vocable correctVocable = spy(new Vocable(CORRECT_PHRASE, TRANSLATION));
@@ -114,7 +114,7 @@ public class TrainerControllerTest {
 	}
 
 	@Test
-	public void testCheckVocableOnGivenPhraseWhenIncorrectPhraseWithDifferentTryValues() {
+	public void testCheckVocableOnGivenPhraseWhenIncorrectPhraseWithDifferentTryValues() throws Exception{
 		// setup
 		Vocable vocableToCheck = new Vocable(GIVEN_INCORRECT_PHRASE, TRANSLATION);
 		Vocable correctVocable = spy(new Vocable(CORRECT_PHRASE, TRANSLATION));
@@ -133,7 +133,7 @@ public class TrainerControllerTest {
 	}
 
 	@Test
-	public void testNextVocableWhenCurrentVocable() {
+	public void testNextVocableWhenCurrentVocable() throws Exception {
 		// setup
 		Vocable vocable1 = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		Vocable vocable2 = new Vocable(CORRECT_PHRASE, TRANSLATION);
@@ -146,7 +146,7 @@ public class TrainerControllerTest {
 	}
 	
 	@Test
-	public void testNextVocableWhenNoCurrentVocable() {
+	public void testNextVocableWhenNoCurrentVocable() throws Exception {
 		// setup
 		Vocable vocable1 = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		when(vocableRepository.nextVocable(null)).thenReturn(vocable1);
