@@ -144,6 +144,17 @@ public class TrainerControllerTest {
 		verify(correctVocable, never()).incCorrTries();
 		verify(vocableRepository).updateVocable(correctVocable);
 	}
+	
+	@Test
+	public void testCheckVocableOnGivenPhraseDbErrorShowError() throws Exception{
+		// setup
+		Vocable vocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		doThrow(new SQLException()).when(vocableRepository).findByTranslation(TRANSLATION);
+		// exercise
+		trainerController.checkVocableOnGivenPhrase(vocable);
+		// verify
+		verify(trainerView).showCheckResult("Database error!", false);
+	}
 
 	@Test
 	public void testNextVocableWhenCurrentVocable() throws Exception {
