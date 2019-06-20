@@ -18,37 +18,38 @@ public class H2VocableRepository implements VocableRepository {
 		this.tableName = tableName;
 	}
 
-	public Vocable findByPhrase(String phrase) {
+	public Vocable findByPhrase(String phrase) throws SQLException {
 		return findBy("PHRASE", phrase);
 	}
 
 	public Vocable findByTranslation(String translation) {
-		return findBy("TRANSLATION", translation);
+		try {
+			return findBy("TRANSLATION", translation);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
-	
-	private Vocable findBy(String column, String argument) {
+
+	private Vocable findBy(String column, String argument) throws SQLException {
 		String command = "SELECT * FROM " + tableName + " WHERE " + column + " = '" + argument + "'";
 		Statement stmt = null;
-		ResultSet rs =  null;
+		ResultSet rs = null;
 		Vocable v = null;
-		try {
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(command);
-	         // extract data from result set 
-	         if(rs.first()) { 
-	        	v = new Vocable();
-	            // Retrieve by column name 
-	            v.setPhrase(rs.getString("phrase"));
-	            v.setTranslation(rs.getString("translation"));
-	            v.setCorrTries(rs.getInt("corrTries"));
-	            v.setFalseTries(rs.getInt("falseTries"));
-	         }
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {if(rs != null) rs.close();} catch (SQLException e) {}
-			try {if(stmt != null) stmt.close();} catch (SQLException e) {}
+		stmt = conn.createStatement();
+		rs = stmt.executeQuery(command);
+		// extract data from result set
+		if (rs.first()) {
+			v = new Vocable();
+			// Retrieve by column name
+			v.setPhrase(rs.getString("phrase"));
+			v.setTranslation(rs.getString("translation"));
+			v.setCorrTries(rs.getInt("corrTries"));
+			v.setFalseTries(rs.getInt("falseTries"));
 		}
+		try {if (rs != null) rs.close(); } catch (SQLException e) {}
+		try {if (stmt != null) stmt.close(); } catch (SQLException e) {}
 		return v;
 	}
 
@@ -56,31 +57,47 @@ public class H2VocableRepository implements VocableRepository {
 		String command = "INSERT INTO " + tableName + " VALUES ('" + vocable.getPhrase() + "', '"
 				+ vocable.getTranslation() + "', " + vocable.getCorrTries() + ", " + vocable.getFalseTries() + ")";
 		Statement stmt = null;
-		ResultSet rs =  null;
+		ResultSet rs = null;
 		try {
 			stmt = conn.createStatement();
 			stmt.executeUpdate(command);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {if(rs != null) rs.close();} catch (SQLException e) {}
-			try {if(stmt != null) stmt.close();} catch (SQLException e) {}
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+			}
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+			}
 		}
 	}
 
 	public void updateVocable(Vocable vocable) {
-		String command = "UPDATE " + tableName + " SET CORRTRIES = " + vocable.getCorrTries() + ", FALSETRIES = " + vocable.getFalseTries() + " WHERE PHRASE = '"
-				+ vocable.getPhrase() + "'";
+		String command = "UPDATE " + tableName + " SET CORRTRIES = " + vocable.getCorrTries() + ", FALSETRIES = "
+				+ vocable.getFalseTries() + " WHERE PHRASE = '" + vocable.getPhrase() + "'";
 		Statement stmt = null;
-		ResultSet rs =  null;
+		ResultSet rs = null;
 		try {
 			stmt = conn.createStatement();
 			stmt.executeUpdate(command);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {if(rs != null) rs.close();} catch (SQLException e) {}
-			try {if(stmt != null) stmt.close();} catch (SQLException e) {}
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+			}
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+			}
 		}
 	}
 
@@ -96,14 +113,14 @@ public class H2VocableRepository implements VocableRepository {
 			if (currentVocable != null) {
 				while (rs.next()) {
 					if (rs.getString("phrase").equals(currentVocable.getPhrase())) {
-						if(rs.isLast())
+						if (rs.isLast())
 							rs.first();
 						else
 							rs.next();
 						break;
 					}
 				}
-			}else {
+			} else {
 				rs.first();
 			}
 			v = new Vocable();
