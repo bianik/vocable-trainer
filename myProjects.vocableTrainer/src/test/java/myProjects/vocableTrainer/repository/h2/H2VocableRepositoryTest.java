@@ -186,7 +186,11 @@ public class H2VocableRepositoryTest {
 		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		addTestVocable("phrase 2", "translation 2", 0, 0);
 		// execution
-		Vocable nextVocable = vocableRepo.nextVocable(null);
+		Vocable nextVocable = null;
+		try {
+			nextVocable = vocableRepo.nextVocable(null);
+		} catch (SQLException e) {
+		}
 		// verify
 		assertThat(nextVocable).isEqualTo(firstVocable);
 	}
@@ -197,7 +201,11 @@ public class H2VocableRepositoryTest {
 		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		Vocable secondVocable = addTestVocable("phrase 2", "translation 2", 0, 0);
 		// execution
-		Vocable nextVocable = vocableRepo.nextVocable(firstVocable);
+		Vocable nextVocable = null;
+		try {
+			nextVocable = vocableRepo.nextVocable(firstVocable);
+		} catch (SQLException e) {
+		}
 		// verify
 		assertThat(nextVocable).isEqualTo(secondVocable);
 	}
@@ -209,7 +217,11 @@ public class H2VocableRepositoryTest {
 		addTestVocable("phrase 2", "translation 2", 0, 0);
 		Vocable lastVocable = addTestVocable("phrase 3", "translation 3", 0, 0);
 		// execution
-		Vocable nextVocable = vocableRepo.nextVocable(lastVocable);
+		Vocable nextVocable = null;
+		try {
+			nextVocable = vocableRepo.nextVocable(lastVocable);
+		} catch (SQLException e) {
+		}
 		// verify
 		assertThat(nextVocable).isEqualTo(firstVocable);
 	}
@@ -218,7 +230,7 @@ public class H2VocableRepositoryTest {
 	public void testNextVocableDbErrorSholdThrow() {
 		// setup
 		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
-		Vocable secondVocable = addTestVocable("phrase 2", "translation 2", 0, 0);
+		addTestVocable("phrase 2", "translation 2", 0, 0);
 		try {
 			conn.close();
 		} catch (SQLException e) {

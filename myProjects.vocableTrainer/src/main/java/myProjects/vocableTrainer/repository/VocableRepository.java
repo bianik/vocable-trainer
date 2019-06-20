@@ -13,5 +13,5 @@ public interface VocableRepository {
 	
 	public void updateVocable(Vocable vocable) throws SQLException;
 
-	public Vocable nextVocable(Vocable currentVocable);
+	public Vocable nextVocable(Vocable currentVocable) throws SQLException;
 }

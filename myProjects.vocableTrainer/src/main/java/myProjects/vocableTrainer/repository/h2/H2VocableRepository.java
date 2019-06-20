@@ -93,48 +93,42 @@ public class H2VocableRepository implements VocableRepository {
 		}
 	}
 
-	public Vocable nextVocable(Vocable currentVocable) {
+	public Vocable nextVocable(Vocable currentVocable) throws SQLException {
 		String command = "SELECT * FROM " + tableName;
 		Statement stmt = null;
 		ResultSet rs = null;
 		Vocable v = null;
-		try {
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			rs = stmt.executeQuery(command);
-			// extract data from result set
-			if (currentVocable != null) {
-				while (rs.next()) {
-					if (rs.getString("phrase").equals(currentVocable.getPhrase())) {
-						if (rs.isLast())
-							rs.first();
-						else
-							rs.next();
-						break;
-					}
+		stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		rs = stmt.executeQuery(command);
+		// extract data from result set
+		if (currentVocable != null) {
+			while (rs.next()) {
+				if (rs.getString("phrase").equals(currentVocable.getPhrase())) {
+					if (rs.isLast())
+						rs.first();
+					else
+						rs.next();
+					break;
 				}
-			} else {
-				rs.first();
 			}
-			v = new Vocable();
-			// Retrieve by column name
-			v.setPhrase(rs.getString("phrase"));
-			v.setTranslation(rs.getString("translation"));
-			v.setCorrTries(rs.getInt("corrTries"));
-			v.setFalseTries(rs.getInt("falseTries"));
-
+		} else {
+			rs.first();
+		}
+		v = new Vocable();
+		// Retrieve by column name
+		v.setPhrase(rs.getString("phrase"));
+		v.setTranslation(rs.getString("translation"));
+		v.setCorrTries(rs.getInt("corrTries"));
+		v.setFalseTries(rs.getInt("falseTries"));
+		try {
+			if (rs != null)
+				rs.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-			}
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-			}
+		}
+		try {
+			if (stmt != null)
+				stmt.close();
+		} catch (SQLException e) {
 		}
 		return v;
 	}
