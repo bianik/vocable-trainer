@@ -2,6 +2,8 @@ package myProjects.vocableTrainer.controller;
 
 import static org.mockito.Mockito.*;
 
+import java.sql.SQLException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -60,7 +62,7 @@ public class TrainerControllerTest {
 		InOrder inOrder = inOrder(vocableRepository, trainerView);
 		inOrder.verify(vocableRepository).findByPhrase(CORRECT_PHRASE);
 		inOrder.verify(vocableRepository, never()).saveVocable(vocableToAdd);
-		inOrder.verify(trainerView).showMessageVocableAdded("Vocable already exists", vocableToAdd);
+		inOrder.verify(trainerView).showMessageVocableAdded("Vocable already exists", vocableToAdd);	
 	}
 
 	@Test

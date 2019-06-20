@@ -115,7 +115,7 @@
             <targetClasses>
               <!-- excludes model.Vocable -->
               <param>**.controller.TrainerController*</param>
-              <param>**.controller.H2VocableRepository*</param>
+              <param>**.repository.h2.H2VocableRepository*</param>
             </targetClasses>
             <targetTests>
               <param>**.controller.*</param>

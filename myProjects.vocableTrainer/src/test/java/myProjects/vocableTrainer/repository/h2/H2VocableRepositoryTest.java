@@ -69,7 +69,7 @@ public class H2VocableRepositoryTest {
 	public void testFindByPhraseFound() {
 		// setup
 		addTestVocable("an other phrase", "translation", 0, 0);
-		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 5, 7);
 		// execution
 		Vocable retreivedVocable = null;
 		try {
@@ -103,7 +103,7 @@ public class H2VocableRepositoryTest {
 	public void testFindByTranslationFound() {
 		// setup
 		addTestVocable("an other phrase", "an other translation", 0, 0);
-		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 5, 7);
 		// execution
 		Vocable retreivedVocable = null;
 		try {
@@ -128,6 +128,8 @@ public class H2VocableRepositoryTest {
 	@Test
 	public void testSaveVocable() {
 		Vocable vocable = new Vocable("phrase 1", "translation 1");
+		vocable.setCorrTries(5);
+		vocable.setFalseTries(7);
 		// execution
 		try {
 			vocableRepo.saveVocable(vocable);
@@ -199,7 +201,7 @@ public class H2VocableRepositoryTest {
 	public void testNextVocableWhenCurrentVocable() {
 		// setup
 		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
-		Vocable secondVocable = addTestVocable("phrase 2", "translation 2", 0, 0);
+		Vocable secondVocable = addTestVocable("phrase 2", "translation 2", 5, 7);
 		// execution
 		Vocable nextVocable = null;
 		try {
@@ -213,7 +215,7 @@ public class H2VocableRepositoryTest {
 	@Test
 	public void testNextVocableWhenCurrentVocableLastOne() {
 		// setup
-		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 5, 7);
 		addTestVocable("phrase 2", "translation 2", 0, 0);
 		Vocable lastVocable = addTestVocable("phrase 3", "translation 3", 0, 0);
 		// execution
