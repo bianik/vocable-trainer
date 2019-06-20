@@ -9,7 +9,7 @@ public interface VocableRepository {
 	
 	public Vocable findByTranslation(String translation) throws SQLException;
 	
-	public void saveVocable(Vocable vocable);
+	public void saveVocable(Vocable vocable) throws SQLException;
 	
 	public void updateVocable(Vocable vocable);
 

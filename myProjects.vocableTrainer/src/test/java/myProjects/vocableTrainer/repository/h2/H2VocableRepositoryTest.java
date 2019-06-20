@@ -129,7 +129,9 @@ public class H2VocableRepositoryTest {
 	public void testSaveVocable() {
 		Vocable vocable = new Vocable("phrase 1", "translation 1");
 		// execution
-		vocableRepo.saveVocable(vocable);
+		try {
+			vocableRepo.saveVocable(vocable);
+		} catch (SQLException e) {}
 		// verify
 		assertThat(readAllVocablesFromRepository()).containsExactly(vocable);
 	}
