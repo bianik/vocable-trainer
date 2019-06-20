@@ -131,7 +131,8 @@ public class H2VocableRepositoryTest {
 		// execution
 		try {
 			vocableRepo.saveVocable(vocable);
-		} catch (SQLException e) {}
+		} catch (SQLException e) {
+		}
 		// verify
 		assertThat(readAllVocablesFromRepository()).containsExactly(vocable);
 	}
@@ -158,11 +159,12 @@ public class H2VocableRepositoryTest {
 		// execution
 		try {
 			vocableRepo.updateVocable(dbVocable);
-		} catch (SQLException e) {}
+		} catch (SQLException e) {
+		}
 		// verify
 		assertThat(readAllVocablesFromRepository()).contains(dbVocable);
 	}
-	
+
 	@Test
 	public void testUpdateVocableDbErrorShouldThrow() {
 		// setup
@@ -210,6 +212,19 @@ public class H2VocableRepositoryTest {
 		Vocable nextVocable = vocableRepo.nextVocable(lastVocable);
 		// verify
 		assertThat(nextVocable).isEqualTo(firstVocable);
+	}
+
+	@Test
+	public void testNextVocableDbErrorSholdThrow() {
+		// setup
+		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		Vocable secondVocable = addTestVocable("phrase 2", "translation 2", 0, 0);
+		try {
+			conn.close();
+		} catch (SQLException e) {
+		}
+		// execute & verify
+		assertThatThrownBy(() -> vocableRepo.nextVocable(firstVocable)).isInstanceOf(SQLException.class);
 	}
 
 	////////////////// helping functions ////////////////////////////////
