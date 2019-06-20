@@ -69,8 +69,7 @@ public class H2VocableRepository implements VocableRepository {
 	}
 
 	public void updateVocable(Vocable vocable) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	public Vocable nextVocable(Vocable currentVocable) {

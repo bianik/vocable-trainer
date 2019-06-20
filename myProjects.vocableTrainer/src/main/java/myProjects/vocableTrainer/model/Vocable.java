@@ -102,6 +102,7 @@ public class Vocable {
 
 	@Override
 	public String toString() {
-		return "Vocable [phrase=" + phrase + ", translation=" + translation + "]";
+		return "Vocable [phrase=" + phrase + ", translation=" + translation + ", corrTries=" + corrTries
+				+ ", falseTries=" + falseTries + "]";
 	}
 }

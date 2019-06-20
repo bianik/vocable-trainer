@@ -97,6 +97,19 @@ public class H2VocableRepositoryTest {
 		assertThat(readAllVocablesFromRepository()).containsExactly(vocable);
 	}
 	
+	@Test
+	public void testUpdateVocable() {
+		// setup
+		addTestVocable("an other phrase", "an other translation", 0, 0);
+		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		dbVocable.setCorrTries(6);
+		dbVocable.setFalseTries(3);
+		// execution
+		vocableRepo.updateVocable(dbVocable);
+		// verify
+		assertThat(readAllVocablesFromRepository()).contains(dbVocable);
+	}
+	
 	////////////////// helping functions ////////////////////////////////
 	
 	private List<Vocable> readAllVocablesFromRepository() {
