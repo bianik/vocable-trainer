@@ -166,7 +166,7 @@ public class TrainerControllerTest {
 		trainerController.nextVocable(vocable1);
 		// verify
 		verify(vocableRepository).nextVocable(vocable1);
-		verify(trainerView).showNextVocable(vocable2);
+		verify(trainerView).showNextVocable("", vocable2);
 	}
 	
 	@Test
@@ -178,6 +178,6 @@ public class TrainerControllerTest {
 		trainerController.nextVocable(null);
 		// verify
 		verify(vocableRepository).nextVocable(null);
-		verify(trainerView).showNextVocable(vocable1);
+		verify(trainerView).showNextVocable("", vocable1);
 	}
 }

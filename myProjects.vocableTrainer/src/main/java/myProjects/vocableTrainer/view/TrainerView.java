@@ -7,5 +7,5 @@ public interface TrainerView {
 	
 	void showCheckResult(String message, boolean result);
 	
-	void showNextVocable(Vocable vocable);
+	void showNextVocable(String message, Vocable vocable);
 }
