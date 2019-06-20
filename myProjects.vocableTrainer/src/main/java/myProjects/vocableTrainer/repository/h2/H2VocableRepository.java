@@ -69,7 +69,19 @@ public class H2VocableRepository implements VocableRepository {
 	}
 
 	public void updateVocable(Vocable vocable) {
-		
+		String command = "UPDATE " + tableName + " SET CORRTRIES = " + vocable.getCorrTries() + ", FALSETRIES = " + vocable.getFalseTries() + " WHERE PHRASE = '"
+				+ vocable.getPhrase() + "'";
+		Statement stmt = null;
+		ResultSet rs =  null;
+		try {
+			stmt = conn.createStatement();
+			stmt.executeUpdate(command);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {if(rs != null) rs.close();} catch (SQLException e) {}
+			try {if(stmt != null) stmt.close();} catch (SQLException e) {}
+		}
 	}
 
 	public Vocable nextVocable(Vocable currentVocable) {
