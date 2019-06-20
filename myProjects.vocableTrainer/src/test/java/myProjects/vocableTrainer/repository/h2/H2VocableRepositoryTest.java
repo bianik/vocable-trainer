@@ -107,6 +107,17 @@ public class H2VocableRepositoryTest {
 		// verify
 		assertThat(retreivedVocable).isEqualTo(dbVocable);
 	}
+	
+	@Test
+	public void testFindByTranslationDbErrorShouldThrow() {
+		// setup
+		try {
+			conn.close();
+		} catch (SQLException e) {
+		}
+		// execute & verify
+		assertThatThrownBy(() -> vocableRepo.findByTranslation("translation")).isInstanceOf(SQLException.class);
+	}
 
 	@Test
 	public void testSaveVocable() {
