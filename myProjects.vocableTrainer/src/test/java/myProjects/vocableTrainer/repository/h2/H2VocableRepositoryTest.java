@@ -121,6 +121,17 @@ public class H2VocableRepositoryTest {
 		assertThat(nextVocable).isEqualTo(firstVocable);
 	}
 	
+	@Test
+	public void testNextVocableWhenCurrentVocable() {
+		// setup
+		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		Vocable secondVocable = addTestVocable("phrase 2", "translation 2", 0, 0);
+		// execution
+		Vocable nextVocable = vocableRepo.nextVocable(firstVocable);
+		// verify
+		assertThat(nextVocable).isEqualTo(secondVocable);
+	}
+	
 	////////////////// helping functions ////////////////////////////////
 	
 	private List<Vocable> readAllVocablesFromRepository() {
