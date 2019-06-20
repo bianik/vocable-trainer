@@ -25,8 +25,7 @@ public class TrainerController {
 				trainerView.showMessageVocableAdded("Vocable already exists", voc);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			trainerView.showMessageVocableAdded("Database error!", voc);
 		}
 	}
 
@@ -34,20 +33,19 @@ public class TrainerController {
 		Vocable correctVocable;
 		try {
 			correctVocable = vocableRepository.findByTranslation(vocableToCheck.getTranslation());
-		if (vocableToCheck.compareTo(correctVocable)) {
-			correctVocable.incCorrTries();
-			int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
-			trainerView.showCheckResult("correct(" + c + "/" + (c + f) + "="
-					+ Integer.toString(Math.round(100 * ((float) c / (c + f)))) + "% corr. tries)", true);
-		} else {
-			correctVocable.incFalseTries();
-			int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
-			trainerView.showCheckResult(
-					"incorrect(" + c + "/" + (c + f) + "=" + Integer.toString(Math.round(100 * ((float) c / (c + f))))
-							+ "% corr. tries) - correct phrase: '" + correctVocable.getPhrase() + "'",
-					false);
-		}
-		vocableRepository.updateVocable(correctVocable);
+			if (vocableToCheck.compareTo(correctVocable)) {
+				correctVocable.incCorrTries();
+				int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
+				trainerView.showCheckResult("correct(" + c + "/" + (c + f) + "="
+						+ Integer.toString(Math.round(100 * ((float) c / (c + f)))) + "% corr. tries)", true);
+			} else {
+				correctVocable.incFalseTries();
+				int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
+				trainerView.showCheckResult("incorrect(" + c + "/" + (c + f) + "="
+						+ Integer.toString(Math.round(100 * ((float) c / (c + f))))
+						+ "% corr. tries) - correct phrase: '" + correctVocable.getPhrase() + "'", false);
+			}
+			vocableRepository.updateVocable(correctVocable);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
