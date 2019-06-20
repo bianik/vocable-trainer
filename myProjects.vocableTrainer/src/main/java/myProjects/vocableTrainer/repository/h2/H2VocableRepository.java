@@ -42,16 +42,8 @@ public class H2VocableRepository implements VocableRepository {
 			v.setCorrTries(rs.getInt("corrTries"));
 			v.setFalseTries(rs.getInt("falseTries"));
 		}
-		try {
-			if (rs != null)
-				rs.close();
-		} catch (SQLException e) {
-		}
-		try {
-			if (stmt != null)
-				stmt.close();
-		} catch (SQLException e) {
-		}
+		rs.close();
+		stmt.close();
 		return v;
 	}
 
@@ -59,38 +51,18 @@ public class H2VocableRepository implements VocableRepository {
 		String command = "INSERT INTO " + tableName + " VALUES ('" + vocable.getPhrase() + "', '"
 				+ vocable.getTranslation() + "', " + vocable.getCorrTries() + ", " + vocable.getFalseTries() + ")";
 		Statement stmt = null;
-		ResultSet rs = null;
 		stmt = conn.createStatement();
 		stmt.executeUpdate(command);
-		try {
-			if (rs != null)
-				rs.close();
-		} catch (SQLException e) {
-		}
-		try {
-			if (stmt != null)
-				stmt.close();
-		} catch (SQLException e) {
-		}
+		stmt.close();
 	}
 
 	public void updateVocable(Vocable vocable) throws SQLException {
 		String command = "UPDATE " + tableName + " SET CORRTRIES = " + vocable.getCorrTries() + ", FALSETRIES = "
 				+ vocable.getFalseTries() + " WHERE PHRASE = '" + vocable.getPhrase() + "'";
 		Statement stmt = null;
-		ResultSet rs = null;
 		stmt = conn.createStatement();
 		stmt.executeUpdate(command);
-		try {
-			if (rs != null)
-				rs.close();
-		} catch (SQLException e) {
-		}
-		try {
-			if (stmt != null)
-				stmt.close();
-		} catch (SQLException e) {
-		}
+		stmt.close();
 	}
 
 	public Vocable nextVocable(Vocable currentVocable) throws SQLException {
@@ -120,17 +92,8 @@ public class H2VocableRepository implements VocableRepository {
 		v.setTranslation(rs.getString("translation"));
 		v.setCorrTries(rs.getInt("corrTries"));
 		v.setFalseTries(rs.getInt("falseTries"));
-		try {
-			if (rs != null)
-				rs.close();
-		} catch (SQLException e) {
-		}
-		try {
-			if (stmt != null)
-				stmt.close();
-		} catch (SQLException e) {
-		}
+		rs.close();
+		stmt.close();
 		return v;
 	}
-
 }
