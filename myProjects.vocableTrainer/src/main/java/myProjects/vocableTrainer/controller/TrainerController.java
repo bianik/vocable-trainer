@@ -53,7 +53,7 @@ public class TrainerController {
 
 	public void nextVocable(Vocable currentVocable) {
 		try {
-			trainerView.showNextVocable(vocableRepository.nextVocable(currentVocable));
+			trainerView.showNextVocable("", vocableRepository.nextVocable(currentVocable));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
