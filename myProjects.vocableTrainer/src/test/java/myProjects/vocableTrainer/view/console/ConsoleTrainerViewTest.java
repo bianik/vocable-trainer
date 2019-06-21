@@ -273,6 +273,18 @@ public class ConsoleTrainerViewTest {
 		String[] output = outputBuffer.toString().split(NL);
 		assertThat(output[0]).isEqualTo(ANSI_GREEN + "correct!" + ANSI_RESET);
 	}
+	
+	@Test
+	public void testShowCheckResultFalse() {
+		// setup
+		Vocable vocableToAdd = new Vocable(PHRASE,TRANSLATION);
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
+		// exercise
+		view.showCheckResult("incorrect!", false);
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[0]).isEqualTo(ANSI_RED + "incorrect!" + ANSI_RESET);
+	}
 
 	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
 		Scanner scanner = new Scanner(userInput);

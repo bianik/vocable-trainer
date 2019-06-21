@@ -34,7 +34,7 @@ public class ConsoleTrainerView implements TrainerView {
 
 	@Override
 	public void showCheckResult(String message, boolean result) {
-		out.println(ANSI_GREEN + message+ ANSI_RESET);
+		out.println(ANSI_GREEN + message + ANSI_RESET);
 	}
 
 	@Override
