@@ -207,6 +207,15 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[3]).isEqualTo("ABORT: wrong command!");
 		verify(trainerController, never()).nextVocable(any());
 	}
+	
+	@Test
+	public void testStartConsoleWhenTaskCompletedReturnsTrue() {
+		// setup
+		String userInput = "wrong command" + NL;
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
+		// exercise & verify
+		assertThat(view.startConsole()).isTrue();
+	}
 
 	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
 		Scanner scanner = new Scanner(userInput);
