@@ -29,7 +29,10 @@ public class ConsoleTrainerView implements TrainerView {
 
 	@Override
 	public void showMessageVocableAdded(String message, Vocable vocable) {
-		out.println(message + vocable.getPhrase() + " - " + vocable.getTranslation());
+		if (vocable != null)
+			out.println(message + vocable.getPhrase() + " - " + vocable.getTranslation());
+		else
+			out.println(ANSI_RED + message + ANSI_RESET);
 	}
 
 	@Override
