@@ -216,6 +216,15 @@ public class ConsoleTrainerViewTest {
 		// exercise & verify
 		assertThat(view.startConsole()).isTrue();
 	}
+	
+	@Test
+	public void testStartConsoleWhenExitCommandThenReturnFalse() {
+		// setup
+		String userInput = "exit" + NL;
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
+		// exercise & verify
+		assertThat(view.startConsole()).isFalse();
+	}
 
 	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
 		Scanner scanner = new Scanner(userInput);
