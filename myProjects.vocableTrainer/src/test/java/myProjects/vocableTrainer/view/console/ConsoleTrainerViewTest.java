@@ -244,6 +244,18 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[4]).isEqualTo("ABORT: wrong command!");
 		assertThat(output[5]).isEqualTo("ABORT: wrong command!");
 	}
+	
+	@Test
+	public void testShowMessageVocableAddedSuccessfully() {
+		// setup
+		Vocable vocableToAdd = new Vocable(PHRASE,TRANSLATION);
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
+		// exercise
+		view.showMessageVocableAdded("Vocable added: ", vocableToAdd);
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[0]).isEqualTo("Vocable added: " + PHRASE + " - " + TRANSLATION);
+	}
 
 	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
 		Scanner scanner = new Scanner(userInput);
