@@ -103,7 +103,7 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
 		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		assertThat(output[3]).isEqualTo("phrase: ");
-//		assertThat(output[4]).isEqualTo("translation: ");
+		assertThat(output[4]).isEqualTo("ABORT: no phrase!");
 		verify(trainerController, never()).newVocable(any());
 	}
 	
