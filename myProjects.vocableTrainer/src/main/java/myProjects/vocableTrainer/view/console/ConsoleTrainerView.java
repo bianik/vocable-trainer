@@ -28,8 +28,7 @@ public class ConsoleTrainerView implements TrainerView {
 
 	@Override
 	public void showCheckResult(String message, boolean result) {
-		// TODO Auto-generated method stub
-
+		out.println(message);
 	}
 
 	@Override
