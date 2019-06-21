@@ -13,7 +13,7 @@ public class ConsoleTrainerView implements TrainerView {
 	private TrainerController trainerContr;
 	private Vocable currentVocable = null;
 	private boolean startMessage = true;
-	
+
 	// ANSI escape codes for colors
 	private static final String ANSI_RESET = "\u001B[0m";
 	private static final String ANSI_RED = "\u001B[31m";
@@ -39,7 +39,10 @@ public class ConsoleTrainerView implements TrainerView {
 
 	@Override
 	public void showNextVocable(String message, Vocable vocable) {
-		out.println("translation: " + vocable.getTranslation() + "\nenter phrase: ");
+		if (vocable != null)
+			out.println("translation: " + vocable.getTranslation() + "\nenter phrase: ");
+		else
+			out.println(ANSI_RED + message + ANSI_RESET);
 	}
 
 	public boolean startConsole() {
