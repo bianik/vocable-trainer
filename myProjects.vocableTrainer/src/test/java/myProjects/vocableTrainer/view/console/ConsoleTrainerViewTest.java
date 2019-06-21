@@ -14,6 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import myProjects.vocableTrainer.controller.TrainerController;
+import myProjects.vocableTrainer.model.Vocable;
 
 public class ConsoleTrainerViewTest {
 	TrainerController trainerController = mock(TrainerController.class);
@@ -55,7 +56,8 @@ public class ConsoleTrainerViewTest {
 	@Test
 	public void testStartConsoleNewVocable() {
 		// setup
-		String userInput = "new\n" + "phrase 1\n";
+		Vocable vocableToAdd = new Vocable("phrase 1", "translation 1");
+		String userInput = "new\n" + "phrase 1\n" + "translation 1\n";
 		Scanner scanner = new Scanner(userInput);
 		ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
 		PrintStream outPrinter = new PrintStream(outputBuffer);
@@ -69,6 +71,7 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		assertThat(output[3]).isEqualTo("phrase: ");
 		assertThat(output[4]).isEqualTo("translation: ");
+		verify(trainerController).newVocable(vocableToAdd);
 	}
 
 }
