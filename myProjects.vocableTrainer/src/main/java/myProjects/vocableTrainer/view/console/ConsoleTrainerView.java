@@ -49,6 +49,8 @@ public class ConsoleTrainerView implements TrainerView {
 					out.println("translation: ");
 					String translation = in.nextLine().trim();
 					trainerContr.newVocable(new Vocable(phrase, translation));
+				}else {
+					out.println("ABORT: no phrase!");
 				}
 			} else {
 				trainerContr.nextVocable(currentVocable);
