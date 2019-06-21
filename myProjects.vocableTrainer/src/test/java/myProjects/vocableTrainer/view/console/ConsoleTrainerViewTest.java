@@ -50,9 +50,10 @@ public class ConsoleTrainerViewTest {
 		view.startConsole();
 		// verify
 		String output = outputBuffer.toString();
-		assertThat(output).isEqualTo("##### Vocable Trainer #####\nenter 'n'/'new' to add a new vocable\nenter 'l'/'learn' to start learning\n");
+		assertThat(output).isEqualTo(
+				"##### Vocable Trainer #####\nenter 'n'/'new' to add a new vocable\nenter 'l'/'learn' to start learning\n");
 	}
-	
+
 	@Test
 	public void testStartConsoleNewVocable() {
 		// setup
@@ -70,7 +71,7 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[4]).isEqualTo("translation: ");
 		verify(trainerController).newVocable(vocableToAdd);
 	}
-	
+
 	@Test
 	public void testStartConsoleNewVocableIgnoreLeadingOrTrailingWhiteSpace() {
 		// setup
@@ -87,6 +88,22 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[3]).isEqualTo("phrase: ");
 		assertThat(output[4]).isEqualTo("translation: ");
 		verify(trainerController).newVocable(vocableToAdd);
+	}
+	
+	@Test
+	public void testStartConsoleLearningNoCurrentVocable() {
+		// setup
+		Vocable vocableToCheck = new Vocable(PHRASE, TRANSLATION);
+		String userInput = "learn" + NL + TRANSLATION + NL;
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
+		// exercise
+		view.startConsole();
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
+		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
+		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
+		verify(trainerController).nextVocable(null);
 	}
 
 	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
