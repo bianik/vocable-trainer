@@ -59,6 +59,8 @@ public class ConsoleTrainerView implements TrainerView {
 				}
 			} else if (comm.equals("learn") || comm.equals("l")) {
 				trainerContr.nextVocable(currentVocable);
+			} else {
+				out.println("ABORT: wrong command!");
 			}
 		}
 	}
