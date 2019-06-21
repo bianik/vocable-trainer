@@ -39,8 +39,7 @@ public class ConsoleTrainerView implements TrainerView {
 
 	@Override
 	public void showNextVocable(String message, Vocable vocable) {
-		// TODO Auto-generated method stub
-
+		out.println("translation: " + vocable.getTranslation() + "\nenter phrase: ");
 	}
 
 	public boolean startConsole() {
