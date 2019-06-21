@@ -116,10 +116,12 @@
               <!-- excludes model.Vocable -->
               <param>**.controller.TrainerController*</param>
               <param>**.repository.h2.H2VocableRepository*</param>
+              <param>**.view.console.ConsoleTrainerView*</param>
             </targetClasses>
             <targetTests>
               <param>**.controller.*</param>
               <param>**.h2.*</param>
+              <param>**.view.console.*</param>
             </targetTests>
             <mutators>
               <mutator>ALL</mutator>
@@ -152,6 +154,18 @@
           <plugin>
             <groupId>org.eluder.coveralls</groupId>
             <artifactId>coveralls-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>jacoco</id>
+      <build>
+        <plugins>
+          <plugin>
+            <!-- configured in pluginManagement -->
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
           </plugin>
         </plugins>
       </build>

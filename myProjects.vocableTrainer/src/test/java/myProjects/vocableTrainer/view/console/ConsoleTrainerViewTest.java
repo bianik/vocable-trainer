@@ -7,10 +7,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import myProjects.vocableTrainer.controller.TrainerController;
@@ -23,29 +19,13 @@ public class ConsoleTrainerViewTest {
 	private static final String NL = System.getProperty("line.separator");
 	private static final String PHRASE = "phrase 1";
 	private static final String TRANSLATION = "translation 1";
+	private static final String DATABASE_ERROR = "Database error!";
 	// ANSI escape codes for colors
 	private static final String ANSI_RESET = "\u001B[0m";
 	private static final String ANSI_RED = "\u001B[31m";
 	private static final String ANSI_GREEN = "\u001B[32m";
-	private static final String ANSI_YELLOW = "\u001B[33m";
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
+	//////////////// testing UI commands ////////////////////
 	@Test
 	public void testStartConsoleShowStartupMessage() {
 		// setup
@@ -249,7 +229,8 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[4]).isEqualTo("ABORT: wrong command!");
 		assertThat(output[5]).isEqualTo("ABORT: wrong command!");
 	}
-
+	
+	//////////////// testing TrainerView-interface ////////////////////
 	@Test
 	public void testShowMessageVocableAdded() {
 		// setup
@@ -264,14 +245,12 @@ public class ConsoleTrainerViewTest {
 	
 	@Test
 	public void testShowMessageVocableAddedDbError() {
-		// setup
-		Vocable vocableToAdd = new Vocable(PHRASE, TRANSLATION);
 		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
 		// exercise
-		view.showMessageVocableAdded("Database error!", null);
+		view.showMessageVocableAdded(DATABASE_ERROR, null);
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo(ANSI_RED + "Database error!" + ANSI_RESET);
+		assertThat(output[0]).isEqualTo(ANSI_RED + DATABASE_ERROR + ANSI_RESET);
 	}
 
 	@Test
@@ -314,12 +293,13 @@ public class ConsoleTrainerViewTest {
 		// setup
 		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
 		// exercise
-		view.showNextVocable("Database error!", null);
+		view.showNextVocable(DATABASE_ERROR, null);
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo(ANSI_RED + "Database error!" + ANSI_RESET);
+		assertThat(output[0]).isEqualTo(ANSI_RED + DATABASE_ERROR + ANSI_RESET);
 	}
 
+	//////////////// helping method ////////////////////
 	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
 		Scanner scanner = new Scanner(userInput);
 		outputBuffer = new ByteArrayOutputStream();
