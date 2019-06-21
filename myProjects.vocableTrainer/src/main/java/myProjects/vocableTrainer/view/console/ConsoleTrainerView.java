@@ -23,8 +23,7 @@ public class ConsoleTrainerView implements TrainerView {
 
 	@Override
 	public void showMessageVocableAdded(String message, Vocable vocable) {
-		// TODO Auto-generated method stub
-
+		out.println(message + vocable.getPhrase() + " - " + vocable.getTranslation());
 	}
 
 	@Override
