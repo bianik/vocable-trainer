@@ -55,7 +55,7 @@ public class ConsoleTrainerViewTest {
 	@Test
 	public void testStartConsoleNewVocable() {
 		// setup
-		String userInput = "new\n";
+		String userInput = "new\n" + "phrase 1\n";
 		Scanner scanner = new Scanner(userInput);
 		ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
 		PrintStream outPrinter = new PrintStream(outputBuffer);
@@ -68,6 +68,7 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
 		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		assertThat(output[3]).isEqualTo("phrase: ");
+		assertThat(output[4]).isEqualTo("translation: ");
 	}
 
 }
