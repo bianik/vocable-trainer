@@ -261,6 +261,18 @@ public class ConsoleTrainerViewTest {
 		String[] output = outputBuffer.toString().split(NL);
 		assertThat(output[0]).isEqualTo("Vocable added: " + PHRASE + " - " + TRANSLATION);
 	}
+	
+	@Test
+	public void testShowMessageVocableAddedDbError() {
+		// setup
+		Vocable vocableToAdd = new Vocable(PHRASE, TRANSLATION);
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
+		// exercise
+		view.showMessageVocableAdded("Database error!", null);
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[0]).isEqualTo(ANSI_RED + "Database error!" + ANSI_RESET);
+	}
 
 	@Test
 	public void testShowCheckResultWhenCorrect() {
