@@ -12,6 +12,7 @@ public class ConsoleTrainerView implements TrainerView {
 	private PrintStream out;
 	private TrainerController trainerContr;
 	private Vocable currentVocable = null;
+	private boolean startMessage = true;
 
 	public ConsoleTrainerView(Scanner in, PrintStream out, TrainerController trainerContr) {
 		super();
@@ -39,8 +40,11 @@ public class ConsoleTrainerView implements TrainerView {
 	}
 
 	public boolean startConsole() {
-		out.println(
-				"##### Vocable Trainer #####\nenter 'n'/'new' to add a new vocable\nenter 'l'/'learn' to start learning");
+		if (startMessage) {
+			out.println(
+					"##### Vocable Trainer #####\nenter 'n'/'new' to add a new vocable\nenter 'l'/'learn' to start learning");
+			startMessage = false;
+		}
 		if (in.hasNextLine()) {
 			String comm = in.nextLine();
 			if (comm.equals("new") || comm.equals("n")) {
@@ -59,7 +63,7 @@ public class ConsoleTrainerView implements TrainerView {
 				}
 			} else if (comm.equals("learn") || comm.equals("l")) {
 				trainerContr.nextVocable(currentVocable);
-			} else if (comm.equals("exit")){
+			} else if (comm.equals("exit")) {
 				return false;
 			} else {
 				out.println("ABORT: wrong command!");
