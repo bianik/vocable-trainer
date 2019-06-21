@@ -156,6 +156,23 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		verify(trainerController).nextVocable(currentVocable);
 	}
+	
+	@Test
+	public void testStartConsoleLearningWhenCommandL() {
+		// setup
+		Vocable currentVocable = new Vocable(PHRASE, TRANSLATION);
+		String userInput = "l" + NL + TRANSLATION + NL;
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
+		view.setCurrentVocable(currentVocable);
+		// exercise
+		view.startConsole();
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
+		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
+		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
+		verify(trainerController).nextVocable(currentVocable);
+	}
 
 	@Test
 	public void testStartConsoleIgnoreWrongCommand() {
