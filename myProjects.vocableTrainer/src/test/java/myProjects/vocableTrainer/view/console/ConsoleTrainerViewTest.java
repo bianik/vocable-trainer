@@ -296,6 +296,17 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[0]).isEqualTo("translation: " + TRANSLATION);
 		assertThat(output[1]).isEqualTo("enter phrase: ");
 	}
+	
+	@Test
+	public void testShowNextVocableWhenNoNextVocable() {
+		// setup
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
+		// exercise
+		view.showNextVocable("Database error!", null);
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[0]).isEqualTo(ANSI_RED + "Database error!" + ANSI_RESET);
+	}
 
 	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
 		Scanner scanner = new Scanner(userInput);
