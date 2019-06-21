@@ -46,8 +46,9 @@ public class ConsoleTrainerView implements TrainerView {
 			startMessage = false;
 		}
 		if (in.hasNextLine()) {
-			String comm = in.nextLine();
-			if (comm.equals("new") || comm.equals("n")) {
+			switch (in.nextLine()) {
+			case "new":
+			case "n":
 				out.println("phrase: ");
 				String phrase = in.nextLine().trim();
 				if (!phrase.isEmpty()) {
@@ -61,11 +62,14 @@ public class ConsoleTrainerView implements TrainerView {
 				} else {
 					out.println("ABORT: no phrase!");
 				}
-			} else if (comm.equals("learn") || comm.equals("l")) {
+				break;
+			case "learn":
+			case "l":
 				trainerContr.nextVocable(currentVocable);
-			} else if (comm.equals("exit")) {
+				break;
+			case "exit":
 				return false;
-			} else {
+			default:
 				out.println("ABORT: wrong command!");
 			}
 		}
