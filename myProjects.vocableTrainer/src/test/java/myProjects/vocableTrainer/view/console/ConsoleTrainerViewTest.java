@@ -38,7 +38,7 @@ public class ConsoleTrainerViewTest {
 	}
 
 	@Test
-	public void testStartupMessage() {
+	public void testStartConsoleShowStartupMessage() {
 		// setup
 		String userInput = "";
 		Scanner scanner = new Scanner(userInput);
@@ -46,10 +46,12 @@ public class ConsoleTrainerViewTest {
 		PrintStream outPrinter = new PrintStream(outputBuffer);
 		ConsoleTrainerView view = new ConsoleTrainerView(scanner, outPrinter, trainerController);
 		// exercise
-		view.startTerminal();
+		view.startConsole();
 		// verify
 		String output = outputBuffer.toString();
 		assertThat(output).isEqualTo("##### Vocable Trainer #####\nenter 'n'/'new' to add a new vocable\nenter 'l'/'learn' to start learning\n");
 	}
+	
+	
 
 }
