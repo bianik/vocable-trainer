@@ -48,8 +48,10 @@ public class ConsoleTrainerView implements TrainerView {
 				if (!phrase.isEmpty()) {
 					out.println("translation: ");
 					String translation = in.nextLine().trim();
-					trainerContr.newVocable(new Vocable(phrase, translation));
-				}else {
+					if (!translation.isEmpty()) {
+						trainerContr.newVocable(new Vocable(phrase, translation));
+					}
+				} else {
 					out.println("ABORT: no phrase!");
 				}
 			} else {
