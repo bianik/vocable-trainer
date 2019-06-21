@@ -71,7 +71,7 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[4]).isEqualTo("translation: ");
 		verify(trainerController).newVocable(vocableToAdd);
 	}
-	
+
 	@Test
 	public void testStartConsoleNewVocableWhenCommandN() {
 		// setup
@@ -174,7 +174,7 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		verify(trainerController).nextVocable(currentVocable);
 	}
-	
+
 	@Test
 	public void testStartConsoleLearningWhenCommandL() {
 		// setup
@@ -207,7 +207,7 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[3]).isEqualTo("ABORT: wrong command!");
 		verify(trainerController, never()).nextVocable(any());
 	}
-	
+
 	@Test
 	public void testStartConsoleWhenTaskCompletedReturnsTrue() {
 		// setup
@@ -216,7 +216,7 @@ public class ConsoleTrainerViewTest {
 		// exercise & verify
 		assertThat(view.startConsole()).isTrue();
 	}
-	
+
 	@Test
 	public void testStartConsoleWhenExitCommandThenReturnFalse() {
 		// setup
@@ -224,6 +224,25 @@ public class ConsoleTrainerViewTest {
 		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
 		// exercise & verify
 		assertThat(view.startConsole()).isFalse();
+	}
+
+	@Test
+	public void testStartConsoleShowStartUpMessageOnlyFirstTime() {
+		// iterate 3 times
+		// setup
+		String userInput = "wrong command" + NL + "wrong command" + NL + "wrong command" + NL;
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
+		// exercise
+		for (int i = 0; i < 3; i++)
+			view.startConsole();
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
+		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
+		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
+		assertThat(output[3]).isEqualTo("ABORT: wrong command!");
+		assertThat(output[4]).isEqualTo("ABORT: wrong command!");
+		assertThat(output[5]).isEqualTo("ABORT: wrong command!");
 	}
 
 	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
