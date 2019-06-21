@@ -23,6 +23,11 @@ public class ConsoleTrainerViewTest {
 	private static final String NL = System.getProperty("line.separator");
 	private static final String PHRASE = "phrase 1";
 	private static final String TRANSLATION = "translation 1";
+	// ANSI escape codes for colors
+	private static final String ANSI_RESET = "\u001B[0m";
+	private static final String ANSI_RED = "\u001B[31m";
+	private static final String ANSI_GREEN = "\u001B[32m";
+	private static final String ANSI_YELLOW = "\u001B[33m";
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -258,7 +263,7 @@ public class ConsoleTrainerViewTest {
 	}
 	
 	@Test
-	public void testShowCheckResult() {
+	public void testShowCheckResultWhenCorrect() {
 		// setup
 		Vocable vocableToAdd = new Vocable(PHRASE,TRANSLATION);
 		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
@@ -266,7 +271,7 @@ public class ConsoleTrainerViewTest {
 		view.showCheckResult("correct!", true);
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("correct!");
+		assertThat(output[0]).isEqualTo(ANSI_GREEN + "correct!" + ANSI_RESET);
 	}
 
 	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
