@@ -11,6 +11,7 @@ public class ConsoleTrainerView implements TrainerView {
 	private Scanner in;
 	private PrintStream out;
 	private TrainerController trainerContr;
+	private Vocable currentVocable = null;
 
 	public ConsoleTrainerView(Scanner in, PrintStream out, TrainerController trainerContr) {
 		super();
@@ -51,6 +52,11 @@ public class ConsoleTrainerView implements TrainerView {
 				trainerContr.nextVocable(null);
 			}
 		}
+	}
+	
+	// package-privates setter for testing
+	void setCurrentVocable(Vocable currentVocable) {
+		this.currentVocable = currentVocable;
 	}
 
 }
