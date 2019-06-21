@@ -52,6 +52,22 @@ public class ConsoleTrainerViewTest {
 		assertThat(output).isEqualTo("##### Vocable Trainer #####\nenter 'n'/'new' to add a new vocable\nenter 'l'/'learn' to start learning\n");
 	}
 	
-	
+	@Test
+	public void testStartConsoleNewVocable() {
+		// setup
+		String userInput = "new\n";
+		Scanner scanner = new Scanner(userInput);
+		ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
+		PrintStream outPrinter = new PrintStream(outputBuffer);
+		ConsoleTrainerView view = new ConsoleTrainerView(scanner, outPrinter, trainerController);
+		// exercise
+		view.startConsole();
+		// verify
+		String[] output = outputBuffer.toString().split(newLine);
+		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
+		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
+		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
+		assertThat(output[3]).isEqualTo("phrase: ");
+	}
 
 }
