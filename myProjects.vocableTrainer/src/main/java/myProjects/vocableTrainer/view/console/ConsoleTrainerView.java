@@ -1,9 +1,23 @@
 package myProjects.vocableTrainer.view.console;
 
+import java.io.PrintStream;
+import java.util.Scanner;
+
+import myProjects.vocableTrainer.controller.TrainerController;
 import myProjects.vocableTrainer.model.Vocable;
 import myProjects.vocableTrainer.view.TrainerView;
 
 public class ConsoleTrainerView implements TrainerView {
+	private Scanner in;
+	private PrintStream out;
+	private TrainerController trainerContr;
+
+	public ConsoleTrainerView(Scanner in, PrintStream out, TrainerController trainerContr) {
+		super();
+		this.in = in;
+		this.out = out;
+		this.trainerContr = trainerContr;
+	}
 
 	@Override
 	public void showMessageVocableAdded(String message, Vocable vocable) {
@@ -21,6 +35,9 @@ public class ConsoleTrainerView implements TrainerView {
 	public void showNextVocable(String message, Vocable vocable) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void startTerminal() {
 	}
 
 }
