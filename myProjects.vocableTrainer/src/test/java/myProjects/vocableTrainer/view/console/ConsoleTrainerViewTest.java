@@ -18,8 +18,11 @@ import myProjects.vocableTrainer.model.Vocable;
 
 public class ConsoleTrainerViewTest {
 	TrainerController trainerController = mock(TrainerController.class);
+	ByteArrayOutputStream outputBuffer;
 
-	private final String newLine = System.getProperty("line.separator");
+	private static final String NL = System.getProperty("line.separator");
+	private static final String PHRASE = "phrase 1";
+	private static final String TRANSLATION = "translation 1";
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -42,10 +45,7 @@ public class ConsoleTrainerViewTest {
 	public void testStartConsoleShowStartupMessage() {
 		// setup
 		String userInput = "";
-		Scanner scanner = new Scanner(userInput);
-		ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
-		PrintStream outPrinter = new PrintStream(outputBuffer);
-		ConsoleTrainerView view = new ConsoleTrainerView(scanner, outPrinter, trainerController);
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
 		// exercise
 		view.startConsole();
 		// verify
@@ -56,16 +56,13 @@ public class ConsoleTrainerViewTest {
 	@Test
 	public void testStartConsoleNewVocable() {
 		// setup
-		Vocable vocableToAdd = new Vocable("phrase 1", "translation 1");
-		String userInput = "new\n" + "phrase 1\n" + "translation 1\n";
-		Scanner scanner = new Scanner(userInput);
-		ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
-		PrintStream outPrinter = new PrintStream(outputBuffer);
-		ConsoleTrainerView view = new ConsoleTrainerView(scanner, outPrinter, trainerController);
+		Vocable vocableToAdd = new Vocable(PHRASE, TRANSLATION);
+		String userInput = "new" + NL + PHRASE + NL + TRANSLATION + NL;
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
 		// exercise
 		view.startConsole();
 		// verify
-		String[] output = outputBuffer.toString().split(newLine);
+		String[] output = outputBuffer.toString().split(NL);
 		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
 		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
 		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
@@ -74,4 +71,10 @@ public class ConsoleTrainerViewTest {
 		verify(trainerController).newVocable(vocableToAdd);
 	}
 
+	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
+		Scanner scanner = new Scanner(userInput);
+		outputBuffer = new ByteArrayOutputStream();
+		PrintStream outPrinter = new PrintStream(outputBuffer);
+		return new ConsoleTrainerView(scanner, outPrinter, trainerController);
+	}
 }
