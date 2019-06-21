@@ -42,7 +42,8 @@ public class ConsoleTrainerView implements TrainerView {
 		out.println(
 				"##### Vocable Trainer #####\nenter 'n'/'new' to add a new vocable\nenter 'l'/'learn' to start learning");
 		if (in.hasNextLine()) {
-			if (in.nextLine().equals("new")) {
+			String comm = in.nextLine();
+			if (comm.equals("new")) {
 				out.println("phrase: ");
 				String phrase = in.nextLine().trim();
 				if (!phrase.isEmpty()) {
@@ -56,7 +57,7 @@ public class ConsoleTrainerView implements TrainerView {
 				} else {
 					out.println("ABORT: no phrase!");
 				}
-			} else {
+			} else if (comm.equals("learn")) {
 				trainerContr.nextVocable(currentVocable);
 			}
 		}
