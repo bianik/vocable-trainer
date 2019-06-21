@@ -246,7 +246,7 @@ public class ConsoleTrainerViewTest {
 	}
 	
 	@Test
-	public void testShowMessageVocableAddedSuccessfully() {
+	public void testShowMessageVocableAdded() {
 		// setup
 		Vocable vocableToAdd = new Vocable(PHRASE,TRANSLATION);
 		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
@@ -255,6 +255,18 @@ public class ConsoleTrainerViewTest {
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
 		assertThat(output[0]).isEqualTo("Vocable added: " + PHRASE + " - " + TRANSLATION);
+	}
+	
+	@Test
+	public void testShowCheckResult() {
+		// setup
+		Vocable vocableToAdd = new Vocable(PHRASE,TRANSLATION);
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
+		// exercise
+		view.showCheckResult("correct!", true);
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[0]).isEqualTo("correct!");
 	}
 
 	private ConsoleTrainerView createConsoleTrainerViewWithUserInput(String userInput) {
