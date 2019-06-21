@@ -49,7 +49,7 @@ public class ConsoleTrainerView implements TrainerView {
 				String translation = in.nextLine().trim();
 				trainerContr.newVocable(new Vocable(phrase, translation));
 			} else {
-				trainerContr.nextVocable(null);
+				trainerContr.nextVocable(currentVocable);
 			}
 		}
 	}
