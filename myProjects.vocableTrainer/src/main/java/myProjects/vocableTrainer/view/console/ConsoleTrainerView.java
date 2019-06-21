@@ -45,15 +45,17 @@ public class ConsoleTrainerView implements TrainerView {
 			if (in.nextLine().equals("new")) {
 				out.println("phrase: ");
 				String phrase = in.nextLine().trim();
-				out.println("translation: ");
-				String translation = in.nextLine().trim();
-				trainerContr.newVocable(new Vocable(phrase, translation));
+				if (!phrase.isEmpty()) {
+					out.println("translation: ");
+					String translation = in.nextLine().trim();
+					trainerContr.newVocable(new Vocable(phrase, translation));
+				}
 			} else {
 				trainerContr.nextVocable(currentVocable);
 			}
 		}
 	}
-	
+
 	// package-privates setter for testing
 	void setCurrentVocable(Vocable currentVocable) {
 		this.currentVocable = currentVocable;
