@@ -39,6 +39,8 @@ public class ConsoleTrainerView implements TrainerView {
 
 	public void startConsole() {
 		out.println("##### Vocable Trainer #####\nenter 'n'/'new' to add a new vocable\nenter 'l'/'learn' to start learning");
+		if(in.hasNextLine())
+			out.println("phrase: ");
 	}
 
 }
