@@ -197,6 +197,12 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		checkVocablePanel.add(lblEnter, gbc_lblEnter);
 
 		enterTextField = new JTextField();
+		enterTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnCheck.setEnabled(!enterTextField.getText().isEmpty());
+			}
+		});
 		enterTextField.setName("checkEnterTextBox");
 		GridBagConstraints gbc_enterTextField = new GridBagConstraints();
 		gbc_enterTextField.gridwidth = 3;
