@@ -58,29 +58,32 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Next")).requireDisabled();
 		window.label("checkVocableMessageLabel").requireText(" ");
 	}
-	
-	@Test @GUITest
+
+	@Test
+	@GUITest
 	public void testWhenPhraseAndTranslationAreNotEmptyThenAddButtonShouldBeEnabled() {
 		window.textBox("newPhraseTextBox").enterText("phrase 1");
 		window.textBox("newTranslationTextBox").enterText("translation 1");
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 	}
-	
-	@Test @GUITest
+
+	@Test
+	@GUITest
 	public void testWhenEitherPhraseOrTranslationAreBlankThenAddButtonShouldBeDisabled() {
 		window.textBox("newPhraseTextBox").enterText(" ");
 		window.textBox("newTranslationTextBox").enterText("translation 1");
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
 		// erase text in TextFields
-		window.textBox("newPhraseTextBox").setText("");			
+		window.textBox("newPhraseTextBox").setText("");
 		window.textBox("newTranslationTextBox").setText("");
-		
+
 		window.textBox("newPhraseTextBox").enterText("phrase 1");
 		window.textBox("newTranslationTextBox").enterText(" ");
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
 	}
-	
-	@Test @GUITest
+
+	@Test
+	@GUITest
 	public void testWhenAddButtonIsClickedClearPhraseAndTranslation() {
 		// setup
 		window.textBox("newPhraseTextBox").enterText("phrase 1");
@@ -91,11 +94,12 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("newPhraseTextBox").requireEmpty();
 		window.textBox("newTranslationTextBox").requireEmpty();
 	}
-	
-	@Test @GUITest
+
+	@Test
+	@GUITest
 	public void testAddButtonShouldDelegateToTrainerControllerNewVocable() {
 		// setup
-		Vocable vocableToAdd = new Vocable("phrase 1","translation 1");
+		Vocable vocableToAdd = new Vocable("phrase 1", "translation 1");
 		window.textBox("newPhraseTextBox").enterText("phrase 1");
 		window.textBox("newTranslationTextBox").enterText("translation 1");
 		// execute
@@ -103,11 +107,12 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		verify(trainerController).newVocable(vocableToAdd);
 	}
-	
-	@Test @GUITest
+
+	@Test
+	@GUITest
 	public void testAddButtonShouldDelegateToTrainerControllerNewVocableIgnoreLeadingOrTrailingWhiteSpace() {
 		// setup
-		Vocable vocableToAdd = new Vocable("phrase 1","translation 1");
+		Vocable vocableToAdd = new Vocable("phrase 1", "translation 1");
 		window.textBox("newPhraseTextBox").enterText(" phrase 1  ");
 		window.textBox("newTranslationTextBox").enterText("   translation 1   ");
 		// execute
@@ -115,8 +120,9 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		verify(trainerController).newVocable(vocableToAdd);
 	}
-	
-	@Test @GUITest
+
+	@Test
+	@GUITest
 	public void testAddButtonWhenClickedShouldEnableNextButton() {
 		// setup
 		window.textBox("newPhraseTextBox").enterText("phrase 1");
@@ -125,5 +131,16 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Add")).click();
 		// verify
 		window.button(JButtonMatcher.withText("Next")).requireEnabled();
+	}
+
+	@Test
+	@GUITest
+	public void testeNextButtonShouldDelegateToTrainerControllerNextVocableWhenNoCurrentVocable() {
+		// setup - execute on EDT
+		GuiActionRunner.execute(() -> swingTrainerView.btnNext.setEnabled(true));
+		// execute
+		window.button(JButtonMatcher.withText("Next")).click();
+		// verify
+		verify(trainerController).nextVocable(null);
 	}
 }
