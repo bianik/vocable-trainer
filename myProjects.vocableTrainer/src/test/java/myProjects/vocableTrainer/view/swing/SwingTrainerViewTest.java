@@ -56,4 +56,18 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("newTranslationTextBox").enterText("translation 1");
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 	}
+	
+	@Test @GUITest
+	public void testWhenEitherPhraseOrTranslationAreBlankThenAddButtonShouldBeDisabled() {
+		window.textBox("newPhraseTextBox").enterText(" ");
+		window.textBox("newTranslationTextBox").enterText("translation 1");
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+		// erase text in TextFields
+		window.textBox("newPhraseTextBox").setText("");			
+		window.textBox("newTranslationTextBox").setText("");
+		
+		window.textBox("newPhraseTextBox").enterText("phrase 1");
+		window.textBox("newTranslationTextBox").enterText(" ");
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+	}
 }
