@@ -227,7 +227,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		btnNext = new JButton("Next");
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				trainerController.nextVocable(null);
+				trainerController.nextVocable(currentVocable);
 			}
 		});
 		btnNext.setEnabled(false);
