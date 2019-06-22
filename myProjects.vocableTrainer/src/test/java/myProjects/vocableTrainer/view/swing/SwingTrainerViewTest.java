@@ -161,9 +161,9 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testWhenEnterTextFieldIsNotEmptyThenCheckButtonShouldBeEnabled() {
+	public void testWhenEnterTextFieldIsNotEmptyAndNoCurrentVocableThenCheckButtonShouldBeDisabled() {
 		window.textBox("checkEnterTextBox").enterText("phrase 1");
-		window.button(JButtonMatcher.withText("Check")).requireEnabled();
+		window.button(JButtonMatcher.withText("Check")).requireDisabled();
 	}
 
 	@Test
