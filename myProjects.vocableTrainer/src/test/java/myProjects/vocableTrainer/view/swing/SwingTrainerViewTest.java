@@ -115,4 +115,15 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		verify(trainerController).newVocable(vocableToAdd);
 	}
+	
+	@Test @GUITest
+	public void testAddButtonWhenClickedShouldEnableNextButton() {
+		// setup
+		window.textBox("newPhraseTextBox").enterText("phrase 1");
+		window.textBox("newTranslationTextBox").enterText("translation 1");
+		// execute
+		window.button(JButtonMatcher.withText("Add")).click();
+		// verify
+		window.button(JButtonMatcher.withText("Next")).requireEnabled();
+	}
 }
