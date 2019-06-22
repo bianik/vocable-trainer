@@ -223,6 +223,11 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		checkVocablePanel.add(lblCheckMessage, gbc_lblCheckMessage);
 
 		btnCheck = new JButton("Check");
+		btnCheck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				trainerController.checkVocableOnGivenPhrase(new Vocable(enterTextField.getText(), currentVocable.getTranslation()));
+			}
+		});
 		btnCheck.setEnabled(false);
 		GridBagConstraints gbc_btnCheck = new GridBagConstraints();
 		gbc_btnCheck.insets = new Insets(0, 0, 0, 5);
