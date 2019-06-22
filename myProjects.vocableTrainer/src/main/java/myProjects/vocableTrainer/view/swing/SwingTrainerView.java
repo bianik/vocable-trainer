@@ -200,7 +200,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		enterTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				btnCheck.setEnabled(!enterTextField.getText().trim().isEmpty());
+				
 			}
 		});
 		enterTextField.setName("checkEnterTextBox");
