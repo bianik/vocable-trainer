@@ -93,10 +93,11 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		KeyAdapter btnAddEnabler = new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				btnAdd.setEnabled(!phraseTxtField.getText().trim().isEmpty() && !translationTxtField.getText().trim().isEmpty());
+				btnAdd.setEnabled(
+						!phraseTxtField.getText().trim().isEmpty() && !translationTxtField.getText().trim().isEmpty());
 			}
 		};
-		
+
 		phraseTxtField = new JTextField();
 		phraseTxtField.addKeyListener(btnAddEnabler);
 		phraseTxtField.setName("newPhraseTextBox");
@@ -143,6 +144,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				trainerController.newVocable(new Vocable(phraseTxtField.getText(), translationTxtField.getText()));
 				phraseTxtField.setText("");
 				translationTxtField.setText("");
 			}
