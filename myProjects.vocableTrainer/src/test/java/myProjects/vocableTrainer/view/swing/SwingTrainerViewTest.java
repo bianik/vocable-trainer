@@ -1,26 +1,34 @@
 package myProjects.vocableTrainer.view.swing;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
-import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import myProjects.vocableTrainer.controller.TrainerController;
 
 @RunWith(GUITestRunner.class) // takes screenshots in case of failure
 public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 	private FrameFixture window; // interact with GUI-components
 	private SwingTrainerView swingTrainerView; // call and test methods on this
+	@Mock
+	private TrainerController trainerController;
 
 	@Override
 	protected void onSetUp() {
+		MockitoAnnotations.initMocks(this);
 		GuiActionRunner.execute(() -> {
 			swingTrainerView = new SwingTrainerView();
+			swingTrainerView.setTrainerController(trainerController);
 			return swingTrainerView;
 		});
 		window = new FrameFixture(robot(), swingTrainerView);

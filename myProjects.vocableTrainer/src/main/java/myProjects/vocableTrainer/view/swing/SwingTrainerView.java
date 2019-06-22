@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import myProjects.vocableTrainer.controller.TrainerController;
 import myProjects.vocableTrainer.model.Vocable;
 import myProjects.vocableTrainer.view.TrainerView;
 import java.awt.GridLayout;
@@ -24,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class SwingTrainerView extends JFrame implements TrainerView {
+	TrainerController trainerController;
 
 	private JPanel contentPane;
 	private JTextField translationTxtField;
@@ -242,5 +244,9 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 	public void showNextVocable(String message, Vocable vocable) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setTrainerController(TrainerController trainerController) {
+		this.trainerController = trainerController;
 	}
 }
