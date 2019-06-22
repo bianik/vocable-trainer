@@ -165,6 +165,15 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("checkEnterTextBox").enterText("phrase 1");
 		window.button(JButtonMatcher.withText("Check")).requireDisabled();
 	}
+	
+	@Test
+	@GUITest
+	public void testWhenEnterTextFieldIsNotEmptyAndCurrentVocableThenCheckButtonShouldBeEnabled() {
+		Vocable currentVocable = new Vocable("phrase 1", "translation 1");
+		GuiActionRunner.execute(() -> swingTrainerView.setCurrentVocable(currentVocable));
+		window.textBox("checkEnterTextBox").enterText("phrase 1");
+		window.button(JButtonMatcher.withText("Check")).requireEnabled();
+	}
 
 	@Test
 	@GUITest
