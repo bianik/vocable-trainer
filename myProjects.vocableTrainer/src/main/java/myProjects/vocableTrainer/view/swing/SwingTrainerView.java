@@ -144,7 +144,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				trainerController.newVocable(new Vocable(phraseTxtField.getText(), translationTxtField.getText()));
+				trainerController.newVocable(new Vocable(phraseTxtField.getText().trim(), translationTxtField.getText().trim()));
 				phraseTxtField.setText("");
 				translationTxtField.setText("");
 			}
