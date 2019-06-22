@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import myProjects.vocableTrainer.controller.TrainerController;
+import myProjects.vocableTrainer.model.Vocable;
 
 @RunWith(GUITestRunner.class) // takes screenshots in case of failure
 public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
@@ -89,5 +90,17 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		window.textBox("newPhraseTextBox").requireEmpty();
 		window.textBox("newTranslationTextBox").requireEmpty();
+	}
+	
+	@Test @GUITest
+	public void testAddButtonShouldDelegateToTrainerControllerNewVocable() {
+		// setup
+		Vocable vocableToAdd = new Vocable("phrase 1","translation 1");
+		window.textBox("newPhraseTextBox").enterText("phrase 1");
+		window.textBox("newTranslationTextBox").enterText("translation 1");
+		// execute
+		window.button(JButtonMatcher.withText("Add")).click();
+		// verify
+		verify(trainerController).newVocable(vocableToAdd);
 	}
 }
