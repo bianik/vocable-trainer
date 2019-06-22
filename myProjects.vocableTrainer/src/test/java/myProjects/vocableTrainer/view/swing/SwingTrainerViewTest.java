@@ -30,13 +30,14 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testControlsInitialState() {
+		window.requireTitle("Vocable Trainer");
 		// components in upper panel 'new vocable'
 		window.panel("newVocable");
 		window.label("newPhraseLabel");
 		window.label("newTranslationLabel");
 		window.textBox("newPhraseTextBox").requireEditable().requireEmpty();
 		window.textBox("newTranslationTextBox").requireEditable().requireEmpty();
-		window.button(JButtonMatcher.withText("add")).requireDisabled();
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
 		window.label("newVocableMessageLabel").requireText(" ");
 		// components in upper panel 'check vocable'
 		window.panel("checkVocable");
@@ -44,8 +45,8 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.label("checkShowLabel");
 		window.label("checkEnterLabel");
 		window.textBox("checkEnterTextBox").requireEditable().requireEmpty();
-		window.button(JButtonMatcher.withText("check")).requireDisabled();
-		window.button(JButtonMatcher.withText("next")).requireDisabled();
+		window.button(JButtonMatcher.withText("Check")).requireDisabled();
+		window.button(JButtonMatcher.withText("Next")).requireDisabled();
 		window.label("checkVocableMessageLabel").requireText(" ");
 	}
 }
