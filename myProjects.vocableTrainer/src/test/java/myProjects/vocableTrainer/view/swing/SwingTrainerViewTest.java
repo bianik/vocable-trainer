@@ -49,4 +49,11 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Next")).requireDisabled();
 		window.label("checkVocableMessageLabel").requireText(" ");
 	}
+	
+	@Test @GUITest
+	public void testWhenPhraseAndTranslationAreNotEmptyThenAddButtonShouldBeEnabled() {
+		window.textBox("newPhraseTextBox").enterText("phrase 1");
+		window.textBox("newTranslationTextBox").enterText("translation 1");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+	}
 }
