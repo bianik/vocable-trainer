@@ -224,6 +224,11 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		checkVocablePanel.add(btnCheck, gbc_btnCheck);
 
 		btnNext = new JButton("Next");
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				trainerController.nextVocable(null);
+			}
+		});
 		btnNext.setEnabled(false);
 		GridBagConstraints gbc_btnNext = new GridBagConstraints();
 		gbc_btnNext.gridx = 3;
