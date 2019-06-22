@@ -88,7 +88,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// setup
 		window.textBox("newPhraseTextBox").enterText("phrase 1");
 		window.textBox("newTranslationTextBox").enterText("translation 1");
-		// execute
+		// exercise
 		window.button(JButtonMatcher.withText("Add")).click();
 		// verify
 		window.textBox("newPhraseTextBox").requireEmpty();
@@ -102,7 +102,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		Vocable vocableToAdd = new Vocable("phrase 1", "translation 1");
 		window.textBox("newPhraseTextBox").enterText("phrase 1");
 		window.textBox("newTranslationTextBox").enterText("translation 1");
-		// execute
+		// exercise
 		window.button(JButtonMatcher.withText("Add")).click();
 		// verify
 		verify(trainerController).newVocable(vocableToAdd);
@@ -115,7 +115,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		Vocable vocableToAdd = new Vocable("phrase 1", "translation 1");
 		window.textBox("newPhraseTextBox").enterText(" phrase 1  ");
 		window.textBox("newTranslationTextBox").enterText("   translation 1   ");
-		// execute
+		// exercise
 		window.button(JButtonMatcher.withText("Add")).click();
 		// verify
 		verify(trainerController).newVocable(vocableToAdd);
@@ -127,7 +127,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// setup
 		window.textBox("newPhraseTextBox").enterText("phrase 1");
 		window.textBox("newTranslationTextBox").enterText("translation 1");
-		// execute
+		// exercise
 		window.button(JButtonMatcher.withText("Add")).click();
 		// verify
 		window.button(JButtonMatcher.withText("Next")).requireEnabled();
@@ -135,10 +135,10 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testeNextButtonShouldDelegateToTrainerControllerNextVocableWhenNoCurrentVocable() {
+	public void testNextButtonShouldDelegateToTrainerControllerNextVocableWhenNoCurrentVocable() {
 		// setup - execute on EDT
 		GuiActionRunner.execute(() -> swingTrainerView.btnNext.setEnabled(true));
-		// execute
+		// exercise
 		window.button(JButtonMatcher.withText("Next")).click();
 		// verify
 		verify(trainerController).nextVocable(null);
@@ -146,16 +146,23 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testeNextButtonShouldDelegateToTrainerControllerNextVocableWhenCurrentVocable() {
+	public void testNextButtonShouldDelegateToTrainerControllerNextVocableWhenCurrentVocable() {
 		// setup - execute on EDT
 		Vocable currentVocable = new Vocable("phrase 1", "translation 1");
 		GuiActionRunner.execute(() -> {
 			swingTrainerView.setCurrentVocable(currentVocable);
 			swingTrainerView.btnNext.setEnabled(true);
 		});
-		// execute
+		// exercise
 		window.button(JButtonMatcher.withText("Next")).click();
 		// verify
 		verify(trainerController).nextVocable(currentVocable);
+	}
+	
+	@Test
+	@GUITest
+	public void testWhenEntertextFieldIsNotEmptyThenCheckButtonShouldBeEnabled() {
+		window.textBox("checkEnterTextBox").enterText("phrase 1");
+		window.button(JButtonMatcher.withText("Check")).requireEnabled();
 	}
 }
