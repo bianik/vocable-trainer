@@ -103,4 +103,16 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		verify(trainerController).newVocable(vocableToAdd);
 	}
+	
+	@Test @GUITest
+	public void testAddButtonShouldDelegateToTrainerControllerNewVocableIgnoreLeadingOrTrailingWhiteSpace() {
+		// setup
+		Vocable vocableToAdd = new Vocable("phrase 1","translation 1");
+		window.textBox("newPhraseTextBox").enterText(" phrase 1  ");
+		window.textBox("newTranslationTextBox").enterText("   translation 1   ");
+		// execute
+		window.button(JButtonMatcher.withText("Add")).click();
+		// verify
+		verify(trainerController).newVocable(vocableToAdd);
+	}
 }
