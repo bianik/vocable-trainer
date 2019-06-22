@@ -25,7 +25,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class SwingTrainerView extends JFrame implements TrainerView {
-	TrainerController trainerController;
+	private TrainerController trainerController;
+	private Vocable currentVocable;
 
 	private JPanel contentPane;
 	private JTextField translationTxtField;
@@ -256,5 +257,10 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 
 	public void setTrainerController(TrainerController trainerController) {
 		this.trainerController = trainerController;
+	}
+
+	// package-private setter
+	void setCurrentVocable(Vocable currentVocable) {
+		this.currentVocable = currentVocable;
 	}
 }

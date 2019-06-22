@@ -143,4 +143,19 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		verify(trainerController).nextVocable(null);
 	}
+
+	@Test
+	@GUITest
+	public void testeNextButtonShouldDelegateToTrainerControllerNextVocableWhenCurrentVocable() {
+		// setup - execute on EDT
+		Vocable currentVocable = new Vocable("phrase 1", "translation 1");
+		GuiActionRunner.execute(() -> {
+			swingTrainerView.setCurrentVocable(currentVocable);
+			swingTrainerView.btnNext.setEnabled(true);
+		});
+		// execute
+		window.button(JButtonMatcher.withText("Next")).click();
+		// verify
+		verify(trainerController).nextVocable(currentVocable);
+	}
 }
