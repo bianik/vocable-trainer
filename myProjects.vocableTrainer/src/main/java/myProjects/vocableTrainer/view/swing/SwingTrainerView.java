@@ -20,6 +20,8 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class SwingTrainerView extends JFrame implements TrainerView {
 
@@ -137,6 +139,12 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		newVocablePanel.add(lblAddMessage, gbc_lblAddMessage);
 
 		btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				phraseTxtField.setText("");
+				translationTxtField.setText("");
+			}
+		});
 		btnAdd.setEnabled(false);
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
 		gbc_btnAdd.gridx = 2;
