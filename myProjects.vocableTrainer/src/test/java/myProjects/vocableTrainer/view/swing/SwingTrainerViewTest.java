@@ -288,6 +288,6 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.label("checkShowLabel").requireText("some text");
 		window.textBox("checkEnterTextBox").requireText("some text");
 		window.label("checkVocableMessageLabel").requireText("Database error!");
-//		assertThat(swingTrainerView.getCurrentVocable()).isEqualTo(currentVocable);
+		assertThat(swingTrainerView.getCurrentVocable()).isEqualTo(currentVocable);
 	}
 }
