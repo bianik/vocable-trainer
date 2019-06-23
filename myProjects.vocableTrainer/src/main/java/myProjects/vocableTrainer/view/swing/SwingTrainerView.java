@@ -40,7 +40,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 	private JLabel lblCheckMessage;
 	private JButton btnAdd;
 	private JButton btnCheck;
-	JButton btnNext;		// package-private to enable via test
+	JButton btnNext; // package-private to enable via test
 
 	/**
 	 * Launch the application.
@@ -146,7 +146,8 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				trainerController.newVocable(new Vocable(phraseTxtField.getText().trim(), translationTxtField.getText().trim()));
+				trainerController
+						.newVocable(new Vocable(phraseTxtField.getText().trim(), translationTxtField.getText().trim()));
 				phraseTxtField.setText("");
 				translationTxtField.setText("");
 				btnNext.setEnabled(true);
@@ -226,7 +227,8 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		btnCheck = new JButton("Check");
 		btnCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				trainerController.checkVocableOnGivenPhrase(new Vocable(enterTextField.getText(), currentVocable.getTranslation()));
+				trainerController.checkVocableOnGivenPhrase(
+						new Vocable(enterTextField.getText(), currentVocable.getTranslation()));
 			}
 		});
 		btnCheck.setEnabled(false);
@@ -251,7 +253,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 
 	@Override
 	public void showMessageVocableAdded(String message, Vocable vocable) {
-		if(vocable != null) {
+		if (vocable != null) {
 			lblAddMessage.setForeground(Color.BLACK);
 			lblAddMessage.setText(message + vocable.getPhrase() + " - " + vocable.getTranslation());
 		} else {
@@ -279,5 +281,10 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 	// package-private setter
 	void setCurrentVocable(Vocable currentVocable) {
 		this.currentVocable = currentVocable;
+	}
+
+	// package-private getter
+	Vocable getCurrentVocable() {
+		return currentVocable;
 	}
 }

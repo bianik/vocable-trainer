@@ -1,6 +1,6 @@
 package myProjects.vocableTrainer.view.swing;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 import java.awt.Color;
@@ -260,5 +260,6 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> swingTrainerView.showNextVocable("", nextVocable));
 		// verify
 		window.label("checkShowLabel").requireText("translation 1");
+		assertThat(swingTrainerView.getCurrentVocable()).isEqualTo(nextVocable);
 	}
 }
