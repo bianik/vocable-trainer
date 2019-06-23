@@ -241,6 +241,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		window.label("checkVocableMessageLabel").requireText("correct!");
 		window.label("checkVocableMessageLabel").foreground().requireEqualTo(Color.GREEN);
+		window.textBox("checkEnterTextBox").background().requireEqualTo(Color.GREEN);
 	}
 	
 	@Test
