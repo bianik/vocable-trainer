@@ -3,6 +3,8 @@ package myProjects.vocableTrainer.view.swing;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
+import java.awt.Color;
+
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
@@ -213,5 +215,6 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> swingTrainerView.showMessageVocableAdded("Database error!", null));
 		// verify
 		window.label("newVocableMessageLabel").requireText("Database error!");
+		window.label("newVocableMessageLabel").foreground().requireEqualTo(Color.RED);
 	}
 }
