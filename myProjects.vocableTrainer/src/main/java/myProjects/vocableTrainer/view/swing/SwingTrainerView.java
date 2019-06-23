@@ -262,7 +262,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 
 	@Override
 	public void showCheckResult(String message, boolean result) {
-		lblCheckMessage.setForeground(Color.RED);
+		lblCheckMessage.setForeground(result ? Color.GREEN : Color.RED);
 		lblCheckMessage.setText(message);
 	}
 
