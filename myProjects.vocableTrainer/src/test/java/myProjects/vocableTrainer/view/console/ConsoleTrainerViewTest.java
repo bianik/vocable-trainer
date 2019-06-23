@@ -286,6 +286,7 @@ public class ConsoleTrainerViewTest {
 		String[] output = outputBuffer.toString().split(NL);
 		assertThat(output[0]).isEqualTo("translation: " + TRANSLATION);
 		assertThat(output[1]).isEqualTo("enter phrase: ");
+		assertThat(view.getCurrentVocable()).isEqualTo(nextVocable);
 	}
 	
 	@Test
