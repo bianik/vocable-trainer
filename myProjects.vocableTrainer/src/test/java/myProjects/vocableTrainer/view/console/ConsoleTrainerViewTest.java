@@ -304,6 +304,8 @@ public class ConsoleTrainerViewTest {
 		Scanner scanner = new Scanner(userInput);
 		outputBuffer = new ByteArrayOutputStream();
 		PrintStream outPrinter = new PrintStream(outputBuffer);
-		return new ConsoleTrainerView(scanner, outPrinter, trainerController);
+		ConsoleTrainerView cTView = new ConsoleTrainerView(scanner, outPrinter);
+		cTView.setTrainerContr(trainerController);
+		return cTView;
 	}
 }

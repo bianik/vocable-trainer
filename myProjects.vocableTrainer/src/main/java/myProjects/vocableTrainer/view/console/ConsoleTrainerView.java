@@ -19,11 +19,10 @@ public class ConsoleTrainerView implements TrainerView {
 	private static final String ANSI_RED = "\u001B[31m";
 	private static final String ANSI_GREEN = "\u001B[32m";
 	
-	public ConsoleTrainerView(Scanner in, PrintStream out, TrainerController trainerContr) {
+	public ConsoleTrainerView(Scanner in, PrintStream out) {
 		super();
 		this.in = in;
 		this.out = out;
-		this.trainerContr = trainerContr;
 	}
 
 	@Override
@@ -83,8 +82,12 @@ public class ConsoleTrainerView implements TrainerView {
 		}
 		return true;
 	}
-
-	// package-privates setter for testing
+	
+	public void setTrainerContr(TrainerController trainerContr) {
+		this.trainerContr = trainerContr;
+	}
+	
+	// package-private setter for testing
 	void setCurrentVocable(Vocable currentVocable) {
 		this.currentVocable = currentVocable;
 	}
