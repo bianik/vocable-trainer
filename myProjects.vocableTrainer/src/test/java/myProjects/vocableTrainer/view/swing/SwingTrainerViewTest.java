@@ -204,6 +204,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testShowMessageVocableAdded() {
 		// setup
+		GuiActionRunner.execute(() -> swingTrainerView.lblAddMessage.setForeground(Color.RED));
 		Vocable vocableToAdd = new Vocable("phrase 1", "translation 1");
 		// exercise
 		GuiActionRunner.execute(() -> swingTrainerView.showMessageVocableAdded("Vocable added: ", vocableToAdd));
@@ -220,18 +221,6 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		window.label("newVocableMessageLabel").requireText("Database error!");
 		window.label("newVocableMessageLabel").foreground().requireEqualTo(Color.RED);
-	}
-
-	@Test
-	@GUITest
-	public void testShowMessageVocableAddedColorGoesBackToBlackAfterError() {
-		// exercise
-		GuiActionRunner.execute(() -> swingTrainerView.showMessageVocableAdded("Database error!", null));
-		Vocable vocableToAdd = new Vocable("phrase 1", "translation 1");
-		GuiActionRunner.execute(() -> swingTrainerView.showMessageVocableAdded("Vocable added: ", vocableToAdd));
-		// verify
-		window.label("newVocableMessageLabel").requireText("Vocable added: phrase 1 - translation 1");
-		window.label("newVocableMessageLabel").foreground().requireEqualTo(Color.BLACK);
 	}
 
 	@Test
