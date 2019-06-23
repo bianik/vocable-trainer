@@ -1,6 +1,7 @@
 package myProjects.vocableTrainer.view.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -252,8 +253,10 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 	public void showMessageVocableAdded(String message, Vocable vocable) {
 		if(vocable != null)
 			lblAddMessage.setText(message + vocable.getPhrase() + " - " + vocable.getTranslation());
-		else
+		else {
+			lblAddMessage.setForeground(Color.RED);
 			lblAddMessage.setText(message);
+		}
 	}
 
 	@Override
