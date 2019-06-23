@@ -253,4 +253,12 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.label("checkVocableMessageLabel").foreground().requireEqualTo(Color.RED);
 		window.textBox("checkEnterTextBox").background().requireEqualTo(Color.RED);
 	}
+	
+	@Test @GUITest
+	public void testShowNextVocableWhenNextVocable() {
+		Vocable nextVocable = new Vocable("phrase 1", "translation 1");
+		GuiActionRunner.execute(() -> swingTrainerView.showNextVocable("", nextVocable));
+		// verify
+		window.label("checkShowLabel").requireText("translation 1");
+	}
 }
