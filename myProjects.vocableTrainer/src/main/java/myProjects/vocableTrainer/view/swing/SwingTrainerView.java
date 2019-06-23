@@ -37,10 +37,10 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 	private JLabel lblShowTitle;
 	private JLabel lblShow;
 	private JLabel lblEnter;
-	private JLabel lblCheckMessage;
+	JLabel lblCheckMessage;			// package-private for testing
 	private JButton btnAdd;
 	private JButton btnCheck;
-	JButton btnNext; // package-private to enable via test
+	JButton btnNext; 				// package-private to enable via test
 
 	/**
 	 * Launch the application.
