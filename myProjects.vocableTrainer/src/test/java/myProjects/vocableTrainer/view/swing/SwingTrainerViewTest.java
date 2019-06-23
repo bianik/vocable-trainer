@@ -206,4 +206,12 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		window.label("newVocableMessageLabel").requireText("Vocable added: phrase 1 - translation 1");
 	}
+	
+	@Test @GUITest
+	public void testShowMessageVocableAddedDbError() {
+		// exercise
+		GuiActionRunner.execute(() -> swingTrainerView.showMessageVocableAdded("Database error!", null));
+		// verify
+		window.label("newVocableMessageLabel").requireText("Database error!");
+	}
 }
