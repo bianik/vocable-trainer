@@ -35,7 +35,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 	private JTextField phraseTxtField;
 	private JLabel lblAddMessage;
 	private JLabel lblShowTitle;
-	private JLabel lblShow;
+	JLabel lblShow;
 	private JLabel lblEnter;
 	JLabel lblCheckMessage;			// package-private for testing
 	private JButton btnAdd;
