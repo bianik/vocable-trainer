@@ -36,6 +36,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.show();
 	}
 
+////////////////// unit tests for GUI- controls and GUI's logic /////////////
 	@Test
 	@GUITest
 	public void testControlsInitialState() {
@@ -165,7 +166,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("checkEnterTextBox").enterText("phrase 1");
 		window.button(JButtonMatcher.withText("Check")).requireDisabled();
 	}
-	
+
 	@Test
 	@GUITest
 	public void testWhenEnterTextFieldIsNotEmptyAndCurrentVocableThenCheckButtonShouldBeEnabled() {
@@ -186,7 +187,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testCheckButtonShouldDelegateToTrainerControllerCheckOnGivenPhrase() {
 		// setup - execute on EDT
-		Vocable vocableToCheck = new Vocable("wrong phrase","translation 1");
+		Vocable vocableToCheck = new Vocable("wrong phrase", "translation 1");
 		Vocable currentVocable = new Vocable("phrase 1", "translation 1");
 		GuiActionRunner.execute(() -> swingTrainerView.setCurrentVocable(currentVocable));
 		window.textBox("checkEnterTextBox").enterText("wrong phrase");
@@ -194,5 +195,15 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Check")).click();
 		// verify
 		verify(trainerController).checkVocableOnGivenPhrase(vocableToCheck);
+	}
+////////////////// unit tests for TrainerView-interface implementation/////////////
+	@Test @GUITest
+	public void testShowMessageVocableAdded() {
+		// setup
+		Vocable vocableToAdd = new Vocable("phrase 1", "translation 1");
+		// exercise
+		GuiActionRunner.execute(() -> swingTrainerView.showMessageVocableAdded("Vocable added: ", vocableToAdd));
+		// verify
+		window.label("newVocableMessageLabel").requireText("Vocable added: phrase 1 - translation 1");
 	}
 }
