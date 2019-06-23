@@ -293,11 +293,14 @@ public class ConsoleTrainerViewTest {
 	public void testShowNextVocableWhenNoNextVocable() {
 		// setup
 		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
+		Vocable currentVocable = new Vocable(PHRASE, TRANSLATION);
+		view.setCurrentVocable(currentVocable);
 		// exercise
 		view.showNextVocable(DATABASE_ERROR, null);
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
 		assertThat(output[0]).isEqualTo(ANSI_RED + DATABASE_ERROR + ANSI_RESET);
+		assertThat(view.getCurrentVocable()).isEqualTo(currentVocable);
 	}
 
 	//////////////// helping method ////////////////////
