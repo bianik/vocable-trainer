@@ -45,18 +45,18 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SwingTrainerView frame = new SwingTrainerView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					SwingTrainerView frame = new SwingTrainerView();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -144,14 +144,12 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		newVocablePanel.add(lblAddMessage, gbc_lblAddMessage);
 
 		btnAdd = new JButton("Add");
-		btnAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				trainerController
-						.newVocable(new Vocable(phraseTxtField.getText().trim(), translationTxtField.getText().trim()));
-				phraseTxtField.setText("");
-				translationTxtField.setText("");
-				btnNext.setEnabled(true);
-			}
+		btnAdd.addActionListener(e -> {
+			trainerController
+					.newVocable(new Vocable(phraseTxtField.getText().trim(), translationTxtField.getText().trim()));
+			phraseTxtField.setText("");
+			translationTxtField.setText("");
+			btnNext.setEnabled(true);
 		});
 		btnAdd.setEnabled(false);
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
@@ -225,11 +223,9 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		checkVocablePanel.add(lblCheckMessage, gbc_lblCheckMessage);
 
 		btnCheck = new JButton("Check");
-		btnCheck.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				trainerController.checkVocableOnGivenPhrase(
-						new Vocable(enterTextField.getText(), currentVocable.getTranslation()));
-			}
+		btnCheck.addActionListener(e -> {
+			trainerController
+					.checkVocableOnGivenPhrase(new Vocable(enterTextField.getText(), currentVocable.getTranslation()));
 		});
 		btnCheck.setEnabled(false);
 		GridBagConstraints gbc_btnCheck = new GridBagConstraints();
@@ -239,10 +235,8 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		checkVocablePanel.add(btnCheck, gbc_btnCheck);
 
 		btnNext = new JButton("Next");
-		btnNext.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				trainerController.nextVocable(currentVocable);
-			}
+		btnNext.addActionListener(e -> {
+			trainerController.nextVocable(currentVocable);
 		});
 		btnNext.setEnabled(false);
 		GridBagConstraints gbc_btnNext = new GridBagConstraints();
