@@ -241,4 +241,13 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		window.label("checkVocableMessageLabel").requireText("correct!");
 	}
+	
+	@Test
+	@GUITest
+	public void testShowCheckResultWhenIncorrect() {
+		GuiActionRunner.execute(() -> swingTrainerView.showCheckResult("incorrect!", false));
+		// verify
+		window.label("checkVocableMessageLabel").requireText("incorrect!");
+		window.label("checkVocableMessageLabel").foreground().requireEqualTo(Color.RED);
+	}
 }
