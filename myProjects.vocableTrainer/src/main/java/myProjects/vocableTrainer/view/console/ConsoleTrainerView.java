@@ -44,6 +44,7 @@ public class ConsoleTrainerView implements TrainerView {
 			out.println("translation: " + vocable.getTranslation() + "\nenter phrase: ");
 		else
 			out.println(ANSI_RED + message + ANSI_RESET);
+		currentVocable = vocable;
 	}
 
 	public boolean startConsole() {
