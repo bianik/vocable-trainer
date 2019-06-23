@@ -271,9 +271,9 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 
 	@Override
 	public void showNextVocable(String message, Vocable vocable) {
-		lblShow.setText(vocable.getTranslation());
+		if(vocable != null)lblShow.setText(vocable.getTranslation());
 		enterTextField.setText("");
-		lblCheckMessage.setText(" ");
+		lblCheckMessage.setText(vocable != null ? " " : message);
 		this.currentVocable = vocable;
 	}
 
