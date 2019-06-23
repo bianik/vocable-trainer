@@ -35,9 +35,10 @@ public class ConsoleTrainerViewTest {
 		// exercise
 		view.startConsole();
 		// verify
-		String output = outputBuffer.toString();
-		assertThat(output).isEqualTo(
-				"##### Vocable Trainer #####\nenter 'n'/'new' to add a new vocable\nenter 'l'/'learn' to start learning\n");
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
+		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
+		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 	}
 
 	@Test
@@ -50,9 +51,6 @@ public class ConsoleTrainerViewTest {
 		view.startConsole();
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
-		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
-		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		assertThat(output[3]).isEqualTo("phrase: ");
 		assertThat(output[4]).isEqualTo("translation: ");
 		verify(trainerController).newVocable(vocableToAdd);
@@ -68,9 +66,6 @@ public class ConsoleTrainerViewTest {
 		view.startConsole();
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
-		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
-		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		assertThat(output[3]).isEqualTo("phrase: ");
 		assertThat(output[4]).isEqualTo("translation: ");
 		verify(trainerController).newVocable(vocableToAdd);
@@ -86,9 +81,6 @@ public class ConsoleTrainerViewTest {
 		view.startConsole();
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
-		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
-		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		assertThat(output[3]).isEqualTo("phrase: ");
 		assertThat(output[4]).isEqualTo("translation: ");
 		verify(trainerController).newVocable(vocableToAdd);
@@ -103,9 +95,6 @@ public class ConsoleTrainerViewTest {
 		view.startConsole();
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
-		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
-		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		assertThat(output[3]).isEqualTo("phrase: ");
 		assertThat(output[4]).isEqualTo("ABORT: no phrase!");
 		verify(trainerController, never()).newVocable(any());
@@ -120,9 +109,6 @@ public class ConsoleTrainerViewTest {
 		view.startConsole();
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
-		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
-		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		assertThat(output[3]).isEqualTo("phrase: ");
 		assertThat(output[4]).isEqualTo("translation: ");
 		assertThat(output[5]).isEqualTo("ABORT: no translation!");
@@ -137,10 +123,6 @@ public class ConsoleTrainerViewTest {
 		// exercise
 		view.startConsole();
 		// verify
-		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
-		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
-		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		verify(trainerController).nextVocable(null);
 	}
 
@@ -154,10 +136,6 @@ public class ConsoleTrainerViewTest {
 		// exercise
 		view.startConsole();
 		// verify
-		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
-		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
-		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		verify(trainerController).nextVocable(currentVocable);
 	}
 
@@ -171,10 +149,6 @@ public class ConsoleTrainerViewTest {
 		// exercise
 		view.startConsole();
 		// verify
-		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
-		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
-		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		verify(trainerController).nextVocable(currentVocable);
 	}
 	
@@ -189,10 +163,6 @@ public class ConsoleTrainerViewTest {
 		// exercise
 		view.startConsole();
 		// verify
-		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
-		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
-		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		verify(trainerController).nextVocable(currentVocable);
 		verify(trainerController).checkVocableOnGivenPhrase(vocableToCheck);
 	}
@@ -206,9 +176,6 @@ public class ConsoleTrainerViewTest {
 		view.startConsole();
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
-		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
-		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
-		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		assertThat(output[3]).isEqualTo("ABORT: wrong command!");
 		verify(trainerController, never()).nextVocable(any());
 	}
