@@ -13,6 +13,7 @@ import myProjects.vocableTrainer.controller.TrainerController;
 import myProjects.vocableTrainer.model.Vocable;
 
 public class ConsoleTrainerViewTest {
+	private static final String SOME_PHRASE = "some phrase";
 	TrainerController trainerController = mock(TrainerController.class);
 	ByteArrayOutputStream outputBuffer;
 
@@ -175,6 +176,25 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
 		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
 		verify(trainerController).nextVocable(currentVocable);
+	}
+	
+	@Test
+	public void testStartConsoleLearningWhenNextVocableShouldDelegateToTrainerControllerCheckVocableOnGivenPhrase() {
+		// setup
+		Vocable vocableToCheck = new Vocable(SOME_PHRASE, TRANSLATION);
+		Vocable currentVocable = new Vocable(PHRASE, TRANSLATION);
+		String userInput = "l" + NL + SOME_PHRASE + NL;
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
+		view.setCurrentVocable(currentVocable);
+		// exercise
+		view.startConsole();
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[0]).isEqualTo("##### Vocable Trainer #####");
+		assertThat(output[1]).isEqualTo("enter 'n'/'new' to add a new vocable");
+		assertThat(output[2]).isEqualTo("enter 'l'/'learn' to start learning");
+		verify(trainerController).nextVocable(currentVocable);
+		verify(trainerController).checkVocableOnGivenPhrase(vocableToCheck);
 	}
 
 	@Test
