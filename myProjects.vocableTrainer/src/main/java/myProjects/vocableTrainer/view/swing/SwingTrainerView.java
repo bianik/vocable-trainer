@@ -31,16 +31,16 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 
 	private JPanel contentPane;
 	private JTextField translationTxtField;
-	JTextField enterTextField;		// package-private for testing
+	JTextField enterTextField; // package-private for testing
 	private JTextField phraseTxtField;
 	private JLabel lblAddMessage;
 	private JLabel lblShowTitle;
 	JLabel lblShow;
 	private JLabel lblEnter;
-	JLabel lblCheckMessage;			// package-private for testing
+	JLabel lblCheckMessage; // package-private for testing
 	private JButton btnAdd;
 	private JButton btnCheck;
-	JButton btnNext; 				// package-private to enable via test
+	JButton btnNext; // package-private to enable via test
 
 	/**
 	 * Launch the application.
@@ -271,11 +271,12 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 
 	@Override
 	public void showNextVocable(String message, Vocable vocable) {
-		if(vocable != null) {
+		if (vocable != null) {
 			lblShow.setText(vocable.getTranslation());
 			enterTextField.setText("");
-		}
-		lblCheckMessage.setText(vocable != null ? " " : message);
+			lblCheckMessage.setText(" ");
+		} else
+			lblCheckMessage.setText(message);
 		this.currentVocable = vocable;
 	}
 
