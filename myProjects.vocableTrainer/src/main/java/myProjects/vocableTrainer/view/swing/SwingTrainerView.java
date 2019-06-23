@@ -250,7 +250,10 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 
 	@Override
 	public void showMessageVocableAdded(String message, Vocable vocable) {
-		lblAddMessage.setText(message + vocable.getPhrase() + " - " + vocable.getTranslation());
+		if(vocable != null)
+			lblAddMessage.setText(message + vocable.getPhrase() + " - " + vocable.getTranslation());
+		else
+			lblAddMessage.setText(message);
 	}
 
 	@Override
