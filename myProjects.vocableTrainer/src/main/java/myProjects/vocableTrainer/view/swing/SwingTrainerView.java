@@ -251,9 +251,10 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 
 	@Override
 	public void showMessageVocableAdded(String message, Vocable vocable) {
-		if(vocable != null)
+		if(vocable != null) {
+			lblAddMessage.setForeground(Color.BLACK);
 			lblAddMessage.setText(message + vocable.getPhrase() + " - " + vocable.getTranslation());
-		else {
+		} else {
 			lblAddMessage.setForeground(Color.RED);
 			lblAddMessage.setText(message);
 		}
