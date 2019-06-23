@@ -271,4 +271,23 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.label("checkVocableMessageLabel").requireText(" ");
 		assertThat(swingTrainerView.getCurrentVocable()).isEqualTo(nextVocable);
 	}
+	
+	@Test
+	@GUITest
+	public void testShowNextVocableWheNonNextVocable() {
+		// setup
+		Vocable currentVocable = new Vocable("phrase 1", "translation 1");
+		GuiActionRunner.execute(() -> {
+			swingTrainerView.lblCheckMessage.setText("some text");
+			swingTrainerView.enterTextField.setText("some text");
+			swingTrainerView.setCurrentVocable(currentVocable);
+		});
+		// exercise
+		GuiActionRunner.execute(() -> swingTrainerView.showNextVocable("Database error!", null));
+		// verify
+//		window.label("checkShowLabel").requireText("some text");
+//		window.textBox("checkEnterTextBox").requireText("some text");
+		window.label("checkVocableMessageLabel").requireText("Database error!");
+//		assertThat(swingTrainerView.getCurrentVocable()).isEqualTo(currentVocable);
+	}
 }
