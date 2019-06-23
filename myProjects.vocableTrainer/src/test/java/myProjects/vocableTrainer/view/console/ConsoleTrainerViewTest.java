@@ -116,7 +116,7 @@ public class ConsoleTrainerViewTest {
 	}
 
 	@Test
-	public void testStartConsoleLearningWhenNoCurrentVocable() {
+	public void testStartConsoleLearningWhenNoCurrentVocableShouldDelegateToTrainerControllerNextVocable() {
 		// setup
 		String userInput = "learn" + NL + TRANSLATION + NL;
 		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
@@ -127,7 +127,7 @@ public class ConsoleTrainerViewTest {
 	}
 
 	@Test
-	public void testStartConsoleLearningWhenCurrentVocable() {
+	public void testStartConsoleLearningWhenCurrentVocableShouldDelegateToTrainerControllerNextVocable() {
 		// setup
 		Vocable currentVocable = new Vocable(PHRASE, TRANSLATION);
 		String userInput = "learn" + NL + TRANSLATION + NL;
@@ -140,7 +140,7 @@ public class ConsoleTrainerViewTest {
 	}
 
 	@Test
-	public void testStartConsoleLearningWhenCommandL() {
+	public void testStartConsoleLearningWhenCommandLShouldDelegateToTrainerControllerNextVocable() {
 		// setup
 		Vocable currentVocable = new Vocable(PHRASE, TRANSLATION);
 		String userInput = "l" + NL + TRANSLATION + NL;
@@ -163,8 +163,18 @@ public class ConsoleTrainerViewTest {
 		// exercise
 		view.startConsole();
 		// verify
-		verify(trainerController).nextVocable(currentVocable);
 		verify(trainerController).checkVocableOnGivenPhrase(vocableToCheck);
+	}
+	
+	@Test
+	public void testStartConsoleLearningWhenNoNextVocableShouldNotDelegateToTrainerControllerCheckVocableOnGivenPhrase() {
+		// setup
+		String userInput = "l" + NL + SOME_PHRASE + NL;
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
+		// exercise
+		view.startConsole();
+		// verify
+		verify(trainerController, never()).checkVocableOnGivenPhrase(any());
 	}
 
 	@Test
