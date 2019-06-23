@@ -262,8 +262,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 
 	@Override
 	public void showCheckResult(String message, boolean result) {
-		// TODO Auto-generated method stub
-
+		lblCheckMessage.setText(message);
 	}
 
 	@Override
