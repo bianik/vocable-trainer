@@ -40,11 +40,11 @@ public class ConsoleTrainerView implements TrainerView {
 
 	@Override
 	public void showNextVocable(String message, Vocable vocable) {
-		if (vocable != null)
+		if (vocable != null) {
 			out.println("translation: " + vocable.getTranslation() + "\nenter phrase: ");
-		else
+			currentVocable = vocable;
+		} else
 			out.println(ANSI_RED + message + ANSI_RESET);
-		currentVocable = vocable;
 	}
 
 	public boolean startConsole() {
@@ -92,6 +92,7 @@ public class ConsoleTrainerView implements TrainerView {
 	void setCurrentVocable(Vocable currentVocable) {
 		this.currentVocable = currentVocable;
 	}
+
 	// package-private getter for testing
 	Vocable getCurrentVocable() {
 		return currentVocable;
