@@ -31,7 +31,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 
 	private JPanel contentPane;
 	private JTextField translationTxtField;
-	private JTextField enterTextField;
+	JTextField enterTextField;		// package-private for testing
 	private JTextField phraseTxtField;
 	private JLabel lblAddMessage;
 	private JLabel lblShowTitle;

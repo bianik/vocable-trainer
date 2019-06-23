@@ -256,10 +256,14 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 	
 	@Test @GUITest
 	public void testShowNextVocableWhenNextVocable() {
+		// setup
+		GuiActionRunner.execute(() -> swingTrainerView.enterTextField.setText("some text"));
 		Vocable nextVocable = new Vocable("phrase 1", "translation 1");
+		// exercise
 		GuiActionRunner.execute(() -> swingTrainerView.showNextVocable("", nextVocable));
 		// verify
 		window.label("checkShowLabel").requireText("translation 1");
+		window.textBox("checkEnterTextBox").requireEmpty();
 		assertThat(swingTrainerView.getCurrentVocable()).isEqualTo(nextVocable);
 	}
 }
