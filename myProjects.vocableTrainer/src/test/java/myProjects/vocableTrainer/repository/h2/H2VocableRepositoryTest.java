@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class H2VocableRepositoryTest {
 	// Database credentials
 	private static final String USER = "sa";
 	private static final String PASS = "";
-	private static final String TABLE_NAME = "vocables";
+	private static final String TABLE_NAME = "VOCABLES";
 
 	private static Connection conn;
 	private static H2VocableRepository vocableRepo;
@@ -238,13 +239,25 @@ public class H2VocableRepositoryTest {
 		// execute & verify
 		assertThatThrownBy(() -> vocableRepo.nextVocable(firstVocable)).isInstanceOf(SQLException.class);
 	}
-	
+
 	@Test
 	public void testInitialize() {
 		// setup
 		executeDbCommand("DROP TABLE IF EXISTS " + TABLE_NAME);
 		// exercise
 		vocableRepo.initialize();
+		// verify
+		// try to find the table
+		boolean wantedTable = false;
+		try (ResultSet rs = conn.getMetaData().getTables(null, null, TABLE_NAME, new String[] { "TABLE" });) {
+			while (rs.next()) {
+				wantedTable = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		assertThat(wantedTable).isTrue();
 	}
 
 	////////////////// helping functions ////////////////////////////////
