@@ -75,7 +75,7 @@ public class ConsoleTrainerView implements TrainerView {
 			case "l":
 				trainerContr.nextVocable(currentVocable);
 				if (currentVocable != null) {
-					String inputToCheck = in.nextLine();
+					String inputToCheck = in.nextLine().trim();
 					trainerContr.checkVocableOnGivenPhrase(new Vocable(inputToCheck, currentVocable.getTranslation()));
 				}
 				break;
