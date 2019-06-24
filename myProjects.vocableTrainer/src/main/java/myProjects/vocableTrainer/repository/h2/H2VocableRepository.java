@@ -19,7 +19,7 @@ public class H2VocableRepository implements VocableRepository {
 	}
 
 	public void initialize() {
-		String command = "CREATE TABLE " + tableName + "(phrase VARCHAR(30))";
+		String command = "CREATE TABLE " + tableName + "(phrase VARCHAR(30), translation VARCHAR(30))";
 		try (Statement stmt = conn.createStatement();) {
 			stmt.executeUpdate(command);
 		} catch (SQLException e) {
