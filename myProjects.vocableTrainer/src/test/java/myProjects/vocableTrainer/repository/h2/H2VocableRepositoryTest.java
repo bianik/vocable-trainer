@@ -1,6 +1,7 @@
 package myProjects.vocableTrainer.repository.h2;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.fail;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -258,11 +259,14 @@ public class H2VocableRepositoryTest {
 					ResultSetMetaData rsmd = tableRs.getMetaData();
 					assertThat(rsmd.getColumnLabel(1)).isEqualTo("PHRASE");
 					assertThat(rsmd.getColumnTypeName(1)).isEqualTo("VARCHAR");
+					assertThat(rsmd.getColumnLabel(2)).isEqualTo("TRANSLATION");
+					assertThat(rsmd.getColumnTypeName(2)).isEqualTo("VARCHAR");
 				}
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			fail("SQLException");
 		}
 		assertThat(wantedTable).isTrue();
 	}
