@@ -261,6 +261,8 @@ public class H2VocableRepositoryTest {
 					assertThat(rsmd.getColumnTypeName(1)).isEqualTo("VARCHAR");
 					assertThat(rsmd.getColumnLabel(2)).isEqualTo("TRANSLATION");
 					assertThat(rsmd.getColumnTypeName(2)).isEqualTo("VARCHAR");
+					assertThat(rsmd.getColumnLabel(3)).isEqualTo("CORRTRIES");
+					assertThat(rsmd.getColumnTypeName(3)).isEqualTo("INTEGER");
 				}
 			}
 
