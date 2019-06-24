@@ -24,6 +24,9 @@
     <h2db.version>1.4.199</h2db.version>
     <buildHelper.version>3.0.0</buildHelper.version>
     <failsafe.version>2.22.1</failsafe.version>
+    <docker.version>0.28.0</docker.version>
+    
+    <DbTcpPort>1523</DbTcpPort>
   </properties>
 
   <dependencies>
@@ -84,6 +87,53 @@
             <goals>
               <goal>integration-test</goal>
               <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>${docker.version}</version>
+        <configuration>
+          <images>
+            <image>
+              <name>h2</name>
+              <build>
+                <dockerFileDir>${project.basedir}</dockerFileDir>
+                <args>
+                  <tcpPort>${DbTcpPort}</tcpPort>
+                </args>
+              </build>
+              <run>
+                <ports>
+                  <port>${DbTcpPort}:${DbTcpPort}</port>
+                  <port>81:81</port>
+                </ports>
+              </run>
+            </image>
+          </images>
+        </configuration>
+        <executions>
+          <execution>
+            <id>docker:build</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>docker:start</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>start</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>docker:stop</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop</goal>
             </goals>
           </execution>
         </executions>
