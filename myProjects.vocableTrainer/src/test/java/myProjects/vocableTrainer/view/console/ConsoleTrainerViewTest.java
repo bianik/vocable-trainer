@@ -151,7 +151,7 @@ public class ConsoleTrainerViewTest {
 		// verify
 		verify(trainerController).nextVocable(currentVocable);
 	}
-	
+
 	@Test
 	public void testStartConsoleLearningWhenNextVocableShouldDelegateToTrainerControllerCheckVocableOnGivenPhrase() {
 		// setup
@@ -165,7 +165,21 @@ public class ConsoleTrainerViewTest {
 		// verify
 		verify(trainerController).checkVocableOnGivenPhrase(vocableToCheck);
 	}
-	
+
+	@Test
+	public void testStartConsoleLearningIgnoreBlankSpace() {
+		// setup
+		Vocable vocableToCheck = new Vocable(SOME_PHRASE, TRANSLATION);
+		Vocable currentVocable = new Vocable(PHRASE, TRANSLATION);
+		String userInput = "l" + NL + "  " + SOME_PHRASE + "    " + NL;
+		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput(userInput);
+		view.setCurrentVocable(currentVocable);
+		// exercise
+		view.startConsole();
+		// verify
+		verify(trainerController).checkVocableOnGivenPhrase(vocableToCheck);
+	}
+
 	@Test
 	public void testStartConsoleLearningWhenNoNextVocableShouldNotDelegateToTrainerControllerCheckVocableOnGivenPhrase() {
 		// setup
@@ -226,7 +240,7 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[4]).isEqualTo("ABORT: wrong command!");
 		assertThat(output[5]).isEqualTo("ABORT: wrong command!");
 	}
-	
+
 	//////////////// testing TrainerView-interface ////////////////////
 	@Test
 	public void testShowMessageVocableAdded() {
@@ -239,7 +253,7 @@ public class ConsoleTrainerViewTest {
 		String[] output = outputBuffer.toString().split(NL);
 		assertThat(output[0]).isEqualTo("Vocable added: " + PHRASE + " - " + TRANSLATION);
 	}
-	
+
 	@Test
 	public void testShowMessageVocableAddedDbError() {
 		ConsoleTrainerView view = createConsoleTrainerViewWithUserInput("");
@@ -285,7 +299,7 @@ public class ConsoleTrainerViewTest {
 		assertThat(output[1]).isEqualTo("enter phrase: ");
 		assertThat(view.getCurrentVocable()).isEqualTo(nextVocable);
 	}
-	
+
 	@Test
 	public void testShowNextVocableWhenNoNextVocable() {
 		// setup
