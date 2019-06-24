@@ -246,7 +246,11 @@ public class H2VocableRepositoryTest {
 		// setup
 		executeDbCommand("DROP TABLE IF EXISTS " + TABLE_NAME);
 		// exercise
-		vocableRepo.initialize();
+		try {
+			vocableRepo.initialize();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		// verify
 		// try to find the table
 		boolean wantedTable = false;
