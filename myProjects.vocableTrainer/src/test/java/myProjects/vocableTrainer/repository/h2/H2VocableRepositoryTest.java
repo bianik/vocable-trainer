@@ -1,10 +1,12 @@
 package myProjects.vocableTrainer.repository.h2;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.fail;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -21,12 +23,12 @@ import myProjects.vocableTrainer.model.Vocable;
 public class H2VocableRepositoryTest {
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "org.h2.Driver";
-	static final String DB_URL = "jdbc:h2:~/test";
+	static final String DB_URL = "jdbc:h2:mem:"; // use volatile in-memory database
 
 	// Database credentials
 	private static final String USER = "sa";
 	private static final String PASS = "";
-	private static final String TABLE_NAME = "vocables";
+	private static final String TABLE_NAME = "VOCABLES";
 
 	private static Connection conn;
 	private static H2VocableRepository vocableRepo;
@@ -239,6 +241,55 @@ public class H2VocableRepositoryTest {
 		}
 		// execute & verify
 		assertThatThrownBy(() -> vocableRepo.nextVocable(firstVocable)).isInstanceOf(SQLException.class);
+	}
+
+	@Test
+	public void testInitialize() {
+		// setup
+		executeDbCommand("DROP TABLE IF EXISTS " + TABLE_NAME);
+		// exercise
+		try {
+			vocableRepo.initialize();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// verify
+		// try to find the table
+		boolean wantedTable = false;
+		try (ResultSet rs = conn.getMetaData().getTables(null, null, TABLE_NAME, new String[] { "TABLE" });) {
+			while (rs.next()) {
+				wantedTable = true;
+				assertThat(wantedTable).isTrue();
+				try (Statement stmt = conn.createStatement();
+						ResultSet tableRs = stmt.executeQuery("SELECT * FROM " + TABLE_NAME);) {
+					ResultSetMetaData rsmd = tableRs.getMetaData();
+					assertThat(rsmd.getColumnLabel(1)).isEqualTo("PHRASE");
+					assertThat(rsmd.getColumnTypeName(1)).isEqualTo("VARCHAR");
+					assertThat(rsmd.getColumnLabel(2)).isEqualTo("TRANSLATION");
+					assertThat(rsmd.getColumnTypeName(2)).isEqualTo("VARCHAR");
+					assertThat(rsmd.getColumnLabel(3)).isEqualTo("CORRTRIES");
+					assertThat(rsmd.getColumnTypeName(3)).isEqualTo("INTEGER");
+					assertThat(rsmd.getColumnLabel(4)).isEqualTo("FALSETRIES");
+					assertThat(rsmd.getColumnTypeName(4)).isEqualTo("INTEGER");
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			fail("SQLException");
+		}
+		assertThat(wantedTable).isTrue();
+	}
+
+	@Test
+	public void testInitializeWhenDbErrorShouldThrow() {
+		// setup
+		try {
+			conn.close();
+		} catch (SQLException e) {
+		}
+		// execute & verify
+		assertThatThrownBy(() -> vocableRepo.initialize()).isInstanceOf(SQLException.class);
 	}
 
 	////////////////// helping functions ////////////////////////////////

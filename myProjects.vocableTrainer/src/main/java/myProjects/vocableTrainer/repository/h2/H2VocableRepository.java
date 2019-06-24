@@ -18,6 +18,14 @@ public class H2VocableRepository implements VocableRepository {
 		this.tableName = tableName;
 	}
 
+	public void initialize() throws SQLException {
+		String command = "CREATE TABLE " + tableName
+				+ "(phrase VARCHAR(30), translation VARCHAR(30), corrTries INTEGER, falseTries INTEGER)";
+		try (Statement stmt = conn.createStatement();) {
+			stmt.executeUpdate(command);
+		}
+	}
+
 	public Vocable findByPhrase(String phrase) throws SQLException {
 		return findBy("PHRASE", phrase);
 	}
