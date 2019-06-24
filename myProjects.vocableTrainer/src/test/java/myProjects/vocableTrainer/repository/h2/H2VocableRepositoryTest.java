@@ -274,6 +274,17 @@ public class H2VocableRepositoryTest {
 		}
 		assertThat(wantedTable).isTrue();
 	}
+	
+	@Test
+	public void testInitializeWhenDbErrorShouldThrow() {
+		// setup
+		try {
+			conn.close();
+		} catch (SQLException e) {
+		}
+		// execute & verify
+		assertThatThrownBy(() -> vocableRepo.initialize()).isInstanceOf(SQLException.class);
+	}
 
 	////////////////// helping functions ////////////////////////////////
 
