@@ -73,7 +73,7 @@ public class TrainerControllerTest {
 		// exercise
 		trainerController.newVocable(vocable);
 		// verify
-		verify(trainerView).showMessageVocableAdded("Database error!", vocable);
+		verify(trainerView).showMessageVocableAdded("Database error!", null);
 	}
 
 	@Test
