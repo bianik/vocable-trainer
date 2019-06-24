@@ -238,6 +238,14 @@ public class H2VocableRepositoryTest {
 		// execute & verify
 		assertThatThrownBy(() -> vocableRepo.nextVocable(firstVocable)).isInstanceOf(SQLException.class);
 	}
+	
+	@Test
+	public void testInitialize() {
+		// setup
+		executeDbCommand("DROP TABLE IF EXISTS " + TABLE_NAME);
+		// exercise
+		vocableRepo.initialize();
+	}
 
 	////////////////// helping functions ////////////////////////////////
 
