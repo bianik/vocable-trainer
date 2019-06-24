@@ -249,15 +249,23 @@ public class H2VocableRepositoryTest {
 		// verify
 		// try to find the table
 		boolean wantedTable = false;
+		boolean wantedColumns = false;
 		try (ResultSet rs = conn.getMetaData().getTables(null, null, TABLE_NAME, new String[] { "TABLE" });) {
 			while (rs.next()) {
 				wantedTable = true;
+				assertThat(wantedTable).isTrue();
+				try (Statement stmt = conn.createStatement();
+						ResultSet tableRs = stmt.executeQuery("SELECT * FROM " + TABLE_NAME);) {
+					ResultSetMetaData rsmd = tableRs.getMetaData();
+					wantedColumns = (rsmd.getColumnLabel(1).equals("PHRASE") && rsmd.getColumnTypeName(1).equals("VARCHAR"));
+				}
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		assertThat(wantedTable).isTrue();
+		assertThat(wantedColumns).isTrue();
 	}
 
 	////////////////// helping functions ////////////////////////////////
