@@ -25,7 +25,7 @@ public class TrainerController {
 				trainerView.showMessageVocableAdded("Vocable already exists", voc);
 			}
 		} catch (SQLException e) {
-			trainerView.showMessageVocableAdded("Database error!", voc);
+			trainerView.showMessageVocableAdded("Database error!", null);
 		}
 	}
 
