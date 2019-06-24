@@ -17,6 +17,10 @@ public class H2VocableRepository implements VocableRepository {
 		this.conn = conn;
 		this.tableName = tableName;
 	}
+	
+	public void initialize() {
+		
+	}
 
 	public Vocable findByPhrase(String phrase) throws SQLException {
 		return findBy("PHRASE", phrase);
