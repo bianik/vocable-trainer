@@ -23,7 +23,7 @@ import myProjects.vocableTrainer.model.Vocable;
 public class H2VocableRepositoryTest {
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "org.h2.Driver";
-	static final String DB_URL = "jdbc:h2:~/test";
+	static final String DB_URL = "jdbc:h2:mem:"; // use volatile in-memory database
 
 	// Database credentials
 	private static final String USER = "sa";
@@ -278,7 +278,7 @@ public class H2VocableRepositoryTest {
 		}
 		assertThat(wantedTable).isTrue();
 	}
-	
+
 	@Test
 	public void testInitializeWhenDbErrorShouldThrow() {
 		// setup
