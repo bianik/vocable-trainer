@@ -297,7 +297,7 @@ public class ConsoleTrainerViewTest {
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
 		assertThat(output[0]).isEqualTo(ANSI_RED + DATABASE_ERROR + ANSI_RESET);
-		assertThat(view.getCurrentVocable()).isEqualTo(currentVocable);
+		assertThat(view.getCurrentVocable()).isEqualTo(null);
 	}
 
 	//////////////// helping method ////////////////////
