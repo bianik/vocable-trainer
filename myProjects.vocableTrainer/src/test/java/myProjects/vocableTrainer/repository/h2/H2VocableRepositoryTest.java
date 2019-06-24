@@ -249,7 +249,6 @@ public class H2VocableRepositoryTest {
 		// verify
 		// try to find the table
 		boolean wantedTable = false;
-		boolean wantedColumns = false;
 		try (ResultSet rs = conn.getMetaData().getTables(null, null, TABLE_NAME, new String[] { "TABLE" });) {
 			while (rs.next()) {
 				wantedTable = true;
@@ -257,7 +256,8 @@ public class H2VocableRepositoryTest {
 				try (Statement stmt = conn.createStatement();
 						ResultSet tableRs = stmt.executeQuery("SELECT * FROM " + TABLE_NAME);) {
 					ResultSetMetaData rsmd = tableRs.getMetaData();
-					wantedColumns = (rsmd.getColumnLabel(1).equals("PHRASE") && rsmd.getColumnTypeName(1).equals("VARCHAR"));
+					assertThat(rsmd.getColumnLabel(1)).isEqualTo("PHRASE");
+					assertThat(rsmd.getColumnTypeName(1)).isEqualTo("VARCHAR");
 				}
 			}
 
@@ -265,7 +265,6 @@ public class H2VocableRepositoryTest {
 			e.printStackTrace();
 		}
 		assertThat(wantedTable).isTrue();
-		assertThat(wantedColumns).isTrue();
 	}
 
 	////////////////// helping functions ////////////////////////////////
