@@ -1,8 +1,6 @@
 package myProjects.vocableTrainer.view.console;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.verify;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -25,11 +23,9 @@ public class ConsoleTrainerViewIT {
 	private static final String PHRASE = "phrase 1";
 	private static final String TRANSLATION = "translation 1";
 	private static final String OTHER_PHRASE = "phrase 2";
-	private static final String OTHER_TRANSLATION = "translation 2";
 	private static final int INITIAL_CORR_TRIES = 5;
 	private static final int INITIAL_FALSE_TRIES = 3;
 	private static final String NL = System.getProperty("line.separator");
-	private static final String DATABASE_ERROR = "Database error!";
 	// ANSI escape codes for colors
 	private static final String ANSI_RESET = "\u001B[0m";
 	private static final String ANSI_RED = "\u001B[31m";
@@ -87,7 +83,7 @@ public class ConsoleTrainerViewIT {
 		String[] output = outputBuffer.toString().split(NL);
 		assertThat(output[5]).isEqualTo("Vocable added: " + PHRASE + " - " + TRANSLATION);
 	}
-	
+
 	@Test
 	public void testNewVocableError() throws SQLException {
 		// setup
@@ -99,6 +95,45 @@ public class ConsoleTrainerViewIT {
 		// verify
 		String[] output = outputBuffer.toString().split(NL);
 		assertThat(output[5]).isEqualTo("Vocable already exists: " + PHRASE + " - " + TRANSLATION);
+	}
+
+	@Test
+	public void testLearningWhenCorrect() throws SQLException {
+		// setup
+		Vocable correctVocable = new Vocable(PHRASE, TRANSLATION);
+		correctVocable.setFalseTries(INITIAL_FALSE_TRIES);
+		correctVocable.setCorrTries(INITIAL_CORR_TRIES);
+		vocableRepository.saveVocable(correctVocable);
+		String userInput = "l" + NL + PHRASE + NL;
+		createConsoleTrainerViewWithUserInput(userInput);
+		// exercise
+		consoleTrainerView.startConsole();
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		String checkResultMessage = "correct(6/9=67% corr. tries)";
+		assertThat(output[3]).isEqualTo("translation: " + TRANSLATION);
+		assertThat(output[4]).isEqualTo("enter phrase: ");
+		assertThat(output[5]).isEqualTo(ANSI_GREEN + checkResultMessage + ANSI_RESET);
+	}
+
+	@Test
+	public void testLearningWhenIncorrect() throws SQLException {
+		// setup
+		Vocable correctVocable = new Vocable(PHRASE, TRANSLATION);
+		correctVocable.setFalseTries(INITIAL_FALSE_TRIES);
+		correctVocable.setCorrTries(INITIAL_CORR_TRIES);
+		vocableRepository.saveVocable(correctVocable);
+		String userInput = "l" + NL + OTHER_PHRASE + NL; // <- false phrase
+		createConsoleTrainerViewWithUserInput(userInput);
+		consoleTrainerView.setCurrentVocable(correctVocable);
+		// exercise
+		consoleTrainerView.startConsole();
+		// verify
+		String checkResultMessage = "incorrect(5/9=56% corr. tries) - correct phrase: '" + PHRASE + "'"; // 5/9=0.55556
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[3]).isEqualTo("translation: " + TRANSLATION);
+		assertThat(output[4]).isEqualTo("enter phrase: ");
+		assertThat(output[5]).isEqualTo(ANSI_RED + checkResultMessage + ANSI_RESET);
 	}
 
 	//////////////// helping method ////////////////////
