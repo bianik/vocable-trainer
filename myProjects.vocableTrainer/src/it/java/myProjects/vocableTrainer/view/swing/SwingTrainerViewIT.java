@@ -1,8 +1,5 @@
 package myProjects.vocableTrainer.view.swing;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -127,5 +124,36 @@ public class SwingTrainerViewIT extends AssertJSwingJUnitTestCase {
 		window.textBox("checkEnterTextBox").requireEmpty();
 		window.label("checkVocableMessageLabel").requireText(" ");
 	}
-
+	
+	@Test
+	@GUITest
+	public void testCheckButtonCorrect() throws SQLException {
+		// setup - execute on EDT
+		Vocable correctVocable = new Vocable(PHRASE, TRANSLATION);
+		correctVocable.setFalseTries(INITIAL_FALSE_TRIES);
+		correctVocable.setCorrTries(INITIAL_CORR_TRIES);
+		vocableRepository.saveVocable(correctVocable);
+		GuiActionRunner.execute(() -> swingTrainerView.setCurrentVocable(correctVocable));
+		// exercise
+		window.textBox("checkEnterTextBox").enterText(PHRASE);
+		window.button(JButtonMatcher.withText("Check")).click();
+		// verify
+		window.label("checkVocableMessageLabel").requireText("correct(6/9=67% corr. tries)");
+	}
+	
+	@Test
+	public void testCheckButtonIncorrect() throws Exception{
+		// setup
+		Vocable correctVocable = new Vocable(PHRASE, TRANSLATION);
+		correctVocable.setFalseTries(INITIAL_FALSE_TRIES);
+		correctVocable.setCorrTries(INITIAL_CORR_TRIES);
+		vocableRepository.saveVocable(correctVocable);
+		GuiActionRunner.execute(() -> swingTrainerView.setCurrentVocable(correctVocable));
+		// exercise
+		window.textBox("checkEnterTextBox").enterText(OTHER_PHRASE);
+		window.button(JButtonMatcher.withText("Check")).click();
+		// verify
+		String checkResultMessage = "incorrect(5/9=56% corr. tries) - correct phrase: '" + PHRASE + "'"; // 5/9=0.55556
+		window.label("checkVocableMessageLabel").requireText(checkResultMessage);
+	}
 }
