@@ -4,8 +4,6 @@ import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -61,11 +59,9 @@ public class TrainerControllerIT {
 		MockitoAnnotations.initMocks(this);
 		if (conn.isClosed())
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-		// always start with new table
-		executeDbCommand("DROP TABLE IF EXISTS " + TABLE_NAME);
-		executeDbCommand("CREATE TABLE " + TABLE_NAME
-				+ "(phrase VARCHAR(30), translation VARCHAR(30), corrTries INTEGER, falseTries INTEGER)");
 		vocableRepository = new H2VocableRepository(conn, TABLE_NAME);
+		// always start with a new table using the repository
+		vocableRepository.initialize();
 		trainerController = new TrainerController(vocableRepository, trainerView);
 	}
 
@@ -90,7 +86,7 @@ public class TrainerControllerIT {
 		Vocable correctVocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		correctVocable.setFalseTries(INITIAL_FALSE_TRIES);
 		correctVocable.setCorrTries(INITIAL_CORR_TRIES);
-		addTestVocable(correctVocable);
+		vocableRepository.saveVocable(correctVocable);
 		// exercise
 		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
 		// verify
@@ -104,7 +100,7 @@ public class TrainerControllerIT {
 		Vocable correctVocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		correctVocable.setFalseTries(INITIAL_FALSE_TRIES);
 		correctVocable.setCorrTries(INITIAL_CORR_TRIES);
-		addTestVocable(correctVocable);
+		vocableRepository.saveVocable(correctVocable);
 		// exercise
 		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
 		// verify
@@ -117,36 +113,11 @@ public class TrainerControllerIT {
 		// setup
 		Vocable vocable1 = new Vocable(CORRECT_PHRASE, TRANSLATION);
 		Vocable vocable2 = new Vocable(CORRECT_PHRASE, TRANSLATION);
-		addTestVocable(vocable1);
-		addTestVocable(vocable2);
+		vocableRepository.saveVocable(vocable1);
+		vocableRepository.saveVocable(vocable2);
 		// exercise
 		trainerController.nextVocable(vocable1);
 		// verify
 		verify(trainerView).showNextVocable("", vocable2);
-	}
-
-	////////////////// helping functions ////////////////////////////////
-
-	public Vocable addTestVocable(Vocable voc) {
-		return addTestVocable(voc.getPhrase(), voc.getTranslation(), voc.getFalseTries(), voc.getCorrTries());
-	}
-	
-	public Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries) {
-		executeDbCommand("INSERT INTO " + TABLE_NAME + " VALUES ('" + phrase + "', '" + translation + "', " + corrTries
-				+ ", " + falseTries + ")");
-		Vocable v = new Vocable(phrase, translation);
-		v.setCorrTries(corrTries);
-		v.setFalseTries(falseTries);
-		return v;
-	}
-
-	public void executeDbCommand(String command) {
-		try {
-			Statement stmt = conn.createStatement();
-			stmt.executeUpdate(command);
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 }
