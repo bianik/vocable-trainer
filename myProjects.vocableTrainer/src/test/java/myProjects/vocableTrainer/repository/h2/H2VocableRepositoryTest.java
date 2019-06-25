@@ -242,7 +242,7 @@ public class H2VocableRepositoryTest {
 	}
 
 	@Test
-	public void testInitialize() {
+	public void testInitializeWhenNoTable() {
 		// setup
 		executeDbCommand("DROP TABLE IF EXISTS " + TABLE_NAME);
 		// exercise
@@ -250,6 +250,43 @@ public class H2VocableRepositoryTest {
 			vocableRepo.initialize();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		// verify
+		// try to find the table
+		boolean wantedTable = false;
+		try (ResultSet rs = conn.getMetaData().getTables(null, null, TABLE_NAME, new String[] { "TABLE" });) {
+			while (rs.next()) {
+				wantedTable = true;
+				assertThat(wantedTable).isTrue();
+				try (Statement stmt = conn.createStatement();
+						ResultSet tableRs = stmt.executeQuery("SELECT * FROM " + TABLE_NAME);) {
+					ResultSetMetaData rsmd = tableRs.getMetaData();
+					assertThat(rsmd.getColumnLabel(1)).isEqualTo("PHRASE");
+					assertThat(rsmd.getColumnTypeName(1)).isEqualTo("VARCHAR");
+					assertThat(rsmd.getColumnLabel(2)).isEqualTo("TRANSLATION");
+					assertThat(rsmd.getColumnTypeName(2)).isEqualTo("VARCHAR");
+					assertThat(rsmd.getColumnLabel(3)).isEqualTo("CORRTRIES");
+					assertThat(rsmd.getColumnTypeName(3)).isEqualTo("INTEGER");
+					assertThat(rsmd.getColumnLabel(4)).isEqualTo("FALSETRIES");
+					assertThat(rsmd.getColumnTypeName(4)).isEqualTo("INTEGER");
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			fail("SQLException");
+		}
+		assertThat(wantedTable).isTrue();
+	}
+	
+	@Test
+	public void testInitializeWhenTable() {
+		// exercise
+		try {
+			vocableRepo.initialize();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			fail();
 		}
 		// verify
 		// try to find the table
