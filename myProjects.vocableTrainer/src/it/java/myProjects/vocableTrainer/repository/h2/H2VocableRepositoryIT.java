@@ -26,12 +26,10 @@ public class H2VocableRepositoryIT {
 	private static final String PASS = "";
 	private static final String TABLE_NAME = "VOCABLES";
 	private static final String TCP_PORT = System.getProperty("tcpPort"); // get tcpPort from pom
-	// JDBC driver name and database URL
+	// JDBC driver name and database URL // use database server running in Docker container
 	static final String JDBC_DRIVER = "org.h2.Driver";
-	static final String DB_URL = "jdbc:h2:tcp://localhost:" + TCP_PORT + "/" + TABLE_NAME; // use database server
-																							// running in Docker
-
-	// container
+	static final String DB_URL = "jdbc:h2:tcp://localhost:" + TCP_PORT + "/" + TABLE_NAME;
+	
 	private static Connection conn;
 	private static H2VocableRepository vocableRepo;
 
