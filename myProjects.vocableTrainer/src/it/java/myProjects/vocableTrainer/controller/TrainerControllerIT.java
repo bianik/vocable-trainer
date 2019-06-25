@@ -1,22 +1,19 @@
 package myProjects.vocableTrainer.controller;
 
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import myProjects.vocableTrainer.model.Vocable;
 import myProjects.vocableTrainer.repository.VocableRepository;
@@ -61,6 +58,7 @@ public class TrainerControllerIT {
 
 	@Before
 	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
 		if (conn.isClosed())
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 		// always start with new table
@@ -76,48 +74,63 @@ public class TrainerControllerIT {
 	}
 
 	@Test
-	public void test() {
-		// does test case work? 
+	public void testNewVocable() throws Exception{
+		// setup
+		Vocable vocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		// exercise
+		trainerController.newVocable(vocable);
+		// verify
+		verify(trainerView).showMessageVocableAdded("Vocable added", vocable);
+	}
+	
+	@Test
+	public void testCheckVocableOnGivenPhraseWhenCorrectPhrase()  throws Exception{
+		// setup
+		Vocable vocableToCheck = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		Vocable correctVocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		correctVocable.setFalseTries(INITIAL_FALSE_TRIES);
+		correctVocable.setCorrTries(INITIAL_CORR_TRIES);
+		addTestVocable(correctVocable);
+		// exercise
+		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
+		// verify
+		verify(trainerView).showCheckResult("correct(6/9=67% corr. tries)", true); // 6/9=0.66667
+	}
+	
+	@Test
+	public void testCheckVocableOnGivenPhraseWhenIncorrect() throws Exception{
+		// setup
+		Vocable vocableToCheck = new Vocable(GIVEN_INCORRECT_PHRASE, TRANSLATION);
+		Vocable correctVocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		correctVocable.setFalseTries(INITIAL_FALSE_TRIES);
+		correctVocable.setCorrTries(INITIAL_CORR_TRIES);
+		addTestVocable(correctVocable);
+		// exercise
+		trainerController.checkVocableOnGivenPhrase(vocableToCheck);
+		// verify
+		String checkResultMessage = "incorrect(5/9=56% corr. tries) - correct phrase: '" + CORRECT_PHRASE + "'"; // 5/9=0.55556
+		verify(trainerView).showCheckResult(checkResultMessage, false);
+	}
+	
+	@Test
+	public void testNextVocableWhenCurrentVocable() throws Exception {
+		// setup
+		Vocable vocable1 = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		Vocable vocable2 = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		addTestVocable(vocable1);
+		addTestVocable(vocable2);
+		// exercise
+		trainerController.nextVocable(vocable1);
+		// verify
+		verify(trainerView).showNextVocable("", vocable2);
 	}
 
 	////////////////// helping functions ////////////////////////////////
 
-	private List<Vocable> readAllVocablesFromRepository() {
-		String command = "SELECT * FROM " + TABLE_NAME;
-		Statement stmt = null;
-		ResultSet rs = null;
-		List<Vocable> allVocables = new ArrayList<Vocable>();
-		try {
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(command);
-			// extract data from result set
-			while (rs.next()) {
-				Vocable v = new Vocable();
-				v = new Vocable();
-				// Retrieve by column name
-				v.setPhrase(rs.getString("phrase"));
-				v.setTranslation(rs.getString("translation"));
-				v.setCorrTries(rs.getInt("corrTries"));
-				v.setFalseTries(rs.getInt("falseTries"));
-				allVocables.add(v);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-			}
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-			}
-		}
-		return allVocables;
+	public Vocable addTestVocable(Vocable voc) {
+		return addTestVocable(voc.getPhrase(), voc.getTranslation(), voc.getFalseTries(), voc.getCorrTries());
 	}
-
+	
 	public Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries) {
 		executeDbCommand("INSERT INTO " + TABLE_NAME + " VALUES ('" + phrase + "', '" + translation + "', " + corrTries
 				+ ", " + falseTries + ")");
