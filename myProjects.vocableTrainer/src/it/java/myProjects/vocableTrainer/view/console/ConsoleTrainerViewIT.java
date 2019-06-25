@@ -1,6 +1,8 @@
 package myProjects.vocableTrainer.view.console;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -15,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import myProjects.vocableTrainer.controller.TrainerController;
+import myProjects.vocableTrainer.model.Vocable;
 import myProjects.vocableTrainer.repository.VocableRepository;
 import myProjects.vocableTrainer.repository.h2.H2VocableRepository;
 
@@ -25,6 +28,12 @@ public class ConsoleTrainerViewIT {
 	private static final String OTHER_TRANSLATION = "translation 2";
 	private static final int INITIAL_CORR_TRIES = 5;
 	private static final int INITIAL_FALSE_TRIES = 3;
+	private static final String NL = System.getProperty("line.separator");
+	private static final String DATABASE_ERROR = "Database error!";
+	// ANSI escape codes for colors
+	private static final String ANSI_RESET = "\u001B[0m";
+	private static final String ANSI_RED = "\u001B[31m";
+	private static final String ANSI_GREEN = "\u001B[32m";
 
 	// Database credentials
 	private static final String USER = "sa";
@@ -42,7 +51,7 @@ public class ConsoleTrainerViewIT {
 	private TrainerController trainerController;
 
 	private ByteArrayOutputStream outputBuffer;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		Class.forName(JDBC_DRIVER);
@@ -53,7 +62,7 @@ public class ConsoleTrainerViewIT {
 	public static void tearDownAfterClass() throws Exception {
 		conn.close();
 	}
-	
+
 	@Before
 	public void setUp() {
 		try {
@@ -64,13 +73,32 @@ public class ConsoleTrainerViewIT {
 			vocableRepository.initialize();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
 
 	@Test
-	public void test() {
-		createConsoleTrainerViewWithUserInput("");
-		// does this test case run?
+	public void testNewVocableSuccess() {
+		// setup
+		String userInput = "new" + NL + PHRASE + NL + TRANSLATION + NL;
+		createConsoleTrainerViewWithUserInput(userInput);
+		// exercise
+		consoleTrainerView.startConsole();
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[5]).isEqualTo("Vocable added: " + PHRASE + " - " + TRANSLATION);
+	}
+	
+	@Test
+	public void testNewVocableError() throws SQLException {
+		// setup
+		vocableRepository.saveVocable(new Vocable(PHRASE, TRANSLATION));
+		String userInput = "new" + NL + PHRASE + NL + TRANSLATION + NL;
+		createConsoleTrainerViewWithUserInput(userInput);
+		// exercise
+		consoleTrainerView.startConsole();
+		// verify
+		String[] output = outputBuffer.toString().split(NL);
+		assertThat(output[5]).isEqualTo("Vocable already exists: " + PHRASE + " - " + TRANSLATION);
 	}
 
 	//////////////// helping method ////////////////////
