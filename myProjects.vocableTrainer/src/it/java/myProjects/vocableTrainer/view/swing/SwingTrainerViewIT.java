@@ -1,5 +1,8 @@
 package myProjects.vocableTrainer.view.swing;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,7 +28,8 @@ import myProjects.vocableTrainer.repository.h2.H2VocableRepository;
 public class SwingTrainerViewIT extends AssertJSwingJUnitTestCase {
 	private static final String PHRASE = "phrase 1";
 	private static final String TRANSLATION = "translation 1";
-	private static final String GIVEN_INCORRECT_PHRASE = "wrong phrase";
+	private static final String OTHER_PHRASE = "phrase 2";
+	private static final String OTHER_TRANSLATION = "translation 2";
 	private static final int INITIAL_CORR_TRIES = 5;
 	private static final int INITIAL_FALSE_TRIES = 3;
 
@@ -88,6 +92,40 @@ public class SwingTrainerViewIT extends AssertJSwingJUnitTestCase {
 		// verify
 		window.label("newVocableMessageLabel").requireText("Vocable added: " + PHRASE + " - " + TRANSLATION);
 		window.label("newVocableMessageLabel").foreground().requireEqualTo(Color.BLACK);
+	}
+	
+	@Test
+	@GUITest
+	public void testAddButtonError() throws SQLException {
+		// setup
+		vocableRepository.saveVocable(new Vocable(PHRASE, TRANSLATION));
+		window.textBox("newPhraseTextBox").enterText(PHRASE);
+		window.textBox("newTranslationTextBox").enterText(TRANSLATION);
+		// exercise
+		window.button(JButtonMatcher.withText("Add")).click();
+		// verify
+		window.label("newVocableMessageLabel").requireText("Vocable already exists: " + PHRASE + " - " + TRANSLATION);
+		window.label("newVocableMessageLabel").foreground().requireEqualTo(Color.BLACK);
+	}
+	
+	@Test
+	@GUITest
+	public void testNextButton() throws SQLException {
+		// setup - execute on EDT
+		Vocable currentVocable = new Vocable(PHRASE, TRANSLATION);
+		Vocable nextVocable = new Vocable(OTHER_PHRASE, OTHER_TRANSLATION);
+		vocableRepository.saveVocable(currentVocable);
+		vocableRepository.saveVocable(nextVocable);
+		GuiActionRunner.execute(() -> {
+			swingTrainerView.setCurrentVocable(currentVocable);
+			swingTrainerView.btnNext.setEnabled(true);
+		});
+		// exercise
+		window.button(JButtonMatcher.withText("Next")).click();
+		// verify
+		window.label("checkShowLabel").requireText(OTHER_TRANSLATION);
+		window.textBox("checkEnterTextBox").requireEmpty();
+		window.label("checkVocableMessageLabel").requireText(" ");
 	}
 
 }
