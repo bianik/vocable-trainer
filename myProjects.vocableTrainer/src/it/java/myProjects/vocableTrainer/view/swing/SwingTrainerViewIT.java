@@ -1,12 +1,12 @@
 package myProjects.vocableTrainer.view.swing;
 
-import static org.junit.Assert.*;
-
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
@@ -15,15 +15,15 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 
 import myProjects.vocableTrainer.controller.TrainerController;
+import myProjects.vocableTrainer.model.Vocable;
 import myProjects.vocableTrainer.repository.VocableRepository;
 import myProjects.vocableTrainer.repository.h2.H2VocableRepository;
 
 @RunWith(GUITestRunner.class) // takes screenshots in case of failure
 public class SwingTrainerViewIT extends AssertJSwingJUnitTestCase {
-	private static final String CORRECT_PHRASE = "phrase 1";
+	private static final String PHRASE = "phrase 1";
 	private static final String TRANSLATION = "translation 1";
 	private static final String GIVEN_INCORRECT_PHRASE = "wrong phrase";
 	private static final int INITIAL_CORR_TRIES = 5;
@@ -50,7 +50,7 @@ public class SwingTrainerViewIT extends AssertJSwingJUnitTestCase {
 		Class.forName(JDBC_DRIVER);
 		conn = DriverManager.getConnection(DB_URL, USER, PASS);
 	}
-	
+
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		conn.close();
@@ -77,9 +77,17 @@ public class SwingTrainerViewIT extends AssertJSwingJUnitTestCase {
 		window.show();
 	}
 
-	@Test @GUITest
-	public void test() {
-		// will the test case run?
+	@Test
+	@GUITest
+	public void testAddButtonSuccess() {
+		// setup
+		window.textBox("newPhraseTextBox").enterText(PHRASE);
+		window.textBox("newTranslationTextBox").enterText(TRANSLATION);
+		// exercise
+		window.button(JButtonMatcher.withText("Add")).click();
+		// verify
+		window.label("newVocableMessageLabel").requireText("Vocable added: " + PHRASE + " - " + TRANSLATION);
+		window.label("newVocableMessageLabel").foreground().requireEqualTo(Color.BLACK);
 	}
 
 }
