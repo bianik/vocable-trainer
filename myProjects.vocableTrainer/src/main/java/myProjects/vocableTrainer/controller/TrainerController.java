@@ -20,9 +20,9 @@ public class TrainerController {
 		try {
 			if (vocableRepository.findByPhrase(voc.getPhrase()) == null) {
 				vocableRepository.saveVocable(voc);
-				trainerView.showMessageVocableAdded("Vocable added", voc);
+				trainerView.showMessageVocableAdded("Vocable added: ", voc);
 			} else {
-				trainerView.showMessageVocableAdded("Vocable already exists", voc);
+				trainerView.showMessageVocableAdded("Vocable already exists: ", voc);
 			}
 		} catch (SQLException e) {
 			trainerView.showMessageVocableAdded("Database error!", null);

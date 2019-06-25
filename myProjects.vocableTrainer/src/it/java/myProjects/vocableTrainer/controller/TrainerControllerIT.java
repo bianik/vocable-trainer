@@ -76,7 +76,7 @@ public class TrainerControllerIT {
 		// exercise
 		trainerController.newVocable(vocable);
 		// verify
-		verify(trainerView).showMessageVocableAdded("Vocable added", vocable);
+		verify(trainerView).showMessageVocableAdded("Vocable added: ", vocable);
 	}
 	
 	@Test
