@@ -19,10 +19,12 @@ public class H2VocableRepository implements VocableRepository {
 	}
 
 	public void initialize() throws SQLException {
-		String command = "CREATE TABLE " + tableName
+		String command1 = "DROP TABLE IF EXISTS " + tableName;
+		String command2 = "CREATE TABLE " + tableName
 				+ "(phrase VARCHAR(30), translation VARCHAR(30), corrTries INTEGER, falseTries INTEGER)";
 		try (Statement stmt = conn.createStatement();) {
-			stmt.executeUpdate(command);
+			stmt.executeUpdate(command1);
+			stmt.executeUpdate(command2);
 		}
 	}
 
