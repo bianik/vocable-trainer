@@ -33,7 +33,7 @@ public class VocableTrainerApp implements Runnable {
 				Class.forName(JDBC_DRIVER);
 				conn = DriverManager.getConnection(DB_URL, USER, PASS);
 				VocableRepository vocableRepository = new H2VocableRepository(conn, TABLE_NAME);
-				vocableRepository.initialize();
+				//vocableRepository.initialize();
 				SwingTrainerView swingTrainerView = new SwingTrainerView(); // call and test methods on this
 				TrainerController trainerController= new TrainerController(vocableRepository, swingTrainerView);
 				swingTrainerView.setTrainerController(trainerController);
