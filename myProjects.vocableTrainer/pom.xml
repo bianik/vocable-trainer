@@ -25,6 +25,7 @@
     <buildHelper.version>3.0.0</buildHelper.version>
     <failsafe.version>2.22.1</failsafe.version>
     <docker.version>0.28.0</docker.version>
+    <picocli.version>4.0.0-beta-2</picocli.version>
 
     <DbTcpPort>1523</DbTcpPort>
   </properties>
@@ -52,6 +53,11 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>${h2db.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>info.picocli</groupId>
+      <artifactId>picocli</artifactId>
+      <version>${picocli.version}</version>
     </dependency>
   </dependencies>
 

@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.core.matcher.JButtonMatcher;
-import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
@@ -67,7 +66,8 @@ public class VocableTrainerAppSwingE2E extends AssertJSwingJUnitTestCase {
 		// add a vocable to the test fixture
 		addTestVocable(PHRASE, TRANSLATION, INITIAL_FALSE_TRIES, INITIAL_CORR_TRIES);
 		// start the Swing application
-		application("myProjects.vocableTrainer.app.VocableTrainerApp").start();
+		application("myProjects.vocableTrainer.app.VocableTrainerApp")
+				.withArgs("--h2-port=" + TCP_PORT, "--h2-table=" + TABLE_NAME, "--h2-no-init").start();
 		// get a reference of its JFrame
 		window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
 			@Override
