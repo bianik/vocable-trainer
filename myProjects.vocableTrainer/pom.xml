@@ -25,6 +25,7 @@
     <buildHelper.version>3.0.0</buildHelper.version>
     <failsafe.version>2.22.1</failsafe.version>
     <docker.version>0.28.0</docker.version>
+    <picocli.version>4.0.0-beta-2</picocli.version>
 
     <DbTcpPort>1523</DbTcpPort>
   </properties>
@@ -53,6 +54,11 @@
       <artifactId>h2</artifactId>
       <version>${h2db.version}</version>
     </dependency>
+    <dependency>
+      <groupId>info.picocli</groupId>
+      <artifactId>picocli</artifactId>
+      <version>${picocli.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -72,6 +78,7 @@
             <configuration>
               <sources>
                 <source>src/it/java</source>
+                <source>src/e2e/java</source>
               </sources>
             </configuration>
           </execution>
@@ -93,6 +100,21 @@
               <goal>integration-test</goal>
               <goal>verify</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>e2e-tests</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>**/*IT.java</exclude>
+              </excludes>
+              <includes>
+                <include>**/*E2E.java</include>
+              </includes>
+            </configuration>
           </execution>
         </executions>
       </plugin>
