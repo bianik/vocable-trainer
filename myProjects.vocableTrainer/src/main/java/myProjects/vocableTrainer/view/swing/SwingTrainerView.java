@@ -132,6 +132,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 			phraseTxtField.setText("");
 			translationTxtField.setText("");
 			btnNext.setEnabled(true);
+			btnAdd.setEnabled(false);
 		});
 		btnAdd.setEnabled(false);
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
