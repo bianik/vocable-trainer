@@ -96,7 +96,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testWhenAddButtonIsClickedClearPhraseAndTranslation() {
+	public void testWhenAddButtonIsClickedClearPhraseAndTranslationAndDisableAddButton() {
 		// setup
 		window.textBox("newPhraseTextBox").enterText(PHRASE);
 		window.textBox("newTranslationTextBox").enterText(TRANSLATION);
@@ -105,6 +105,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		window.textBox("newPhraseTextBox").requireEmpty();
 		window.textBox("newTranslationTextBox").requireEmpty();
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
 	}
 
 	@Test
@@ -202,6 +203,20 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		Vocable currentVocable = new Vocable(PHRASE, TRANSLATION);
 		GuiActionRunner.execute(() -> swingTrainerView.setCurrentVocable(currentVocable));
 		window.textBox("checkEnterTextBox").enterText(WRONG_PHRASE);
+		// exercise
+		window.button(JButtonMatcher.withText("Check")).click();
+		// verify
+		verify(trainerController).checkVocableOnGivenPhrase(vocableToCheck);
+	}
+
+	@Test
+	@GUITest
+	public void testCheckButtonShouldDelegateToTrainerControllerCheckOnGivenPhraseIgnoreLeadingOrTrailingWhiteSpace() {
+		// setup - execute on EDT
+		Vocable vocableToCheck = new Vocable(WRONG_PHRASE, TRANSLATION);
+		Vocable currentVocable = new Vocable(PHRASE, TRANSLATION);
+		GuiActionRunner.execute(() -> swingTrainerView.setCurrentVocable(currentVocable));
+		window.textBox("checkEnterTextBox").enterText("   " + WRONG_PHRASE + "  ");
 		// exercise
 		window.button(JButtonMatcher.withText("Check")).click();
 		// verify

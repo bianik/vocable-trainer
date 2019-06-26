@@ -1,8 +1,6 @@
 package myProjects.vocableTrainer.view.swing;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,10 +20,10 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class SwingTrainerView extends JFrame implements TrainerView {
+	private static final long serialVersionUID = 1L;
+	
 	private TrainerController trainerController;
 	private Vocable currentVocable;
 
@@ -41,22 +39,6 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 	private JButton btnAdd;
 	private JButton btnCheck;
 	JButton btnNext; // package-private to enable via test
-
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					SwingTrainerView frame = new SwingTrainerView();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the frame.
@@ -150,6 +132,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 			phraseTxtField.setText("");
 			translationTxtField.setText("");
 			btnNext.setEnabled(true);
+			btnAdd.setEnabled(false);
 		});
 		btnAdd.setEnabled(false);
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
@@ -181,6 +164,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		lblShow = new JLabel(" ");
 		lblShow.setName("checkShowLabel");
 		GridBagConstraints gbc_lblShow = new GridBagConstraints();
+		gbc_lblShow.anchor = GridBagConstraints.WEST;
 		gbc_lblShow.gridwidth = 3;
 		gbc_lblShow.insets = new Insets(0, 0, 5, 5);
 		gbc_lblShow.gridx = 1;
@@ -216,6 +200,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		lblCheckMessage = new JLabel(" ");
 		lblCheckMessage.setName("checkVocableMessageLabel");
 		GridBagConstraints gbc_lblCheckMessage = new GridBagConstraints();
+		gbc_lblCheckMessage.anchor = GridBagConstraints.EAST;
 		gbc_lblCheckMessage.gridwidth = 2;
 		gbc_lblCheckMessage.insets = new Insets(0, 0, 0, 5);
 		gbc_lblCheckMessage.gridx = 0;
@@ -225,7 +210,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		btnCheck = new JButton("Check");
 		btnCheck.addActionListener(e -> {
 			trainerController
-					.checkVocableOnGivenPhrase(new Vocable(enterTextField.getText(), currentVocable.getTranslation()));
+					.checkVocableOnGivenPhrase(new Vocable(enterTextField.getText().trim(), currentVocable.getTranslation()));
 		});
 		btnCheck.setEnabled(false);
 		GridBagConstraints gbc_btnCheck = new GridBagConstraints();
