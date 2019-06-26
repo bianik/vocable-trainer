@@ -1,8 +1,6 @@
 package myProjects.vocableTrainer.view.swing;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,10 +20,10 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class SwingTrainerView extends JFrame implements TrainerView {
+	private static final long serialVersionUID = 1L;
+	
 	private TrainerController trainerController;
 	private Vocable currentVocable;
 
@@ -41,22 +39,6 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 	private JButton btnAdd;
 	private JButton btnCheck;
 	JButton btnNext; // package-private to enable via test
-
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					SwingTrainerView frame = new SwingTrainerView();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the frame.
@@ -227,7 +209,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		btnCheck = new JButton("Check");
 		btnCheck.addActionListener(e -> {
 			trainerController
-					.checkVocableOnGivenPhrase(new Vocable(enterTextField.getText(), currentVocable.getTranslation()));
+					.checkVocableOnGivenPhrase(new Vocable(enterTextField.getText().trim(), currentVocable.getTranslation()));
 		});
 		btnCheck.setEnabled(false);
 		GridBagConstraints gbc_btnCheck = new GridBagConstraints();
