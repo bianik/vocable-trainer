@@ -96,7 +96,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 
 	@Test
 	@GUITest
-	public void testWhenAddButtonIsClickedClearPhraseAndTranslation() {
+	public void testWhenAddButtonIsClickedClearPhraseAndTranslationAndDisableAddButton() {
 		// setup
 		window.textBox("newPhraseTextBox").enterText(PHRASE);
 		window.textBox("newTranslationTextBox").enterText(TRANSLATION);
@@ -105,6 +105,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		// verify
 		window.textBox("newPhraseTextBox").requireEmpty();
 		window.textBox("newTranslationTextBox").requireEmpty();
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
 	}
 
 	@Test
