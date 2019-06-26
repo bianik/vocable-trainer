@@ -181,6 +181,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		lblShow = new JLabel(" ");
 		lblShow.setName("checkShowLabel");
 		GridBagConstraints gbc_lblShow = new GridBagConstraints();
+		gbc_lblShow.anchor = GridBagConstraints.WEST;
 		gbc_lblShow.gridwidth = 3;
 		gbc_lblShow.insets = new Insets(0, 0, 5, 5);
 		gbc_lblShow.gridx = 1;
@@ -216,6 +217,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		lblCheckMessage = new JLabel(" ");
 		lblCheckMessage.setName("checkVocableMessageLabel");
 		GridBagConstraints gbc_lblCheckMessage = new GridBagConstraints();
+		gbc_lblCheckMessage.anchor = GridBagConstraints.EAST;
 		gbc_lblCheckMessage.gridwidth = 2;
 		gbc_lblCheckMessage.insets = new Insets(0, 0, 0, 5);
 		gbc_lblCheckMessage.gridx = 0;

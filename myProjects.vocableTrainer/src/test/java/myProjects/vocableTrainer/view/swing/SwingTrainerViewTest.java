@@ -208,6 +208,20 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		verify(trainerController).checkVocableOnGivenPhrase(vocableToCheck);
 	}
 
+	@Test
+	@GUITest
+	public void testCheckButtonShouldDelegateToTrainerControllerCheckOnGivenPhraseIgnoreLeadingOrTrailingWhiteSpace() {
+		// setup - execute on EDT
+		Vocable vocableToCheck = new Vocable(WRONG_PHRASE, TRANSLATION);
+		Vocable currentVocable = new Vocable(PHRASE, TRANSLATION);
+		GuiActionRunner.execute(() -> swingTrainerView.setCurrentVocable(currentVocable));
+		window.textBox("checkEnterTextBox").enterText("   " + WRONG_PHRASE + "  ");
+		// exercise
+		window.button(JButtonMatcher.withText("Check")).click();
+		// verify
+		verify(trainerController).checkVocableOnGivenPhrase(vocableToCheck);
+	}
+
 ////////////////// unit tests for TrainerView-interface implementation/////////////
 	@Test
 	@GUITest
