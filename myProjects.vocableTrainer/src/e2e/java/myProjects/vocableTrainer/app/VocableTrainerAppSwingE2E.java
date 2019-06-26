@@ -1,6 +1,6 @@
 package myProjects.vocableTrainer.app;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.swing.launcher.ApplicationLauncher.*;
 
 import java.sql.Connection;
@@ -10,7 +10,10 @@ import java.sql.Statement;
 
 import javax.swing.JFrame;
 
+import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.GenericTypeMatcher;
+import org.assertj.swing.core.matcher.JButtonMatcher;
+import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
@@ -61,9 +64,8 @@ public class VocableTrainerAppSwingE2E extends AssertJSwingJUnitTestCase {
 		executeDbCommand("DROP TABLE IF EXISTS " + TABLE_NAME);
 		executeDbCommand("CREATE TABLE " + TABLE_NAME
 				+ "(phrase VARCHAR(30), translation VARCHAR(30), corrTries INTEGER, falseTries INTEGER)");
-		// add two vocables to the test fixture
+		// add a vocable to the test fixture
 		addTestVocable(PHRASE, TRANSLATION, INITIAL_FALSE_TRIES, INITIAL_CORR_TRIES);
-		addTestVocable(OTHER_PHRASE, OTHER_TRANSLATION, 0, 0);
 		// start the Swing application
 		application("myProjects.vocableTrainer.app.VocableTrainerApp").start();
 		// get a reference of its JFrame
@@ -76,13 +78,73 @@ public class VocableTrainerAppSwingE2E extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
-	public void test() {
-		// will this test case run?
+	@GUITest
+	public void testAddButtonSuccess() {
+		addVocableThroughGui();
+		// verify
+		assertThat(window.label("newVocableMessageLabel").text()).contains("Vocable added:", OTHER_PHRASE,
+				OTHER_TRANSLATION);
+	}
+
+	@Test
+	@GUITest
+	public void testAddButtonError() {
+		// setup - add a vocable that is already in the repository
+		window.textBox("newPhraseTextBox").enterText(PHRASE);
+		window.textBox("newTranslationTextBox").enterText(TRANSLATION);
+		// exercise
+		window.button(JButtonMatcher.withText("Add")).click();
+		// verify
+		assertThat(window.label("newVocableMessageLabel").text()).contains("Vocable already exists:", PHRASE,
+				TRANSLATION);
+	}
+
+	@Test
+	@GUITest
+	public void testNextButton() {
+		// setup - need to add at least one vocable with the GUI to enable the 'next' button
+		addVocableThroughGui();
+		// exercise
+		window.button(JButtonMatcher.withText("Next")).click();
+		// verify - the first vocable should show up
+		assertThat(window.label("checkShowLabel").text()).contains(TRANSLATION);
+	}
+
+	@Test
+	@GUITest
+	public void testCheckButtonCorrect() {
+		// setup - need to add at least one vocable with the GUI to enable the 'next' button
+		addVocableThroughGui();
+		window.button(JButtonMatcher.withText("Next")).click(); // get first vocable in repository
+		// exercise
+		window.textBox("checkEnterTextBox").enterText(PHRASE);
+		window.button(JButtonMatcher.withText("Check")).click();
+		// verify
+		assertThat(window.label("checkVocableMessageLabel").text()).contains("correct", "6/9");
+	}
+
+	@Test
+	@GUITest
+	public void testCheckButtonIncorrect() {
+		// setup - need to add at least one vocable with the GUI to enable the 'next' button
+		addVocableThroughGui();
+		window.button(JButtonMatcher.withText("Next")).click(); // get first vocable in repository
+		// exercise
+		window.textBox("checkEnterTextBox").enterText(OTHER_PHRASE);
+		window.button(JButtonMatcher.withText("Check")).click();
+		// verify
+		assertThat(window.label("checkVocableMessageLabel").text()).contains("incorrect", "5/9", PHRASE);
 	}
 
 	////////////////// helping functions ////////////////////////////////
 
-	public Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries) {
+	private void addVocableThroughGui() {
+		window.textBox("newPhraseTextBox").enterText(OTHER_PHRASE);
+		window.textBox("newTranslationTextBox").enterText(OTHER_TRANSLATION);
+		window.button(JButtonMatcher.withText("Add")).click();
+	}
+
+	private Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries) {
 		executeDbCommand("INSERT INTO " + TABLE_NAME + " VALUES ('" + phrase + "', '" + translation + "', " + corrTries
 				+ ", " + falseTries + ")");
 		Vocable v = new Vocable(phrase, translation);
@@ -91,7 +153,7 @@ public class VocableTrainerAppSwingE2E extends AssertJSwingJUnitTestCase {
 		return v;
 	}
 
-	public void executeDbCommand(String command) {
+	private void executeDbCommand(String command) {
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate(command);
