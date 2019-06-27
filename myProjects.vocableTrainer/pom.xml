@@ -26,6 +26,7 @@
     <failsafe.version>2.22.1</failsafe.version>
     <docker.version>0.28.0</docker.version>
     <picocli.version>4.0.0-beta-2</picocli.version>
+    <awaitility.version>3.1.6</awaitility.version>
 
     <DbTcpPort>1523</DbTcpPort>
   </properties>
@@ -62,7 +63,7 @@
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
-      <version>3.1.6</version>
+      <version>${awaitility.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
