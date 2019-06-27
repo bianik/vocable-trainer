@@ -70,27 +70,29 @@ public class VocableTrainerApp implements Runnable {
 				ConsoleTrainerView console = new ConsoleTrainerView(scanner, outPrinter);
 				TrainerController trainerController = new TrainerController(vocableRepository, console);
 				console.setTrainerContr(trainerController);
-				while (console.startConsole() && !exitTesting) {	// run until exit command
+				while (console.startConsole() && !exitTesting) { // run until exit command
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	// for stopping thread from test
-	void stop() {	
+
+	// for safely stopping the thread from the test
+	void stop() {
 		exitTesting = true;
 	}
+
 	// setting IO-ports and arguments from test
-	ByteArrayOutputStream setIOArgs(Scanner scanner, String h2User, String h2Pass, String h2Table, String h2Port,
-			String h2Host, boolean h2InMemo, boolean h2NoInit) {
+	ByteArrayOutputStream setIOArgs(Scanner scanner, String h2Table, String h2Port, String h2Host, boolean h2InMemo,
+			boolean h2NoInit) {
 		this.scanner = scanner;
-		this.h2User = h2User;
-		this.h2Pass = h2Pass;
-		this.h2Table = h2Table;
-		this.h2Port = h2Port;
-		this.h2Host = h2Host;
+		if (!h2Table.isEmpty())
+			this.h2Table = h2Table;
+		if (!h2Port.isEmpty())
+			this.h2Port = h2Port;
+		if (!h2Host.isEmpty())
+			this.h2Host = h2Host;
 		this.h2InMemo = h2InMemo;
 		this.h2NoInit = h2NoInit;
 		ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
