@@ -27,10 +27,6 @@ public class VocableTrainerAppConsoleE2E {
 	private static final int INITIAL_CORR_TRIES = 5;
 	private static final int INITIAL_FALSE_TRIES = 3;
 	private static final String NL = System.getProperty("line.separator");
-	// ANSI escape codes for colors
-	private static final String ANSI_RESET = "\u001B[0m";
-	private static final String ANSI_RED = "\u001B[31m";
-	private static final String ANSI_GREEN = "\u001B[32m";
 
 	// Database credentials
 	private static final String USER = "sa";
@@ -103,6 +99,26 @@ public class VocableTrainerAppConsoleE2E {
 				.untilAsserted(() -> assertThat(outputBuffer.toString().contains("Vocable already exists: " + PHRASE + " - " + TRANSLATION)));
 	}
 
+	@Test
+	public void testLearningWhenCorrect() {
+		// setup & exercise
+		String userInput = "l" + NL + PHRASE + NL;
+		createConsoleAppWithUserInput(userInput);
+		// verify
+		await().atMost(5, TimeUnit.SECONDS)
+				.untilAsserted(() -> assertThat(outputBuffer.toString().contains("correct")));
+	}
+	
+	@Test
+	public void testLearningWhenIncorrect() {
+		// setup & exercise
+		String userInput = "l" + NL + OTHER_PHRASE + NL; // <- false phrase
+		createConsoleAppWithUserInput(userInput);
+		// verify
+		await().atMost(5, TimeUnit.SECONDS)
+				.untilAsserted(() -> assertThat(outputBuffer.toString().contains("incorrect")));
+	}
+	
 	////////////////// helping functions ////////////////////////////////
 
 	private Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries) {
