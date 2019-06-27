@@ -23,6 +23,7 @@ public class VocableTrainerAppConsoleE2E {
 	private static final String PHRASE = "phrase 1";
 	private static final String TRANSLATION = "translation 1";
 	private static final String OTHER_PHRASE = "phrase 2";
+	private static final String OTHER_TRANSLATION = "translation 2";
 	private static final int INITIAL_CORR_TRIES = 5;
 	private static final int INITIAL_FALSE_TRIES = 3;
 	private static final String NL = System.getProperty("line.separator");
@@ -75,9 +76,31 @@ public class VocableTrainerAppConsoleE2E {
 
 	@Test
 	public void testStartUp() {
+		// setup & exercise
 		createConsoleAppWithUserInput("");
+		// verify
 		await().atMost(5, TimeUnit.SECONDS)
 				.untilAsserted(() -> assertThat(outputBuffer.toString().contains("##### Vocable Trainer #####")));
+	}
+	
+	@Test
+	public void testNewVocableSuccess() {
+		// setup & exercise
+		String userInput = "new" + NL + OTHER_PHRASE + NL + OTHER_TRANSLATION + NL;
+		createConsoleAppWithUserInput(userInput);
+		// verify
+		await().atMost(5, TimeUnit.SECONDS)
+				.untilAsserted(() -> assertThat(outputBuffer.toString().contains("Vocable added: " + PHRASE + " - " + TRANSLATION)));
+	}
+	
+	@Test
+	public void testNewVocableError() {
+		// setup & exercise
+		String userInput = "new" + NL + PHRASE + NL + TRANSLATION + NL;
+		createConsoleAppWithUserInput(userInput);
+		// verify
+		await().atMost(5, TimeUnit.SECONDS)
+				.untilAsserted(() -> assertThat(outputBuffer.toString().contains("Vocable already exists: " + PHRASE + " - " + TRANSLATION)));
 	}
 
 	////////////////// helping functions ////////////////////////////////
