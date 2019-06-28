@@ -5,17 +5,26 @@ jdk: openjdk8
 services:
    - docker
 
+addons:
+  sonarcloud:
+    organization: "bianik-github"
+    token:
+secure: $SONAR_TOKEN
+
 # skip installation step
 install: true
 
 cache:
    directories:
       - $HOME/.m2
+      - $HOME/.sonar/cache
       
+# start virtual X display server
 env: DISPLAY=:99.0
 before_script:
    - sh -e /etc/init.d/xvfb start
 
 script:
-   - mvn -f myProjects.vocableTrainer/pom.xml clean verify -Pcode-coverage
+   - git fetch --unshallow
+   - mvn -f myProjects.vocableTrainer/pom.xml clean verify -Pcode-coverage sonar:sonar
    #,mutation-testing
