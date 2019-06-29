@@ -23,9 +23,9 @@ import java.awt.event.KeyEvent;
 
 public class SwingTrainerView extends JFrame implements TrainerView {
 	private static final long serialVersionUID = 1L;
-	
-	private TrainerController trainerController;
-	private Vocable currentVocable;
+
+	private transient TrainerController trainerController;
+	private transient Vocable currentVocable;
 
 	private JPanel contentPane;
 	private JTextField translationTxtField;
@@ -208,10 +208,8 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		checkVocablePanel.add(lblCheckMessage, gbc_lblCheckMessage);
 
 		btnCheck = new JButton("Check");
-		btnCheck.addActionListener(e -> {
-			trainerController
-					.checkVocableOnGivenPhrase(new Vocable(enterTextField.getText().trim(), currentVocable.getTranslation()));
-		});
+		btnCheck.addActionListener(e -> trainerController.checkVocableOnGivenPhrase(
+				new Vocable(enterTextField.getText().trim(), currentVocable.getTranslation())));
 		btnCheck.setEnabled(false);
 		GridBagConstraints gbc_btnCheck = new GridBagConstraints();
 		gbc_btnCheck.insets = new Insets(0, 0, 0, 5);
@@ -220,9 +218,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 		checkVocablePanel.add(btnCheck, gbc_btnCheck);
 
 		btnNext = new JButton("Next");
-		btnNext.addActionListener(e -> {
-			trainerController.nextVocable(currentVocable);
-		});
+		btnNext.addActionListener(e -> trainerController.nextVocable(currentVocable));
 		btnNext.setEnabled(false);
 		GridBagConstraints gbc_btnNext = new GridBagConstraints();
 		gbc_btnNext.gridx = 3;
@@ -255,8 +251,9 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 			enterTextField.setText("");
 			lblCheckMessage.setText(" ");
 			this.currentVocable = vocable;
-		} else
+		} else {
 			lblCheckMessage.setText(message);
+		}
 	}
 
 	public void setTrainerController(TrainerController trainerController) {

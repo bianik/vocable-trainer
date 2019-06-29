@@ -9,6 +9,10 @@ import myProjects.vocableTrainer.model.Vocable;
 import myProjects.vocableTrainer.repository.VocableRepository;
 
 public class H2VocableRepository implements VocableRepository {
+	private static final String FALSE_TRIES = "falseTries";
+	private static final String CORR_TRIES = "corrTries";
+	private static final String TRANSLATION = "translation";
+	private static final String PHRASE = "phrase";
 	private Connection conn;
 	private String tableName;
 
@@ -44,10 +48,10 @@ public class H2VocableRepository implements VocableRepository {
 			if (rs.first()) {
 				v = new Vocable();
 				// Retrieve by column name
-				v.setPhrase(rs.getString("phrase"));
-				v.setTranslation(rs.getString("translation"));
-				v.setCorrTries(rs.getInt("corrTries"));
-				v.setFalseTries(rs.getInt("falseTries"));
+				v.setPhrase(rs.getString(PHRASE));
+				v.setTranslation(rs.getString(TRANSLATION));
+				v.setCorrTries(rs.getInt(CORR_TRIES));
+				v.setFalseTries(rs.getInt(FALSE_TRIES));
 			}
 		}
 		return v;
@@ -77,11 +81,9 @@ public class H2VocableRepository implements VocableRepository {
 			// extract data from result set
 			if (currentVocable != null) {
 				while (rs.next()) {
-					if (rs.getString("phrase").equals(currentVocable.getPhrase())) {
-						if (rs.isLast())
+					if (rs.getString(PHRASE).equals(currentVocable.getPhrase())) {
+						if (!rs.next())	// if next row after last row?
 							rs.first();
-						else
-							rs.next();
 						break;
 					}
 				}
@@ -90,10 +92,10 @@ public class H2VocableRepository implements VocableRepository {
 			}
 			v = new Vocable();
 			// Retrieve by column name
-			v.setPhrase(rs.getString("phrase"));
-			v.setTranslation(rs.getString("translation"));
-			v.setCorrTries(rs.getInt("corrTries"));
-			v.setFalseTries(rs.getInt("falseTries"));
+			v.setPhrase(rs.getString(PHRASE));
+			v.setTranslation(rs.getString(TRANSLATION));
+			v.setCorrTries(rs.getInt(CORR_TRIES));
+			v.setFalseTries(rs.getInt(FALSE_TRIES));
 		}
 		return v;
 	}

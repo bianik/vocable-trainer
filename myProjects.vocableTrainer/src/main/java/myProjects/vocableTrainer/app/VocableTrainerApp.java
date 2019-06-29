@@ -6,6 +6,8 @@ import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import myProjects.vocableTrainer.controller.TrainerController;
 import myProjects.vocableTrainer.repository.VocableRepository;
@@ -34,10 +36,8 @@ public class VocableTrainerApp implements Runnable {
 	@Option(names = { "--h2-no-init" }, description = "h2 DB do not initialize")
 	private boolean h2NoInit = false;
 	// JDBC driver name and database URL, use database server running in Docker container
-	private static final String JDBC_DRIVER = "org.h2.Driver";
 	private String dbUrl = "jdbc:h2:tcp://" + h2Host + ":" + h2Port + "/" + h2Table;
 	private String dbUrlInMemo = "jdbc:h2:mem:";
-	private Connection conn;
 
 	// console i/o
 	Scanner scanner = new Scanner(System.in);
@@ -53,8 +53,7 @@ public class VocableTrainerApp implements Runnable {
 		// set up repository
 		try {
 			// setting up the repository
-			Class.forName(JDBC_DRIVER);
-			conn = DriverManager.getConnection(h2InMemo ? dbUrlInMemo : dbUrl, h2User, h2Pass);
+			Connection conn = DriverManager.getConnection(h2InMemo ? dbUrlInMemo : dbUrl, h2User, h2Pass);
 			VocableRepository vocableRepository = new H2VocableRepository(conn, h2Table);
 			if (!h2NoInit)
 				vocableRepository.initialize();
@@ -74,7 +73,7 @@ public class VocableTrainerApp implements Runnable {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Exception", e);
 		}
 	}
 

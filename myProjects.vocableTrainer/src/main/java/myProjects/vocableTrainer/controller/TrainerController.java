@@ -7,6 +7,7 @@ import myProjects.vocableTrainer.repository.VocableRepository;
 import myProjects.vocableTrainer.view.TrainerView;
 
 public class TrainerController {
+	private static final String DATABASE_ERROR = "Database error!";
 	private VocableRepository vocableRepository;
 	private TrainerView trainerView;
 
@@ -25,7 +26,7 @@ public class TrainerController {
 				trainerView.showMessageVocableAdded("Vocable already exists: ", voc);
 			}
 		} catch (SQLException e) {
-			trainerView.showMessageVocableAdded("Database error!", null);
+			trainerView.showMessageVocableAdded(DATABASE_ERROR, null);
 		}
 	}
 
@@ -35,19 +36,21 @@ public class TrainerController {
 			correctVocable = vocableRepository.findByTranslation(vocableToCheck.getTranslation());
 			if (vocableToCheck.compareTo(correctVocable)) {
 				correctVocable.incCorrTries();
-				int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
+				int c = correctVocable.getCorrTries();
+				int f = correctVocable.getFalseTries();
 				trainerView.showCheckResult("correct(" + c + "/" + (c + f) + "="
 						+ Integer.toString(Math.round(100 * ((float) c / (c + f)))) + "% corr. tries)", true);
 			} else {
 				correctVocable.incFalseTries();
-				int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
+				int c = correctVocable.getCorrTries();
+				int f = correctVocable.getFalseTries();
 				trainerView.showCheckResult("incorrect(" + c + "/" + (c + f) + "="
 						+ Integer.toString(Math.round(100 * ((float) c / (c + f))))
 						+ "% corr. tries) - correct phrase: '" + correctVocable.getPhrase() + "'", false);
 			}
 			vocableRepository.updateVocable(correctVocable);
 		} catch (SQLException e) {
-			trainerView.showCheckResult("Database error!", false);
+			trainerView.showCheckResult(DATABASE_ERROR, false);
 		}
 	}
 
@@ -55,7 +58,7 @@ public class TrainerController {
 		try {
 			trainerView.showNextVocable("", vocableRepository.nextVocable(currentVocable));
 		} catch (SQLException e) {
-			trainerView.showNextVocable("Database error!",null);
+			trainerView.showNextVocable(DATABASE_ERROR,null);
 		}
 	}
 }
