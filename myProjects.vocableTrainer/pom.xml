@@ -42,7 +42,7 @@
       ${project.build.directory}/failsafe-reports
     </sonar.junit.reportPaths>
     <!-- exclusions -->
-    <sonar.issue.ignore.multicriteria>e11,e12</sonar.issue.ignore.multicriteria>
+    <sonar.issue.ignore.multicriteria>e11,e12,e13</sonar.issue.ignore.multicriteria>
     <!-- Disable rule for "Tests should include assertions" -->
     <sonar.issue.ignore.multicriteria.e11.ruleKey>
       squid:S2699
@@ -58,6 +58,13 @@
     <sonar.issue.ignore.multicriteria.e12.resourceKey>
       **/SwingTrainerView.java
     </sonar.issue.ignore.multicriteria.e12.resourceKey>
+    <!-- Disable rule for "Package names should comply with a naming convention" in whole project -->
+    <sonar.issue.ignore.multicriteria.e13.ruleKey>
+      squid:S00120
+    </sonar.issue.ignore.multicriteria.e13.ruleKey>
+    <sonar.issue.ignore.multicriteria.e13.resourceKey>
+      **/*.java
+    </sonar.issue.ignore.multicriteria.e13.resourceKey>
   </properties>
 
   <dependencies>
