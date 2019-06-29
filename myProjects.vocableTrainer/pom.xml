@@ -27,8 +27,19 @@
     <docker.version>0.28.0</docker.version>
     <picocli.version>4.0.0-beta-2</picocli.version>
     <awaitility.version>3.1.6</awaitility.version>
+    <sonarMaven.version>3.6.0.1398</sonarMaven.version>
 
     <DbTcpPort>1523</DbTcpPort>
+
+    <sonar.coverage.exclusions>
+      **/model/*.*,
+      **/app/*.*
+    </sonar.coverage.exclusions>
+
+    <sonar.junit.reportPaths>
+      ${project.build.directory}/surefire-reports,
+      ${project.build.directory}/failsafe-reports
+    </sonar.junit.reportPaths>
   </properties>
 
   <dependencies>
@@ -261,6 +272,11 @@
               <phase>verify</phase>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>${sonarMaven.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
