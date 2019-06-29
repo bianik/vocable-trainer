@@ -58,27 +58,11 @@ public class ConsoleTrainerView implements TrainerView {
 			switch (in.nextLine()) {
 			case "new":
 			case "n":
-				out.println("phrase: ");
-				String phrase = in.nextLine().trim();
-				if (!phrase.isEmpty()) {
-					out.println("translation: ");
-					String translation = in.nextLine().trim();
-					if (!translation.isEmpty()) {
-						trainerContr.newVocable(new Vocable(phrase, translation));
-					} else {
-						out.println("ABORT: no translation!");
-					}
-				} else {
-					out.println("ABORT: no phrase!");
-				}
+				newVocable();
 				break;
 			case "learn":
 			case "l":
-				trainerContr.nextVocable(currentVocable);
-				if (currentVocable != null) {
-					String inputToCheck = in.nextLine().trim();
-					trainerContr.checkVocableOnGivenPhrase(new Vocable(inputToCheck, currentVocable.getTranslation()));
-				}
+				learn();
 				break;
 			case "exit":
 				return false;
@@ -87,6 +71,30 @@ public class ConsoleTrainerView implements TrainerView {
 			}
 		}
 		return true;
+	}
+
+	private void learn() {
+		trainerContr.nextVocable(currentVocable);
+		if (currentVocable != null) {
+			String inputToCheck = in.nextLine().trim();
+			trainerContr.checkVocableOnGivenPhrase(new Vocable(inputToCheck, currentVocable.getTranslation()));
+		}
+	}
+
+	private void newVocable() {
+		out.println("phrase: ");
+		String phrase = in.nextLine().trim();
+		if (!phrase.isEmpty()) {
+			out.println("translation: ");
+			String translation = in.nextLine().trim();
+			if (!translation.isEmpty()) {
+				trainerContr.newVocable(new Vocable(phrase, translation));
+			} else {
+				out.println("ABORT: no translation!");
+			}
+		} else {
+			out.println("ABORT: no phrase!");
+		}
 	}
 
 	public void setTrainerContr(TrainerController trainerContr) {
