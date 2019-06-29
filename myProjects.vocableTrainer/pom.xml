@@ -42,7 +42,7 @@
       ${project.build.directory}/failsafe-reports
     </sonar.junit.reportPaths>
     <!-- exclusions -->
-    <sonar.issue.ignore.multicriteria>e11,e12,e13,e14,e15</sonar.issue.ignore.multicriteria>
+    <sonar.issue.ignore.multicriteria>e11,e12,e13,e14,e15,e16</sonar.issue.ignore.multicriteria>
     <!-- Disable rule for "Tests should include assertions" in test for SwingTrainerView.java -->
     <sonar.issue.ignore.multicriteria.e11.ruleKey>
       squid:S2699
@@ -81,6 +81,13 @@
     <sonar.issue.ignore.multicriteria.e15.resourceKey>
       **/VocableTrainerApp.java
     </sonar.issue.ignore.multicriteria.e15.resourceKey>
+    <!-- Disable rule for "Standard outputs should not be used directly to log anything" in VocableTrainerApp.java -->
+    <sonar.issue.ignore.multicriteria.e16.ruleKey>
+      squid:S106
+    </sonar.issue.ignore.multicriteria.e16.ruleKey>
+    <sonar.issue.ignore.multicriteria.e16.resourceKey>
+      **/VocableTrainerApp.java
+    </sonar.issue.ignore.multicriteria.e16.resourceKey>
   </properties>
 
   <dependencies>
