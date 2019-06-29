@@ -31,6 +31,7 @@
 
     <DbTcpPort>1523</DbTcpPort>
 
+    <!-- SonarCloud setup -->
     <sonar.coverage.exclusions>
       **/model/*.*,
       **/app/*.*
@@ -40,6 +41,15 @@
       ${project.build.directory}/surefire-reports,
       ${project.build.directory}/failsafe-reports
     </sonar.junit.reportPaths>
+    <!-- exclusions -->
+    <sonar.issue.ignore.multicriteria>e11</sonar.issue.ignore.multicriteria>
+    <!-- Disable rule for "Tests should include assertions" -->
+    <sonar.issue.ignore.multicriteria.e11.ruleKey>
+      squid:S2699
+    </sonar.issue.ignore.multicriteria.e11.ruleKey>
+    <sonar.issue.ignore.multicriteria.e11.resourceKey>
+      **/SwingTrainerView*.java
+    </sonar.issue.ignore.multicriteria.e11.resourceKey>
   </properties>
 
   <dependencies>
