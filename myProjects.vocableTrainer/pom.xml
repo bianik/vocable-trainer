@@ -297,15 +297,18 @@
           <version>${pitest.version}</version>
           <configuration>
             <targetClasses>
-              <!-- excludes model.Vocable -->
+              <!-- exclude model.Vocable, app.VocableTrainerApp-->
               <param>**.controller.TrainerController*</param>
               <param>**.repository.h2.H2VocableRepository*</param>
               <param>**.view.console.ConsoleTrainerView*</param>
+              <param>**.view.swing.SwingTrainerView*</param>
             </targetClasses>
             <targetTests>
-              <param>**.controller.*</param>
-              <param>**.h2.*</param>
-              <param>**.view.console.*</param>
+            <!-- only use unit test for mutation -->
+              <param>**.controller.TrainerControllerTest</param>
+              <param>**.h2.H2VocableRepositoryTest</param>
+              <param>**.view.console.ConsoleTrainerViewTest</param>
+              <param>**.view.swing.SwingTrainerViewTest</param>
             </targetTests>
             <mutators>
               <mutator>ALL</mutator>
