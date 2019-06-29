@@ -80,13 +80,11 @@ public class H2VocableRepository implements VocableRepository {
 				ResultSet rs = stmt.executeQuery(command);) {
 			// extract data from result set
 			if (currentVocable != null) {
-				while (rs.next()) {
-					if (rs.getString(PHRASE).equals(currentVocable.getPhrase())) {
-						if (!rs.next())	// if next row after last row?
-							rs.first();
-						break;
-					}
-				}
+				do {
+					rs.next();
+				} while (!rs.getString(PHRASE).equals(currentVocable.getPhrase()));
+				if (!rs.next()) // if this is the last entry, jump to first one
+					rs.first();
 			} else {
 				rs.first();
 			}
