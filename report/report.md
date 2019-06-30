@@ -7,3 +7,6 @@ The application can be run with a command line interface or a graphical user int
 ## Implementation
 ### Development and Testing
 ### Problems
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTk4NzU4MDA0Nl19
+-->
