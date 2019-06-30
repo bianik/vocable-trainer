@@ -2,6 +2,8 @@ package myProjects.vocableTrainer.controller;
 
 import static org.mockito.Mockito.*;
 
+import java.sql.SQLException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -45,7 +47,7 @@ public class TrainerControllerTest {
 		InOrder inOrder = inOrder(vocableRepository, trainerView);
 		inOrder.verify(vocableRepository).findByPhrase("phrase 1");
 		inOrder.verify(vocableRepository).saveVocable(vocable);
-		inOrder.verify(trainerView).showMessageVocableAdded("Vocable added", vocable);
+		inOrder.verify(trainerView).showMessageVocableAdded("Vocable added: ", vocable);
 	}
 
 	@Test
@@ -60,7 +62,18 @@ public class TrainerControllerTest {
 		InOrder inOrder = inOrder(vocableRepository, trainerView);
 		inOrder.verify(vocableRepository).findByPhrase(CORRECT_PHRASE);
 		inOrder.verify(vocableRepository, never()).saveVocable(vocableToAdd);
-		inOrder.verify(trainerView).showMessageVocableAdded("Vocable already exists", vocableToAdd);
+		inOrder.verify(trainerView).showMessageVocableAdded("Vocable already exists: ", vocableToAdd);	
+	}
+	
+	@Test
+	public void testNewVocableDbErrorShowError() throws Exception{
+		// setup
+		Vocable vocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		doThrow(new SQLException()).when(vocableRepository).saveVocable(vocable);
+		// exercise
+		trainerController.newVocable(vocable);
+		// verify
+		verify(trainerView).showMessageVocableAdded("Database error!", null);
 	}
 
 	@Test
@@ -131,6 +144,17 @@ public class TrainerControllerTest {
 		verify(correctVocable, never()).incCorrTries();
 		verify(vocableRepository).updateVocable(correctVocable);
 	}
+	
+	@Test
+	public void testCheckVocableOnGivenPhraseDbErrorShowError() throws Exception{
+		// setup
+		Vocable vocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		doThrow(new SQLException()).when(vocableRepository).findByTranslation(TRANSLATION);
+		// exercise
+		trainerController.checkVocableOnGivenPhrase(vocable);
+		// verify
+		verify(trainerView).showCheckResult("Database error!", false);
+	}
 
 	@Test
 	public void testNextVocableWhenCurrentVocable() throws Exception {
@@ -142,7 +166,7 @@ public class TrainerControllerTest {
 		trainerController.nextVocable(vocable1);
 		// verify
 		verify(vocableRepository).nextVocable(vocable1);
-		verify(trainerView).showNextVocable(vocable2);
+		verify(trainerView).showNextVocable("", vocable2);
 	}
 	
 	@Test
@@ -154,6 +178,17 @@ public class TrainerControllerTest {
 		trainerController.nextVocable(null);
 		// verify
 		verify(vocableRepository).nextVocable(null);
-		verify(trainerView).showNextVocable(vocable1);
+		verify(trainerView).showNextVocable("", vocable1);
+	}
+	
+	@Test
+	public void testNextVocableDbErrorShowError() throws Exception{
+		// setup
+		Vocable vocable = new Vocable(CORRECT_PHRASE, TRANSLATION);
+		doThrow(new SQLException()).when(vocableRepository).nextVocable(vocable);
+		// exercise
+		trainerController.nextVocable(vocable);
+		// verify
+		verify(trainerView).showNextVocable("Database error!", null);
 	}
 }

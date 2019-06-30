@@ -7,6 +7,7 @@ import myProjects.vocableTrainer.repository.VocableRepository;
 import myProjects.vocableTrainer.view.TrainerView;
 
 public class TrainerController {
+	private static final String DATABASE_ERROR = "Database error!";
 	private VocableRepository vocableRepository;
 	private TrainerView trainerView;
 
@@ -20,13 +21,12 @@ public class TrainerController {
 		try {
 			if (vocableRepository.findByPhrase(voc.getPhrase()) == null) {
 				vocableRepository.saveVocable(voc);
-				trainerView.showMessageVocableAdded("Vocable added", voc);
+				trainerView.showMessageVocableAdded("Vocable added: ", voc);
 			} else {
-				trainerView.showMessageVocableAdded("Vocable already exists", voc);
+				trainerView.showMessageVocableAdded("Vocable already exists: ", voc);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			trainerView.showMessageVocableAdded(DATABASE_ERROR, null);
 		}
 	}
 
@@ -34,32 +34,31 @@ public class TrainerController {
 		Vocable correctVocable;
 		try {
 			correctVocable = vocableRepository.findByTranslation(vocableToCheck.getTranslation());
-		if (vocableToCheck.compareTo(correctVocable)) {
-			correctVocable.incCorrTries();
-			int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
-			trainerView.showCheckResult("correct(" + c + "/" + (c + f) + "="
-					+ Integer.toString(Math.round(100 * ((float) c / (c + f)))) + "% corr. tries)", true);
-		} else {
-			correctVocable.incFalseTries();
-			int c = correctVocable.getCorrTries(), f = correctVocable.getFalseTries();
-			trainerView.showCheckResult(
-					"incorrect(" + c + "/" + (c + f) + "=" + Integer.toString(Math.round(100 * ((float) c / (c + f))))
-							+ "% corr. tries) - correct phrase: '" + correctVocable.getPhrase() + "'",
-					false);
-		}
-		vocableRepository.updateVocable(correctVocable);
+			if (vocableToCheck.compareTo(correctVocable)) {
+				correctVocable.incCorrTries();
+				int c = correctVocable.getCorrTries();
+				int f = correctVocable.getFalseTries();
+				trainerView.showCheckResult("correct(" + c + "/" + (c + f) + "="
+						+ Integer.toString(Math.round(100 * ((float) c / (c + f)))) + "% corr. tries)", true);
+			} else {
+				correctVocable.incFalseTries();
+				int c = correctVocable.getCorrTries();
+				int f = correctVocable.getFalseTries();
+				trainerView.showCheckResult("incorrect(" + c + "/" + (c + f) + "="
+						+ Integer.toString(Math.round(100 * ((float) c / (c + f))))
+						+ "% corr. tries) - correct phrase: '" + correctVocable.getPhrase() + "'", false);
+			}
+			vocableRepository.updateVocable(correctVocable);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			trainerView.showCheckResult(DATABASE_ERROR, false);
 		}
 	}
 
 	public void nextVocable(Vocable currentVocable) {
 		try {
-			trainerView.showNextVocable(vocableRepository.nextVocable(currentVocable));
+			trainerView.showNextVocable("", vocableRepository.nextVocable(currentVocable));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			trainerView.showNextVocable(DATABASE_ERROR,null);
 		}
 	}
 }

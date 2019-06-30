@@ -22,6 +22,72 @@
     <coveralls.version>4.3.0</coveralls.version>
     <pitest.version>1.4.3</pitest.version>
     <h2db.version>1.4.199</h2db.version>
+    <buildHelper.version>3.0.0</buildHelper.version>
+    <failsafe.version>2.22.1</failsafe.version>
+    <docker.version>0.28.0</docker.version>
+    <picocli.version>4.0.0-beta-2</picocli.version>
+    <awaitility.version>3.1.6</awaitility.version>
+    <sonarMaven.version>3.6.0.1398</sonarMaven.version>
+
+    <DbTcpPort>1523</DbTcpPort>
+
+    <!-- SonarCloud setup -->
+    <sonar.coverage.exclusions>
+      **/model/*.*,
+      **/app/*.*
+    </sonar.coverage.exclusions>
+
+    <sonar.junit.reportPaths>
+      ${project.build.directory}/surefire-reports,
+      ${project.build.directory}/failsafe-reports
+    </sonar.junit.reportPaths>
+    <!-- exclusions -->
+    <sonar.issue.ignore.multicriteria>e11,e12,e13,e14,e15,e16</sonar.issue.ignore.multicriteria>
+    <!-- Disable rule for "Tests should include assertions" in test for SwingTrainerView.java -->
+    <sonar.issue.ignore.multicriteria.e11.ruleKey>
+      squid:S2699
+    </sonar.issue.ignore.multicriteria.e11.ruleKey>
+    <sonar.issue.ignore.multicriteria.e11.resourceKey>
+      **/SwingTrainerView*.java
+    </sonar.issue.ignore.multicriteria.e11.resourceKey>
+    <!-- Disable rule for "Local variable and method parameter names should 
+      comply with a naming convention"in SwingTrainerView.java -->
+    <sonar.issue.ignore.multicriteria.e12.ruleKey>
+      squid:S00117
+    </sonar.issue.ignore.multicriteria.e12.ruleKey>
+    <sonar.issue.ignore.multicriteria.e12.resourceKey>
+      **/SwingTrainerView.java
+    </sonar.issue.ignore.multicriteria.e12.resourceKey>
+    <!-- Disable rule for "Package names should comply with a naming convention" 
+      in whole project -->
+    <sonar.issue.ignore.multicriteria.e13.ruleKey>
+      squid:S00120
+    </sonar.issue.ignore.multicriteria.e13.ruleKey>
+    <sonar.issue.ignore.multicriteria.e13.resourceKey>
+      **/*.java
+    </sonar.issue.ignore.multicriteria.e13.resourceKey>
+    <!-- Disable rule for "Inheritance tree of classes should not be too 
+      deep" in SwingTrainerView.java -->
+    <sonar.issue.ignore.multicriteria.e14.ruleKey>
+      squid:MaximumInheritanceDepth
+    </sonar.issue.ignore.multicriteria.e14.ruleKey>
+    <sonar.issue.ignore.multicriteria.e14.resourceKey>
+      **/SwingTrainerView.java
+    </sonar.issue.ignore.multicriteria.e14.resourceKey>
+    <!-- Disable rule for "Databases should be password-protected" in VocableTrainerApp.java -->
+    <sonar.issue.ignore.multicriteria.e15.ruleKey>
+      squid:S2115
+    </sonar.issue.ignore.multicriteria.e15.ruleKey>
+    <sonar.issue.ignore.multicriteria.e15.resourceKey>
+      **/VocableTrainerApp.java
+    </sonar.issue.ignore.multicriteria.e15.resourceKey>
+    <!-- Disable rule for "Standard outputs should not be used directly to log anything" in VocableTrainerApp.java -->
+    <sonar.issue.ignore.multicriteria.e16.ruleKey>
+      squid:S106
+    </sonar.issue.ignore.multicriteria.e16.ruleKey>
+    <sonar.issue.ignore.multicriteria.e16.resourceKey>
+      **/VocableTrainerApp.java
+    </sonar.issue.ignore.multicriteria.e16.resourceKey>
   </properties>
 
   <dependencies>
@@ -48,9 +114,126 @@
       <artifactId>h2</artifactId>
       <version>${h2db.version}</version>
     </dependency>
+    <dependency>
+      <groupId>info.picocli</groupId>
+      <artifactId>picocli</artifactId>
+      <version>${picocli.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>${awaitility.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
+    <!-- //////////////// Plugins ////////////////// -->
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>${buildHelper.version}</version>
+        <executions>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/it/java</source>
+                <source>src/e2e/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${failsafe.version}</version>
+        <configuration>
+          <systemPropertyVariables>
+            <tcpPort>${DbTcpPort}</tcpPort>
+          </systemPropertyVariables>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default-it</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>e2e-tests</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>**/*IT.java</exclude>
+              </excludes>
+              <includes>
+                <include>**/*E2E.java</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>${docker.version}</version>
+        <configuration>
+          <images>
+            <image>
+              <name>h2</name>
+              <build>
+                <dockerFileDir>${project.basedir}</dockerFileDir>
+                <args>
+                  <tcpPort>${DbTcpPort}</tcpPort>
+                </args>
+              </build>
+              <run>
+                <ports>
+                  <port>${DbTcpPort}:${DbTcpPort}</port>
+                  <port>81:81</port>
+                </ports>
+              </run>
+            </image>
+          </images>
+        </configuration>
+        <executions>
+          <execution>
+            <id>docker:build</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>docker:start</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>start</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>docker:stop</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
+    <!-- //////////////// plugin management ////////////////// -->
     <pluginManagement>
       <plugins>
         <plugin>
@@ -60,6 +243,7 @@
           <configuration>
             <excludes>
               <exclude>**/model/*.*</exclude>
+              <exclude>**/app/*.*</exclude>
             </excludes>
           </configuration>
           <executions>
@@ -85,7 +269,7 @@
                       <limit>
                         <counter>LINE</counter>
                         <value>COVEREDRATIO</value>
-                        <minimum>0.97</minimum>  <!-- 97% -->
+                        <minimum>1</minimum>  <!-- 100% -->
                       </limit>
                     </limits>
                   </rule>
@@ -113,13 +297,18 @@
           <version>${pitest.version}</version>
           <configuration>
             <targetClasses>
-              <!-- excludes model.Vocable -->
+              <!-- exclude model.Vocable, app.VocableTrainerApp-->
               <param>**.controller.TrainerController*</param>
-              <param>**.h2.H2VocableRepository*</param>
+              <param>**.repository.h2.H2VocableRepository*</param>
+              <param>**.view.console.ConsoleTrainerView*</param>
+              <param>**.view.swing.SwingTrainerView*</param>
             </targetClasses>
             <targetTests>
-              <param>**.controller.*</param>
-              <param>**.h2.*</param>
+            <!-- only use unit test for mutation -->
+              <param>**.controller.TrainerControllerTest</param>
+              <param>**.h2.H2VocableRepositoryTest</param>
+              <param>**.view.console.ConsoleTrainerViewTest</param>
+              <param>**.view.swing.SwingTrainerViewTest</param>
             </targetTests>
             <mutators>
               <mutator>ALL</mutator>
@@ -135,10 +324,16 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>${sonarMaven.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
 
+  <!-- //////////////// profiles ////////////////// -->
   <profiles>
     <profile>
       <id>code-coverage</id>
@@ -152,6 +347,18 @@
           <plugin>
             <groupId>org.eluder.coveralls</groupId>
             <artifactId>coveralls-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>jacoco</id>
+      <build>
+        <plugins>
+          <plugin>
+            <!-- configured in pluginManagement -->
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
           </plugin>
         </plugins>
       </build>
