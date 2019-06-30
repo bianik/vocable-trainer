@@ -313,7 +313,7 @@
             <mutators>
               <mutator>ALL</mutator>
             </mutators>
-            <mutationThreshold>100</mutationThreshold>  <!-- 100% -->
+            <mutationThreshold>99</mutationThreshold>  <!-- 99% -->
           </configuration>
           <executions>
             <execution>

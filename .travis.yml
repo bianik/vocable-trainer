@@ -26,5 +26,4 @@ before_script:
 
 script:
    - git fetch --unshallow
-   - mvn -f myProjects.vocableTrainer/pom.xml clean verify -Pcode-coverage sonar:sonar
-   #,mutation-testing
+   - mvn -f myProjects.vocableTrainer/pom.xml clean verify -Pcode-coverage,mutation-testing sonar:sonar
