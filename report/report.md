@@ -8,13 +8,15 @@ The application can be run with a command line interface or a graphical user int
 enter 'n'/'new' to add a new vocable
 enter 'l'/'learn' to start learning
 exit
+<p><span style="color: #0000ff;">rot</span></p>
 ```
+
 
 ## Implementation
 ### Development and Testing
 ### Problems
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDE1MTUzOTE2LC0yNzkwNjIyNjksLTE0Nz
+eyJoaXN0b3J5IjpbNTM4OTMzOTg0LC0yNzkwNjIyNjksLTE0Nz
 YyMzY4MTUsLTIzMzYxMTM1MywxOTE0OTIwNzU2LC04MjU4OTg0
 MywtMzkzMDQ5MjgyXX0=
 -->
