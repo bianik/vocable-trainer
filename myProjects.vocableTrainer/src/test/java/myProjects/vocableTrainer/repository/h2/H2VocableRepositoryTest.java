@@ -1,7 +1,6 @@
 package myProjects.vocableTrainer.repository.h2;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.fail;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -60,197 +59,153 @@ public class H2VocableRepositoryTest {
 	}
 
 	@Test
-	public void testFindByPhraseNotFound() {
-		try {
-			assertThat(vocableRepo.findByPhrase("phrase")).isNull();
-		} catch (SQLException e) {
-		}
+	public void testFindByPhraseNotFound() throws SQLException {
+		assertThat(vocableRepo.findByPhrase("phrase")).isNull();
 	}
 
 	@Test
-	public void testFindByPhraseFound() {
+	public void testFindByPhraseFound() throws SQLException {
 		// setup
 		addTestVocable("an other phrase", "translation", 0, 0);
-		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 5, 7);
 		// execution
 		Vocable retreivedVocable = null;
-		try {
-			retreivedVocable = vocableRepo.findByPhrase("phrase 1");
-		} catch (SQLException e) {
-		}
+		retreivedVocable = vocableRepo.findByPhrase("phrase 1");
 		// verify
 		assertThat(retreivedVocable).isEqualTo(dbVocable);
 	}
 
 	@Test
-	public void testFindByPhraseDbErrorShouldThrow() {
+	public void testFindByPhraseDbErrorShouldThrow() throws SQLException {
 		// setup
-		try {
-			conn.close();
-		} catch (SQLException e) {
-		}
+		conn.close();
 		// execute & verify
 		assertThatThrownBy(() -> vocableRepo.findByPhrase("phrase")).isInstanceOf(SQLException.class);
 	}
 
 	@Test
-	public void testFindByTranslationNotFound() {
-		try {
-			assertThat(vocableRepo.findByTranslation("translation")).isNull();
-		} catch (SQLException e) {
-		}
+	public void testFindByTranslationNotFound() throws SQLException {
+		assertThat(vocableRepo.findByTranslation("translation")).isNull();
 	}
 
 	@Test
-	public void testFindByTranslationFound() {
+	public void testFindByTranslationFound() throws SQLException {
 		// setup
 		addTestVocable("an other phrase", "an other translation", 0, 0);
-		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 5, 7);
 		// execution
 		Vocable retreivedVocable = null;
-		try {
-			retreivedVocable = vocableRepo.findByTranslation("translation 1");
-		} catch (SQLException e) {
-		}
+		retreivedVocable = vocableRepo.findByTranslation("translation 1");
 		// verify
 		assertThat(retreivedVocable).isEqualTo(dbVocable);
 	}
 
 	@Test
-	public void testFindByTranslationDbErrorShouldThrow() {
+	public void testFindByTranslationDbErrorShouldThrow() throws SQLException {
 		// setup
-		try {
-			conn.close();
-		} catch (SQLException e) {
-		}
+		conn.close();
 		// execute & verify
 		assertThatThrownBy(() -> vocableRepo.findByTranslation("translation")).isInstanceOf(SQLException.class);
 	}
 
 	@Test
-	public void testSaveVocable() {
+	public void testSaveVocable() throws SQLException {
 		Vocable vocable = new Vocable("phrase 1", "translation 1");
+		vocable.setCorrTries(5);
+		vocable.setFalseTries(7);
 		// execution
-		try {
-			vocableRepo.saveVocable(vocable);
-		} catch (SQLException e) {
-		}
+		vocableRepo.saveVocable(vocable);
 		// verify
 		assertThat(readAllVocablesFromRepository()).containsExactly(vocable);
 	}
 
 	@Test
-	public void testSaveVocableDbErrorShouldThrow() {
+	public void testSaveVocableDbErrorShouldThrow() throws SQLException {
 		// setup
-		try {
-			conn.close();
-		} catch (SQLException e) {
-		}
+		conn.close();
 		Vocable vocable = new Vocable("phrase 1", "translation 1");
 		// execute & verify
 		assertThatThrownBy(() -> vocableRepo.saveVocable(vocable)).isInstanceOf(SQLException.class);
 	}
 
 	@Test
-	public void testUpdateVocable() {
+	public void testUpdateVocable() throws SQLException {
 		// setup
 		addTestVocable("an other phrase", "an other translation", 0, 0);
 		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		dbVocable.setCorrTries(6);
 		dbVocable.setFalseTries(3);
 		// execution
-		try {
-			vocableRepo.updateVocable(dbVocable);
-		} catch (SQLException e) {
-		}
+		vocableRepo.updateVocable(dbVocable);
 		// verify
 		assertThat(readAllVocablesFromRepository()).contains(dbVocable);
 	}
 
 	@Test
-	public void testUpdateVocableDbErrorShouldThrow() {
+	public void testUpdateVocableDbErrorShouldThrow() throws SQLException {
 		// setup
 		addTestVocable("an other phrase", "an other translation", 0, 0);
 		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		dbVocable.setCorrTries(6);
 		dbVocable.setFalseTries(3);
-		try {
-			conn.close();
-		} catch (SQLException e) {
-		}
+		conn.close();
 		// execute & verify
 		assertThatThrownBy(() -> vocableRepo.updateVocable(dbVocable)).isInstanceOf(SQLException.class);
 	}
 
 	@Test
-	public void testNextVocableWhenNoCurrentVocable() {
+	public void testNextVocableWhenNoCurrentVocable() throws SQLException {
 		// setup
 		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		addTestVocable("phrase 2", "translation 2", 0, 0);
 		// execution
 		Vocable nextVocable = null;
-		try {
-			nextVocable = vocableRepo.nextVocable(null);
-		} catch (SQLException e) {
-		}
+		nextVocable = vocableRepo.nextVocable(null);
 		// verify
 		assertThat(nextVocable).isEqualTo(firstVocable);
 	}
 
 	@Test
-	public void testNextVocableWhenCurrentVocable() {
+	public void testNextVocableWhenCurrentVocable() throws SQLException {
 		// setup
 		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
-		Vocable secondVocable = addTestVocable("phrase 2", "translation 2", 0, 0);
+		Vocable secondVocable = addTestVocable("phrase 2", "translation 2", 5, 7);
 		// execution
 		Vocable nextVocable = null;
-		try {
-			nextVocable = vocableRepo.nextVocable(firstVocable);
-		} catch (SQLException e) {
-		}
+		nextVocable = vocableRepo.nextVocable(firstVocable);
 		// verify
 		assertThat(nextVocable).isEqualTo(secondVocable);
 	}
 
 	@Test
-	public void testNextVocableWhenCurrentVocableLastOne() {
+	public void testNextVocableWhenCurrentVocableLastOne() throws SQLException {
 		// setup
-		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
+		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 5, 7);
 		addTestVocable("phrase 2", "translation 2", 0, 0);
 		Vocable lastVocable = addTestVocable("phrase 3", "translation 3", 0, 0);
 		// execution
 		Vocable nextVocable = null;
-		try {
-			nextVocable = vocableRepo.nextVocable(lastVocable);
-		} catch (SQLException e) {
-		}
+		nextVocable = vocableRepo.nextVocable(lastVocable);
 		// verify
 		assertThat(nextVocable).isEqualTo(firstVocable);
 	}
 
 	@Test
-	public void testNextVocableDbErrorSholdThrow() {
+	public void testNextVocableDbErrorSholdThrow() throws SQLException {
 		// setup
 		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		addTestVocable("phrase 2", "translation 2", 0, 0);
-		try {
-			conn.close();
-		} catch (SQLException e) {
-		}
+		conn.close();
 		// execute & verify
 		assertThatThrownBy(() -> vocableRepo.nextVocable(firstVocable)).isInstanceOf(SQLException.class);
 	}
 
 	@Test
-	public void testInitializeWhenNoTable() {
+	public void testInitializeWhenNoTable() throws SQLException {
 		// setup
 		executeDbCommand("DROP TABLE IF EXISTS " + TABLE_NAME);
 		// exercise
-		try {
-			vocableRepo.initialize();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		vocableRepo.initialize();
 		// verify
 		// try to find the table
 		boolean wantedTable = false;
@@ -271,23 +226,14 @@ public class H2VocableRepositoryTest {
 					assertThat(rsmd.getColumnTypeName(4)).isEqualTo("INTEGER");
 				}
 			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			fail("SQLException");
 		}
 		assertThat(wantedTable).isTrue();
 	}
-	
+
 	@Test
-	public void testInitializeWhenTable() {
+	public void testInitializeWhenTable() throws SQLException {
 		// exercise
-		try {
-			vocableRepo.initialize();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			fail();
-		}
+		vocableRepo.initialize();
 		// verify
 		// try to find the table
 		boolean wantedTable = false;
@@ -309,34 +255,24 @@ public class H2VocableRepositoryTest {
 				}
 			}
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			fail("SQLException");
 		}
 		assertThat(wantedTable).isTrue();
 	}
 
 	@Test
-	public void testInitializeWhenDbErrorShouldThrow() {
+	public void testInitializeWhenDbErrorShouldThrow() throws SQLException {
 		// setup
-		try {
-			conn.close();
-		} catch (SQLException e) {
-		}
+		conn.close();
 		// execute & verify
 		assertThatThrownBy(() -> vocableRepo.initialize()).isInstanceOf(SQLException.class);
 	}
 
 	////////////////// helping functions ////////////////////////////////
 
-	private List<Vocable> readAllVocablesFromRepository() {
+	private List<Vocable> readAllVocablesFromRepository() throws SQLException {
 		String command = "SELECT * FROM " + TABLE_NAME;
-		Statement stmt = null;
-		ResultSet rs = null;
 		List<Vocable> allVocables = new ArrayList<Vocable>();
-		try {
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(command);
+		try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(command);) {
 			// extract data from result set
 			while (rs.next()) {
 				Vocable v = new Vocable();
@@ -348,24 +284,12 @@ public class H2VocableRepositoryTest {
 				v.setFalseTries(rs.getInt("falseTries"));
 				allVocables.add(v);
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-			} catch (SQLException e) {
-			}
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-			}
 		}
 		return allVocables;
 	}
 
-	public Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries) {
+	public Vocable addTestVocable(String phrase, String translation, int falseTries, int corrTries)
+			throws SQLException {
 		executeDbCommand("INSERT INTO " + TABLE_NAME + " VALUES ('" + phrase + "', '" + translation + "', " + corrTries
 				+ ", " + falseTries + ")");
 		Vocable v = new Vocable(phrase, translation);
@@ -374,14 +298,9 @@ public class H2VocableRepositoryTest {
 		return v;
 	}
 
-	public void executeDbCommand(String command) {
-		try {
-			Statement stmt = conn.createStatement();
+	public void executeDbCommand(String command) throws SQLException {
+		try (Statement stmt = conn.createStatement();) {
 			stmt.executeUpdate(command);
-			stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }
