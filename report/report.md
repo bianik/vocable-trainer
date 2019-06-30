@@ -6,8 +6,8 @@ The application can be run with a command line interface or a graphical user int
 Console user interface:  
 <img src="./console_screenshot.jpeg" width="500">  
 Graphical user interface:  
-<img src="./gui_screenshot1.jpeg" height="250"> <img src="./gui_screenshot2.jpeg" height="250">  
-<img src="./gui_screenshot3.jpeg" height="250"> <img src="./gui_screenshot4.jpeg" height="250">  
+<img src="./gui_screenshot1.jpeg" height="230"> -> <img src="./gui_screenshot2.jpeg" height="230">  ->
+<img src="./gui_screenshot3.jpeg" height="230"> -> <img src="./gui_screenshot4.jpeg" height="230">  
 
 
 ## Implementation
