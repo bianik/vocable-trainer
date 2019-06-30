@@ -81,7 +81,8 @@
     <sonar.issue.ignore.multicriteria.e15.resourceKey>
       **/VocableTrainerApp.java
     </sonar.issue.ignore.multicriteria.e15.resourceKey>
-    <!-- Disable rule for "Standard outputs should not be used directly to log anything" in VocableTrainerApp.java -->
+    <!-- Disable rule for "Standard outputs should not be used directly to 
+      log anything" in VocableTrainerApp.java -->
     <sonar.issue.ignore.multicriteria.e16.ruleKey>
       squid:S106
     </sonar.issue.ignore.multicriteria.e16.ruleKey>
@@ -297,18 +298,16 @@
           <version>${pitest.version}</version>
           <configuration>
             <targetClasses>
-              <!-- exclude model.Vocable, app.VocableTrainerApp-->
+              <!-- exclude model.Vocable, app.VocableTrainerApp, view.swing.SwingTrainerViewTest -->
               <param>**.controller.TrainerController*</param>
               <param>**.repository.h2.H2VocableRepository*</param>
               <param>**.view.console.ConsoleTrainerView*</param>
-              <param>**.view.swing.SwingTrainerView*</param>
             </targetClasses>
             <targetTests>
-            <!-- only use unit test for mutation -->
+              <!-- only use unit test for mutation -->
               <param>**.controller.TrainerControllerTest</param>
               <param>**.h2.H2VocableRepositoryTest</param>
               <param>**.view.console.ConsoleTrainerViewTest</param>
-              <param>**.view.swing.SwingTrainerViewTest</param>
             </targetTests>
             <mutators>
               <mutator>ALL</mutator>
