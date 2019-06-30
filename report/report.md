@@ -10,13 +10,13 @@ enter 'l'/'learn' to start learning
 exit
 <p><span style="color: #0000ff;">rot</span></p>
 ```
-
+<p><span style="color: #0000ff;">rot</span></p>
 
 ## Implementation
 ### Development and Testing
 ### Problems
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTM4OTMzOTg0LC0yNzkwNjIyNjksLTE0Nz
-YyMzY4MTUsLTIzMzYxMTM1MywxOTE0OTIwNzU2LC04MjU4OTg0
-MywtMzkzMDQ5MjgyXX0=
+eyJoaXN0b3J5IjpbMjA3MzUxMDYwNCwtMjc5MDYyMjY5LC0xND
+c2MjM2ODE1LC0yMzM2MTEzNTMsMTkxNDkyMDc1NiwtODI1ODk4
+NDMsLTM5MzA0OTI4Ml19
 -->
