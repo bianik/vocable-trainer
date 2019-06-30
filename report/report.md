@@ -1,8 +1,8 @@
 # Report
 ## The program
 ## Implementation
-## Problems
-
+### Development and Testing
+### Problems
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI2ODQ0MjM2OF19
+eyJoaXN0b3J5IjpbLTM5MzA0OTI4Ml19
 -->
