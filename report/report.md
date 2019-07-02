@@ -92,7 +92,7 @@ The build and automated testing of the application is managed by a **Maven** pro
  - mutation-testing
    - execute pitest
 
-The version control system **git** is used for the development for the project locally in a git repository. This is pushed repeatedly to the web service **gitHub**. Connected to this online git repository is the continuous integration service **Travic CI**.org. Pushing to the gitHub repository or creating pull requests will trigger [Travis CI](https://travis-ci.org/bianik/vocable-trainer) to build the Maven project based on the configuration provided by the [travis.yml](../.travis.ym) file as following:
+The version control system **git** is used for the development for the project locally in a git repository. This is pushed repeatedly to the web service **gitHub**. Connected to this online git repository is the continuous integration service **Travic CI**.org. Pushing to the gitHub repository or creating pull requests will trigger [Travis CI](https://travis-ci.org/bianik/vocable-trainer) to build the Maven project based on the configuration provided by the [travis.yml](../.travis.yml) file as following:
 - the Java JDK is set to 8
 - the docker service is started
 - SonarCloud is configured
@@ -113,7 +113,7 @@ After the build has finished, code coverage results are send to the online servi
 - **e13** "*Package names should comply with a naming convention*": The chosen project name violates a naming convention. Trying to rename the project and all necessary files afterwards causes more problems and inconsistency than ignoring this rule.
 - **e14** "*Inheritance tree of classes should not be too
   deep*": SwingTrainerView extends the class JFrame, which does violate this rule. No non time consuming fix exists so ignoring this rule is acceptable.
-- **e15** "*Databases should be password-protected*": Configuring the h2 database with a password on every build has been attempted but couldn't be solved. This is further covered in [Database password]().
+- **e15** "*Databases should be password-protected*": Configuring the h2 database with a password on every build has been attempted but couldn't be solved. This is further covered in [Database password](./report.md#database-password).
 - **e16** "*Standard outputs should not be used directly to
   log anything*": The standard output is used by the console UI so this rule can be ignored here.
 
