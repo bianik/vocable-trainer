@@ -11,3 +11,6 @@ SonarCloud:
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=myProjects%3AvocableTrainer&metric=coverage)](https://sonarcloud.io/dashboard?id=myProjects%3AvocableTrainer)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=myProjects%3AvocableTrainer&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=myProjects%3AvocableTrainer)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=myProjects%3AvocableTrainer&metric=sqale_index)](https://sonarcloud.io/dashboard?id=myProjects%3AvocableTrainer)
+
+
+The report for this project is located at [report/report.md](report/report.md).
