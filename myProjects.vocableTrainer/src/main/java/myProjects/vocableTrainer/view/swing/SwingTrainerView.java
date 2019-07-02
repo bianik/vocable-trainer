@@ -257,6 +257,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 			this.currentVocable = vocable;
 		} else
 			lblCheckMessage.setText(message);
+		enterTextField.setBackground(Color.WHITE);
 	}
 
 	public void setTrainerController(TrainerController trainerController) {
