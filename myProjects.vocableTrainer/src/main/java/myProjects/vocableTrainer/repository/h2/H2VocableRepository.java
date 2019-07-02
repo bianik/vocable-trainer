@@ -9,6 +9,10 @@ import myProjects.vocableTrainer.model.Vocable;
 import myProjects.vocableTrainer.repository.VocableRepository;
 
 public class H2VocableRepository implements VocableRepository {
+	private static final String FALSE_TRIES = "falseTries";
+	private static final String CORR_TRIES = "corrTries";
+	private static final String TRANSLATION = "translation";
+	private static final String PHRASE = "phrase";
 	private Connection conn;
 	private String tableName;
 
@@ -16,6 +20,16 @@ public class H2VocableRepository implements VocableRepository {
 		super();
 		this.conn = conn;
 		this.tableName = tableName;
+	}
+
+	public void initialize() throws SQLException {
+		String command1 = "DROP TABLE IF EXISTS " + tableName;
+		String command2 = "CREATE TABLE " + tableName
+				+ "(phrase VARCHAR(30), translation VARCHAR(30), corrTries INTEGER, falseTries INTEGER)";
+		try (Statement stmt = conn.createStatement();) {
+			stmt.executeUpdate(command1);
+			stmt.executeUpdate(command2);
+		}
 	}
 
 	public Vocable findByPhrase(String phrase) throws SQLException {
@@ -34,10 +48,10 @@ public class H2VocableRepository implements VocableRepository {
 			if (rs.first()) {
 				v = new Vocable();
 				// Retrieve by column name
-				v.setPhrase(rs.getString("phrase"));
-				v.setTranslation(rs.getString("translation"));
-				v.setCorrTries(rs.getInt("corrTries"));
-				v.setFalseTries(rs.getInt("falseTries"));
+				v.setPhrase(rs.getString(PHRASE));
+				v.setTranslation(rs.getString(TRANSLATION));
+				v.setCorrTries(rs.getInt(CORR_TRIES));
+				v.setFalseTries(rs.getInt(FALSE_TRIES));
 			}
 		}
 		return v;
@@ -66,24 +80,20 @@ public class H2VocableRepository implements VocableRepository {
 				ResultSet rs = stmt.executeQuery(command);) {
 			// extract data from result set
 			if (currentVocable != null) {
-				while (rs.next()) {
-					if (rs.getString("phrase").equals(currentVocable.getPhrase())) {
-						if (rs.isLast())
-							rs.first();
-						else
-							rs.next();
-						break;
-					}
-				}
+				do {
+					rs.next();
+				} while (!rs.getString(PHRASE).equals(currentVocable.getPhrase()));
+				if (!rs.next()) // if this is the last entry, jump to first one
+					rs.first();
 			} else {
 				rs.first();
 			}
 			v = new Vocable();
 			// Retrieve by column name
-			v.setPhrase(rs.getString("phrase"));
-			v.setTranslation(rs.getString("translation"));
-			v.setCorrTries(rs.getInt("corrTries"));
-			v.setFalseTries(rs.getInt("falseTries"));
+			v.setPhrase(rs.getString(PHRASE));
+			v.setTranslation(rs.getString(TRANSLATION));
+			v.setCorrTries(rs.getInt(CORR_TRIES));
+			v.setFalseTries(rs.getInt(FALSE_TRIES));
 		}
 		return v;
 	}

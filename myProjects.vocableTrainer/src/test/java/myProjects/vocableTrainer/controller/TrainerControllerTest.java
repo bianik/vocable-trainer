@@ -47,7 +47,7 @@ public class TrainerControllerTest {
 		InOrder inOrder = inOrder(vocableRepository, trainerView);
 		inOrder.verify(vocableRepository).findByPhrase("phrase 1");
 		inOrder.verify(vocableRepository).saveVocable(vocable);
-		inOrder.verify(trainerView).showMessageVocableAdded("Vocable added", vocable);
+		inOrder.verify(trainerView).showMessageVocableAdded("Vocable added: ", vocable);
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class TrainerControllerTest {
 		InOrder inOrder = inOrder(vocableRepository, trainerView);
 		inOrder.verify(vocableRepository).findByPhrase(CORRECT_PHRASE);
 		inOrder.verify(vocableRepository, never()).saveVocable(vocableToAdd);
-		inOrder.verify(trainerView).showMessageVocableAdded("Vocable already exists", vocableToAdd);	
+		inOrder.verify(trainerView).showMessageVocableAdded("Vocable already exists: ", vocableToAdd);	
 	}
 	
 	@Test
@@ -73,7 +73,7 @@ public class TrainerControllerTest {
 		// exercise
 		trainerController.newVocable(vocable);
 		// verify
-		verify(trainerView).showMessageVocableAdded("Database error!", vocable);
+		verify(trainerView).showMessageVocableAdded("Database error!", null);
 	}
 
 	@Test

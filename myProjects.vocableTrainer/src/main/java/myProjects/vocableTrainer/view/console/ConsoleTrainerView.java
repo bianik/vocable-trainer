@@ -18,12 +18,11 @@ public class ConsoleTrainerView implements TrainerView {
 	private static final String ANSI_RESET = "\u001B[0m";
 	private static final String ANSI_RED = "\u001B[31m";
 	private static final String ANSI_GREEN = "\u001B[32m";
-	
-	public ConsoleTrainerView(Scanner in, PrintStream out, TrainerController trainerContr) {
+
+	public ConsoleTrainerView(Scanner in, PrintStream out) {
 		super();
 		this.in = in;
 		this.out = out;
-		this.trainerContr = trainerContr;
 	}
 
 	@Override
@@ -41,10 +40,12 @@ public class ConsoleTrainerView implements TrainerView {
 
 	@Override
 	public void showNextVocable(String message, Vocable vocable) {
-		if (vocable != null)
+		if (vocable != null) {
 			out.println("translation: " + vocable.getTranslation() + "\nenter phrase: ");
-		else
+		} else {
 			out.println(ANSI_RED + message + ANSI_RESET);
+		}
+		currentVocable = vocable;
 	}
 
 	public boolean startConsole() {
@@ -57,23 +58,11 @@ public class ConsoleTrainerView implements TrainerView {
 			switch (in.nextLine()) {
 			case "new":
 			case "n":
-				out.println("phrase: ");
-				String phrase = in.nextLine().trim();
-				if (!phrase.isEmpty()) {
-					out.println("translation: ");
-					String translation = in.nextLine().trim();
-					if (!translation.isEmpty()) {
-						trainerContr.newVocable(new Vocable(phrase, translation));
-					} else {
-						out.println("ABORT: no translation!");
-					}
-				} else {
-					out.println("ABORT: no phrase!");
-				}
+				newVocable();
 				break;
 			case "learn":
 			case "l":
-				trainerContr.nextVocable(currentVocable);
+				learn();
 				break;
 			case "exit":
 				return false;
@@ -84,9 +73,42 @@ public class ConsoleTrainerView implements TrainerView {
 		return true;
 	}
 
-	// package-privates setter for testing
+	private void learn() {
+		trainerContr.nextVocable(currentVocable);
+		if (currentVocable != null) {
+			String inputToCheck = in.nextLine().trim();
+			trainerContr.checkVocableOnGivenPhrase(new Vocable(inputToCheck, currentVocable.getTranslation()));
+		}
+	}
+
+	private void newVocable() {
+		out.println("phrase: ");
+		String phrase = in.nextLine().trim();
+		if (!phrase.isEmpty()) {
+			out.println("translation: ");
+			String translation = in.nextLine().trim();
+			if (!translation.isEmpty()) {
+				trainerContr.newVocable(new Vocable(phrase, translation));
+			} else {
+				out.println("ABORT: no translation!");
+			}
+		} else {
+			out.println("ABORT: no phrase!");
+		}
+	}
+
+	public void setTrainerContr(TrainerController trainerContr) {
+		this.trainerContr = trainerContr;
+	}
+
+	// package-private setter for testing
 	void setCurrentVocable(Vocable currentVocable) {
 		this.currentVocable = currentVocable;
+	}
+
+	// package-private getter for testing
+	Vocable getCurrentVocable() {
+		return currentVocable;
 	}
 
 }

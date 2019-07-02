@@ -1,6 +1,6 @@
 package myProjects.vocableTrainer.repository.h2;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,16 +19,16 @@ import org.junit.Test;
 
 import myProjects.vocableTrainer.model.Vocable;
 
-public class H2VocableRepositoryTest {
-	// JDBC driver name and database URL
-	static final String JDBC_DRIVER = "org.h2.Driver";
-	static final String DB_URL = "jdbc:h2:mem:"; // use volatile in-memory database
-
+public class H2VocableRepositoryIT {
 	// Database credentials
 	private static final String USER = "sa";
 	private static final String PASS = "";
 	private static final String TABLE_NAME = "VOCABLES";
-
+	private static final String TCP_PORT = System.getProperty("tcpPort"); // get tcpPort from pom
+	// JDBC driver name and database URL // use database server running in Docker container
+	static final String JDBC_DRIVER = "org.h2.Driver";
+	static final String DB_URL = "jdbc:h2:tcp://localhost:" + TCP_PORT + "/" + TABLE_NAME;
+	
 	private static Connection conn;
 	private static H2VocableRepository vocableRepo;
 
@@ -59,37 +59,22 @@ public class H2VocableRepositoryTest {
 	}
 
 	@Test
-	public void testFindByPhraseNotFound() throws SQLException {
-		assertThat(vocableRepo.findByPhrase("phrase")).isNull();
-	}
-
-	@Test
-	public void testFindByPhraseFound() throws SQLException {
+	public void testFindByPhrase() throws SQLException {
 		// setup
 		addTestVocable("an other phrase", "translation", 0, 0);
 		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 5, 7);
 		// execution
 		Vocable retreivedVocable = null;
-		retreivedVocable = vocableRepo.findByPhrase("phrase 1");
+		try {
+			retreivedVocable = vocableRepo.findByPhrase("phrase 1");
+		} catch (SQLException e) {
+		}
 		// verify
 		assertThat(retreivedVocable).isEqualTo(dbVocable);
 	}
 
 	@Test
-	public void testFindByPhraseDbErrorShouldThrow() throws SQLException {
-		// setup
-		conn.close();
-		// execute & verify
-		assertThatThrownBy(() -> vocableRepo.findByPhrase("phrase")).isInstanceOf(SQLException.class);
-	}
-
-	@Test
-	public void testFindByTranslationNotFound() throws SQLException {
-		assertThat(vocableRepo.findByTranslation("translation")).isNull();
-	}
-
-	@Test
-	public void testFindByTranslationFound() throws SQLException {
+	public void testFindByTranslation() throws SQLException {
 		// setup
 		addTestVocable("an other phrase", "an other translation", 0, 0);
 		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 5, 7);
@@ -101,14 +86,6 @@ public class H2VocableRepositoryTest {
 	}
 
 	@Test
-	public void testFindByTranslationDbErrorShouldThrow() throws SQLException {
-		// setup
-		conn.close();
-		// execute & verify
-		assertThatThrownBy(() -> vocableRepo.findByTranslation("translation")).isInstanceOf(SQLException.class);
-	}
-
-	@Test
 	public void testSaveVocable() throws SQLException {
 		Vocable vocable = new Vocable("phrase 1", "translation 1");
 		vocable.setCorrTries(5);
@@ -117,15 +94,6 @@ public class H2VocableRepositoryTest {
 		vocableRepo.saveVocable(vocable);
 		// verify
 		assertThat(readAllVocablesFromRepository()).containsExactly(vocable);
-	}
-
-	@Test
-	public void testSaveVocableDbErrorShouldThrow() throws SQLException {
-		// setup
-		conn.close();
-		Vocable vocable = new Vocable("phrase 1", "translation 1");
-		// execute & verify
-		assertThatThrownBy(() -> vocableRepo.saveVocable(vocable)).isInstanceOf(SQLException.class);
 	}
 
 	@Test
@@ -142,31 +110,7 @@ public class H2VocableRepositoryTest {
 	}
 
 	@Test
-	public void testUpdateVocableDbErrorShouldThrow() throws SQLException {
-		// setup
-		addTestVocable("an other phrase", "an other translation", 0, 0);
-		Vocable dbVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
-		dbVocable.setCorrTries(6);
-		dbVocable.setFalseTries(3);
-		conn.close();
-		// execute & verify
-		assertThatThrownBy(() -> vocableRepo.updateVocable(dbVocable)).isInstanceOf(SQLException.class);
-	}
-
-	@Test
-	public void testNextVocableWhenNoCurrentVocable() throws SQLException {
-		// setup
-		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
-		addTestVocable("phrase 2", "translation 2", 0, 0);
-		// execution
-		Vocable nextVocable = null;
-		nextVocable = vocableRepo.nextVocable(null);
-		// verify
-		assertThat(nextVocable).isEqualTo(firstVocable);
-	}
-
-	@Test
-	public void testNextVocableWhenCurrentVocable() throws SQLException {
+	public void testNextVocable() throws SQLException {
 		// setup
 		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
 		Vocable secondVocable = addTestVocable("phrase 2", "translation 2", 5, 7);
@@ -178,30 +122,7 @@ public class H2VocableRepositoryTest {
 	}
 
 	@Test
-	public void testNextVocableWhenCurrentVocableLastOne() throws SQLException {
-		// setup
-		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 5, 7);
-		addTestVocable("phrase 2", "translation 2", 0, 0);
-		Vocable lastVocable = addTestVocable("phrase 3", "translation 3", 0, 0);
-		// execution
-		Vocable nextVocable = null;
-		nextVocable = vocableRepo.nextVocable(lastVocable);
-		// verify
-		assertThat(nextVocable).isEqualTo(firstVocable);
-	}
-
-	@Test
-	public void testNextVocableDbErrorSholdThrow() throws SQLException {
-		// setup
-		Vocable firstVocable = addTestVocable("phrase 1", "translation 1", 0, 0);
-		addTestVocable("phrase 2", "translation 2", 0, 0);
-		conn.close();
-		// execute & verify
-		assertThatThrownBy(() -> vocableRepo.nextVocable(firstVocable)).isInstanceOf(SQLException.class);
-	}
-
-	@Test
-	public void testInitializeWhenNoTable() throws SQLException {
+	public void testInitialize() throws SQLException {
 		// setup
 		executeDbCommand("DROP TABLE IF EXISTS " + TABLE_NAME);
 		// exercise
@@ -228,43 +149,6 @@ public class H2VocableRepositoryTest {
 			}
 		}
 		assertThat(wantedTable).isTrue();
-	}
-
-	@Test
-	public void testInitializeWhenTable() throws SQLException {
-		// exercise
-		vocableRepo.initialize();
-		// verify
-		// try to find the table
-		boolean wantedTable = false;
-		try (ResultSet rs = conn.getMetaData().getTables(null, null, TABLE_NAME, new String[] { "TABLE" });) {
-			while (rs.next()) {
-				wantedTable = true;
-				assertThat(wantedTable).isTrue();
-				try (Statement stmt = conn.createStatement();
-						ResultSet tableRs = stmt.executeQuery("SELECT * FROM " + TABLE_NAME);) {
-					ResultSetMetaData rsmd = tableRs.getMetaData();
-					assertThat(rsmd.getColumnLabel(1)).isEqualTo("PHRASE");
-					assertThat(rsmd.getColumnTypeName(1)).isEqualTo("VARCHAR");
-					assertThat(rsmd.getColumnLabel(2)).isEqualTo("TRANSLATION");
-					assertThat(rsmd.getColumnTypeName(2)).isEqualTo("VARCHAR");
-					assertThat(rsmd.getColumnLabel(3)).isEqualTo("CORRTRIES");
-					assertThat(rsmd.getColumnTypeName(3)).isEqualTo("INTEGER");
-					assertThat(rsmd.getColumnLabel(4)).isEqualTo("FALSETRIES");
-					assertThat(rsmd.getColumnTypeName(4)).isEqualTo("INTEGER");
-				}
-			}
-
-		}
-		assertThat(wantedTable).isTrue();
-	}
-
-	@Test
-	public void testInitializeWhenDbErrorShouldThrow() throws SQLException {
-		// setup
-		conn.close();
-		// execute & verify
-		assertThatThrownBy(() -> vocableRepo.initialize()).isInstanceOf(SQLException.class);
 	}
 
 	////////////////// helping functions ////////////////////////////////
