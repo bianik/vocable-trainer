@@ -296,6 +296,7 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 			swingTrainerView.lblShow.setText(SOME_TEXT);
 			swingTrainerView.enterTextField.setText(SOME_TEXT);
 			swingTrainerView.setCurrentVocable(currentVocable);
+			swingTrainerView.enterTextField.setBackground(Color.GREEN);
 		});
 		// exercise
 		GuiActionRunner.execute(() -> swingTrainerView.showNextVocable(DATABASE_ERROR, null));
@@ -304,5 +305,6 @@ public class SwingTrainerViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("checkEnterTextBox").requireText(SOME_TEXT);
 		window.label("checkVocableMessageLabel").requireText(DATABASE_ERROR);
 		assertThat(swingTrainerView.getCurrentVocable()).isEqualTo(currentVocable);
+		window.textBox("checkEnterTextBox").background().requireEqualTo(Color.GREEN);
 	}
 }
