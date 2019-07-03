@@ -251,6 +251,7 @@ public class SwingTrainerView extends JFrame implements TrainerView {
 			enterTextField.setText("");
 			lblCheckMessage.setText(" ");
 			this.currentVocable = vocable;
+			enterTextField.setBackground(Color.WHITE);
 		} else {
 			lblCheckMessage.setText(message);
 		}
