@@ -37,7 +37,7 @@ The application has been written using test-driven development and the testing f
 #### Unit Tests
 Starting with [unit tests](../myProjects.vocableTrainer/src/test) the overall specifications of the application have been set and implemented beginning with the class TrainerController, then continuing with the H2VocableRepository, the SwingTrainerView and the ConsoleTrainerView.
 
-For the class Vocable no testing has been used since this is a plain domain model containing mostly fields and getters and setters. Beside these and two functions for incrementing the number of tries, the class has two separate equals-methods, which will be explained [here](./report.md#spying-on-the-vocable-class) in the Problems section.  
+For the class Vocable no testing has been used since this is a plain domain model containing mostly fields and getters and setters. Beside these and two functions for incrementing the number of tries, the class has two separate equals-methods, which will be explained in [spying on the vocable class](./report.md#spying-on-the-vocable-class) in the Problems section.  
 Also the class VocableTrainerApp has been excluded from unit tests since this class only connects the collaborators and starts the application so it has been written after all the collaborators have been fully implemented and will be tested with e2e tests.
 
 For unit testing the wrapper class H2VocableRepository an in-memory database has been used for speeding up the tests and so to say mocking a "real" database, which would have to be started and stopped every time.
@@ -57,41 +57,41 @@ The [ConsoleTrainerViewE2E](../myProjects.vocableTrainer/src/e2e/java/myProjects
 ### Applied techniques and frameworks
 The build and automated testing of the application is managed by a **Maven** project. All required steps and settings are configured in the [pom.xml](../myProjects.vocableTrainer/pom.xml) file as following:
 - properties
- - the version of all dependencies and plugins are defined
- - the tcp port for the database is defined
- - the SonarCloud plugin is set up
-   - exclude the domain model and VocableTrainerApp from coverage
-   - include IT and E2E-test reports
-   - define which rules to ignore in which classes
+  - the version of all dependencies and plugins are defined
+  - the tcp port for the database is defined
+  - the SonarCloud plugin is set up
+    - exclude the domain model and VocableTrainerApp from coverage
+    - include IT and E2E-test reports
+    - define which rules to ignore in which classes
 - dependencies are defined
 - plugins to be run every time are defined and configured
- - build-helper-maven-plugin
-   - add IT and E2E tests to test build resources
- - maven-failsafe-plugin
-   - execute IT and E2E tests separately
-   - hand over tcp port number to tests
- - docker-maven-plugin
-   - build Dockerfile and set ports
-   - start docker container before IT and E2E tests and stop it afterwards
+  - build-helper-maven-plugin
+    - add IT and E2E tests to test build resources
+  - maven-failsafe-plugin
+    - execute IT and E2E tests separately
+    - hand over tcp port number to tests
+  - docker-maven-plugin
+    - build Dockerfile and set ports
+    - start docker container before IT and E2E tests and stop it afterwards
 - plugin management
- - jacoco-maven-plugin
-   - exclude the domain model and VocableTrainerApp from coverage
-   - prepare agent in phase "initialize"
-   - create report in phase "verify"
-   - configure coverage goal and check it in phase "verify"
- - coveralls-maven-plugin
-   - coverage report is send to coveralls.org
- - pitest-maven
-   - perform mutation testing on classes TrainerController, H2VocableRepository and ConsoleTrainerView in phase "verify"
-   - define mutators and mutation threshold
- - sonar-maven-plugin
+  - jacoco-maven-plugin
+    - exclude the domain model and VocableTrainerApp from coverage
+    - prepare agent in phase "initialize"
+    - create report in phase "verify"
+    - configure coverage goal and check it in phase "verify"
+  - coveralls-maven-plugin
+    - coverage report is send to coveralls.org
+  - pitest-maven
+    - perform mutation testing on classes TrainerController, H2VocableRepository and ConsoleTrainerView in phase "verify"
+    - define mutators and mutation threshold
+  - sonar-maven-plugin
 - profiles
- - code-coverage
-   - execude jacoco and coveralls
- - jacoco
-   - execute jacoco
- - mutation-testing
-   - execute pitest
+  - code-coverage
+    - execude jacoco and coveralls
+  - jacoco
+    - execute jacoco
+  - mutation-testing
+    - execute pitest
 
 The version control system **git** is used for the development for the project locally in a git repository. This is pushed repeatedly to the web service **gitHub**. Connected to this online git repository is the continuous integration service **Travic CI**.org. Pushing to the gitHub repository or creating pull requests will trigger [Travis CI](https://travis-ci.org/bianik/vocable-trainer) to build the Maven project based on the configuration provided by the [travis.yml](../.travis.yml) file as following:
 - the Java JDK is set to 8
@@ -102,9 +102,9 @@ The version control system **git** is used for the development for the project l
 - the virtual X server is started in order to execute tests on the GUI
 - all commits from gitHub are fetched for SonarCloud
 - the Maven build is stared using the pom
- - execute the phases "clean" and "verify"
- - use the profiles "code-coverage" and "mutation-testing"
- - execute the goal sonar of the sonar plugin
+  - execute the phases "clean" and "verify"
+  - use the profiles "code-coverage" and "mutation-testing"
+  - execute the goal sonar of the sonar plugin
 
 After the build has finished, code coverage results are send to the online service [Coveralls](https://coveralls.io/github/bianik/vocable-trainer) to log and display them. Also connected to the gitHub online repository is the online service [SonarCloud](https://sonarcloud.io/dashboard?id=myProjects%3AvocableTrainer), which also generates reports on code quality based on some rules. Some of these rules have been deactivated so that they are ignored with the following reasons:
 
