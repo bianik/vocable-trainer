@@ -10,6 +10,23 @@ The application can be run with a command line interface or a graphical user int
 <img src="./gui_screenshot1.jpeg" height="230"> -> <img src="./gui_screenshot2.jpeg" height="230">  ->
 <img src="./gui_screenshot3.jpeg" height="230"> -> <img src="./gui_screenshot4.jpeg" height="230">  
 
+### Running the application
+The application uses a SQL database, which needs to be running before starting the application. The best way to do this is to run the database in a container spacified by the provided [Dockerfile](../myProjects.vocableTrainer/Dockerfile).
+To do so, first build the Dockerfile by entering in the command line (in the directory of the Dockerfile):
+
+```
+docker build --build-arg tcpPort=1523 -t h2 .
+```
+
+Then run the Dockerfile with the following command:
+
+```
+docker run --rm --name h2 -p 81:81 -p 1523:1523 h2
+```
+
+Then run the application with the command line arguments described in the following section.
+Alternatively to using a server database running in a container, run it in the in-memory mode with the command line argument `-m`.
+
 ## Implementation
 ### Design and implementation choices
 The application has been written in the programming language Java using the model-view-presenter architecture implemented with the following classes:
